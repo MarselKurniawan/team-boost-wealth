@@ -1,160 +1,170 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Apptronik — White + Blue, flat modal aesthetic */
+/* Editorial SaaS — off-white + deep ink blue, sharp square, generous whitespace */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222 80% 25%;
+    --background: 210 40% 99%;      /* off-white with blue tint */
+    --foreground: 222 60% 14%;      /* deep ink */
 
     --card: 0 0% 100%;
-    --card-foreground: 222 80% 25%;
+    --card-foreground: 222 60% 14%;
 
-    --primary: 222 80% 40%;
+    --primary: 224 76% 33%;         /* bold cobalt blue */
     --primary-foreground: 0 0% 100%;
-    --primary-glow: 222 80% 55%;
+    --primary-glow: 224 76% 45%;
 
-    --secondary: 214 100% 50%;
-    --secondary-foreground: 0 0% 100%;
-    --vip-gold: 222 80% 40%;
-    --vip-gold-glow: 222 80% 55%;
+    --secondary: 220 20% 96%;
+    --secondary-foreground: 222 60% 14%;
 
-    --success: 222 80% 40%;
+    --muted: 220 25% 95%;
+    --muted-foreground: 222 20% 45%;
+
+    --accent: 220 25% 92%;
+    --accent-foreground: 222 60% 14%;
+
+    --success: 224 76% 33%;
     --success-foreground: 0 0% 100%;
-    --success-light: 214 100% 96%;
+    --success-light: 220 30% 96%;
 
-    --accent: 222 80% 40%;
-    --accent-foreground: 0 0% 100%;
+    --vip-gold: 224 76% 33%;
+    --vip-gold-glow: 224 76% 45%;
 
-    --muted: 214 60% 97%;
-    --muted-foreground: 222 40% 45%;
-
-    --destructive: 0 75% 55%;
+    --destructive: 0 72% 48%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 222 60% 90%;
-    --input: 222 60% 96%;
-    --ring: 222 80% 40%;
+    --border: 222 25% 88%;
+    --input: 222 25% 88%;
+    --ring: 224 76% 33%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222 80% 25%;
+    --popover-foreground: 222 60% 14%;
 
-    /* Flat — no rainbow gradients */
-    --gradient-primary: hsl(222 80% 40%);
-    --gradient-gold: hsl(222 80% 40%);
-    --gradient-success: hsl(222 80% 40%);
-    --gradient-accent: hsl(222 80% 40%);
-    --gradient-background: hsl(0 0% 100%);
-    --gradient-card: hsl(0 0% 100%);
-    --gradient-hero: hsl(222 80% 40%);
+    /* Flat, no gradients */
+    --gradient-primary: hsl(var(--primary));
+    --gradient-gold: hsl(var(--primary));
+    --gradient-success: hsl(var(--primary));
+    --gradient-accent: hsl(var(--primary));
+    --gradient-background: hsl(var(--background));
+    --gradient-card: hsl(var(--card));
+    --gradient-hero: hsl(var(--primary));
 
-    --shadow-elegant: 0 2px 12px -4px hsl(222 80% 40% / 0.10);
-    --shadow-card: 0 1px 3px hsl(222 60% 40% / 0.06);
-    --shadow-glow: 0 2px 10px hsl(222 80% 40% / 0.10);
-    --shadow-gold-glow: 0 2px 10px hsl(222 80% 40% / 0.10);
-    --shadow-success-glow: 0 2px 10px hsl(222 80% 40% / 0.10);
-    --shadow-accent-glow: 0 2px 10px hsl(222 80% 40% / 0.10);
+    --shadow-elegant: 0 1px 0 hsl(var(--border));
+    --shadow-card: 0 1px 0 hsl(var(--border));
+    --shadow-glow: none;
+    --shadow-gold-glow: none;
+    --shadow-success-glow: none;
+    --shadow-accent-glow: none;
 
-    --radius: 1rem;
+    /* Sharp square everywhere */
+    --radius: 0px;
   }
 
   .dark {
-    /* Match light — user wants strictly white + blue */
-    --background: 0 0% 100%;
-    --foreground: 222 80% 25%;
+    --background: 210 40% 99%;
+    --foreground: 222 60% 14%;
     --card: 0 0% 100%;
-    --card-foreground: 222 80% 25%;
-    --primary: 222 80% 40%;
+    --card-foreground: 222 60% 14%;
+    --primary: 224 76% 33%;
     --primary-foreground: 0 0% 100%;
-    --primary-glow: 222 80% 55%;
-    --secondary: 214 100% 50%;
-    --secondary-foreground: 0 0% 100%;
-    --vip-gold: 222 80% 40%;
-    --vip-gold-glow: 222 80% 55%;
-    --success: 222 80% 40%;
+    --primary-glow: 224 76% 45%;
+    --secondary: 220 20% 96%;
+    --secondary-foreground: 222 60% 14%;
+    --muted: 220 25% 95%;
+    --muted-foreground: 222 20% 45%;
+    --accent: 220 25% 92%;
+    --accent-foreground: 222 60% 14%;
+    --success: 224 76% 33%;
     --success-foreground: 0 0% 100%;
-    --success-light: 214 100% 96%;
-    --accent: 222 80% 40%;
-    --accent-foreground: 0 0% 100%;
-    --muted: 214 60% 97%;
-    --muted-foreground: 222 40% 45%;
-    --destructive: 0 75% 55%;
+    --success-light: 220 30% 96%;
+    --vip-gold: 224 76% 33%;
+    --vip-gold-glow: 224 76% 45%;
+    --destructive: 0 72% 48%;
     --destructive-foreground: 0 0% 100%;
-    --border: 222 60% 90%;
-    --input: 222 60% 96%;
-    --ring: 222 80% 40%;
+    --border: 222 25% 88%;
+    --input: 222 25% 88%;
+    --ring: 224 76% 33%;
     --popover: 0 0% 100%;
-    --popover-foreground: 222 80% 25%;
+    --popover-foreground: 222 60% 14%;
   }
 }
 
 @layer base {
-  * {
-    @apply border-border;
-  }
-
+  * { @apply border-border; }
+  html { font-feature-settings: "ss01", "cv11"; }
   body {
     @apply bg-background text-foreground font-body text-[13px];
     font-feature-settings: "rlig" 1, "calt" 1;
     min-height: 100vh;
+    letter-spacing: -0.005em;
   }
-
   h1, h2, h3, h4, h5, h6 {
     @apply font-heading;
+    letter-spacing: -0.02em;
+    font-weight: 600;
   }
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-}
-::-webkit-scrollbar-track {
-  background: hsl(var(--muted));
-}
-::-webkit-scrollbar-thumb {
-  background: hsl(var(--primary) / 0.3);
-  border-radius: 4px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: hsl(var(--primary) / 0.5);
-}
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: hsl(var(--border)); }
+::-webkit-scrollbar-thumb:hover { background: hsl(var(--primary) / 0.5); }
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { scrollbar-width: none; }
 
 /* Kept minimal animations */
-@keyframes confetti-fall {
-  0% { transform: translateY(-100%) rotate(0deg); opacity: 1; }
-  100% { transform: translateY(400%) rotate(720deg); opacity: 0; }
-}
-@keyframes float-up {
-  0% { transform: translateY(0) scale(1); opacity: 1; }
-  100% { transform: translateY(-50px) scale(1.5); opacity: 0; }
-}
+@keyframes confetti-fall { 0% { transform: translateY(-100%) rotate(0deg); opacity: 1;} 100% { transform: translateY(400%) rotate(720deg); opacity: 0;} }
+@keyframes float-up { 0% { transform: translateY(0) scale(1); opacity: 1;} 100% { transform: translateY(-50px) scale(1.5); opacity: 0;} }
 .animate-confetti { animation: confetti-fall 2s ease-out forwards; }
 .animate-float-up { animation: float-up 1s ease-out forwards; }
 
-/* Modal-card utility: all cards look like modals */
+/* Modal-card utility — thin border, sharp, no shadow */
 .modal-card {
   background: hsl(var(--card));
   border: 1px solid hsl(var(--border));
-  border-radius: 1rem;
-  box-shadow: 0 2px 12px -4px hsl(222 80% 40% / 0.08);
+  border-radius: 0;
+  box-shadow: none;
 }
 
-.glass {
-  background: hsl(var(--card));
-  border: 1px solid hsl(var(--border));
-}
+.glass { background: hsl(var(--card)); border: 1px solid hsl(var(--border)); }
 
 .bg-hero { background: hsl(var(--primary)); }
 .bg-robot-radial { background: hsl(var(--background)); }
 
-.profile-stable,
-.profile-stable * {
+.profile-stable, .profile-stable * {
   backdrop-filter: none !important;
   filter: none !important;
   text-shadow: none !important;
-  box-shadow: none !important;
+}
+
+/* Editorial grid pattern for headers */
+.pattern-grid {
+  background-image:
+    linear-gradient(hsl(var(--border)) 1px, transparent 1px),
+    linear-gradient(90deg, hsl(var(--border)) 1px, transparent 1px);
+  background-size: 24px 24px;
+  background-position: -1px -1px;
+}
+
+/* Floating input with bottom-border only */
+.field-floating {
+  position: relative;
+}
+.field-floating input,
+.field-floating textarea {
+  border: 0 !important;
+  border-bottom: 1px solid hsl(var(--border)) !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+.field-floating input:focus,
+.field-floating textarea:focus {
+  border-bottom-color: hsl(var(--primary)) !important;
+  box-shadow: 0 1px 0 hsl(var(--primary)) !important;
+  outline: none !important;
 }
