@@ -188,6 +188,7 @@ export type Database = {
           last_claimed_at: string | null
           product_id: string | null
           product_name: string
+          profit_mode: string
           status: string | null
           term_type: string
           total_earned: number | null
@@ -204,6 +205,7 @@ export type Database = {
           last_claimed_at?: string | null
           product_id?: string | null
           product_name: string
+          profit_mode?: string
           status?: string | null
           term_type?: string
           total_earned?: number | null
@@ -220,6 +222,7 @@ export type Database = {
           last_claimed_at?: string | null
           product_id?: string | null
           product_name?: string
+          profit_mode?: string
           status?: string | null
           term_type?: string
           total_earned?: number | null
@@ -312,6 +315,7 @@ export type Database = {
           max_per_user: number | null
           name: string
           price: number
+          profit_mode: string
           promo_daily_income: number | null
           promo_price: number | null
           promo_validity: number | null
@@ -332,6 +336,7 @@ export type Database = {
           max_per_user?: number | null
           name: string
           price: number
+          profit_mode?: string
           promo_daily_income?: number | null
           promo_price?: number | null
           promo_validity?: number | null
@@ -352,6 +357,7 @@ export type Database = {
           max_per_user?: number | null
           name?: string
           price?: number
+          profit_mode?: string
           promo_daily_income?: number | null
           promo_price?: number | null
           promo_validity?: number | null

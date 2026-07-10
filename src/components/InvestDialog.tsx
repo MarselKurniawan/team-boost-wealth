@@ -140,7 +140,8 @@ const InvestDialog = ({ open, onOpenChange, product, balance, onSuccess }: Inves
         total_earned: 0,
         status: 'active',
         term_type: (product as any).term_type === 'short' ? 'short' : 'long',
-      });
+        profit_mode: (product as any).profit_mode === 'locked' ? 'locked' : 'daily',
+      } as any);
 
       // Create transaction record
       await createTransaction({

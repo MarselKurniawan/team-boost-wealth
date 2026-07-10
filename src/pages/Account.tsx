@@ -138,28 +138,29 @@ const Account = () => {
     }
   };
 
-  // Count claimable investments
-  const claimableInvestments = activeInvestments.filter(inv => canClaimToday(inv.last_claimed_at, inv.created_at));
+  // Count claimable investments (exclude locked mode — those pay at contract end)
+  const claimableInvestments = activeInvestments.filter(inv =>
+    (inv as any).profit_mode !== 'locked' && canClaimToday(inv.last_claimed_at, inv.created_at)
+  );
   const totalClaimable = claimableInvestments.reduce((sum, inv) => sum + inv.daily_income, 0);
 
   return (
     <div className="space-y-4 p-4 pt-5">
       {/* Claimable Notification Banner */}
       {claimableInvestments.length > 0 && (
-        <div className="rounded-xl bg-card/80 border border-success/30 p-3.5">
+        <div className="modal-card p-3.5">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 bg-success/15 rounded-lg flex items-center justify-center shrink-0">
-              <Bell className="w-4 h-4 text-success" />
+            <div className="w-9 h-9 bg-muted rounded-lg flex items-center justify-center shrink-0">
+              <Bell className="w-4 h-4 text-primary" />
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-xs font-semibold text-foreground">
                 {claimableInvestments.length} Robot Siap Diklaim
               </p>
               <p className="text-[10px] text-muted-foreground break-all">
-                Total: <span className="font-bold text-success">{formatCurrency(totalClaimable)}</span>
+                Total: <span className="font-bold text-primary">{formatCurrency(totalClaimable)}</span>
               </p>
             </div>
-            <Sparkles className="w-4 h-4 text-success" />
           </div>
         </div>
       )}
@@ -231,9 +232,12 @@ const Account = () => {
           </CardHeader>
           <CardContent className="space-y-2.5">
             {activeInvestments.map((inv) => {
-              const canClaim = canClaimToday(inv.last_claimed_at, inv.created_at);
+              const isLocked = (inv as any).profit_mode === 'locked';
+              const canClaim = !isLocked && canClaimToday(inv.last_claimed_at, inv.created_at);
+              const accruedTotal = inv.daily_income * (inv.validity - inv.days_remaining);
+              const finalPayout = inv.total_income;
               return (
-                <div key={inv.id} className="bg-muted/40 rounded-lg p-3">
+                <div key={inv.id} className="modal-card p-3">
                   <div className="flex items-start justify-between mb-2">
                     <div className="min-w-0">
                       <p className="text-xs font-semibold text-foreground">{inv.product_name}</p>
@@ -241,24 +245,40 @@ const Account = () => {
                         Melayani {inv.days_remaining} hari lagi
                       </p>
                     </div>
-                    <Badge variant="success" className="text-[9px] h-4 px-1.5">Aktif</Badge>
+                    <div className="flex flex-col items-end gap-1">
+                      <Badge variant="success" className="text-[9px] h-4 px-1.5">Aktif</Badge>
+                      {isLocked && (
+                        <Badge className="text-[9px] h-4 px-1.5 bg-primary/15 text-primary border border-primary/40">
+                          🔒 Locked
+                        </Badge>
+                      )}
+                    </div>
                   </div>
-                  <div className="grid grid-cols-3 gap-2 text-center pt-2 border-t border-border/50">
+                  <div className="grid grid-cols-3 gap-2 text-center pt-2 border-t border-border">
                     <div>
                       <p className="text-[9px] text-muted-foreground">Sewa</p>
                       <p className="text-[11px] font-semibold break-all">{formatCurrency(inv.amount)}</p>
                     </div>
                     <div>
-                      <p className="text-[9px] text-muted-foreground">Harian</p>
-                      <p className="text-[11px] font-semibold text-success break-all">{formatCurrency(inv.daily_income)}</p>
+                      <p className="text-[9px] text-muted-foreground">{isLocked ? "Akrual" : "Harian"}</p>
+                      <p className="text-[11px] font-semibold text-primary break-all">
+                        {formatCurrency(isLocked ? accruedTotal : inv.daily_income)}
+                      </p>
                     </div>
                     <div>
-                      <p className="text-[9px] text-muted-foreground">Diperoleh</p>
-                      <p className="text-[11px] font-semibold text-accent break-all">{formatCurrency(inv.total_earned)}</p>
+                      <p className="text-[9px] text-muted-foreground">{isLocked ? "Payout Akhir" : "Diperoleh"}</p>
+                      <p className="text-[11px] font-semibold text-primary break-all">
+                        {formatCurrency(isLocked ? finalPayout : inv.total_earned)}
+                      </p>
                     </div>
                   </div>
-                  <div className="mt-2.5 pt-2.5 border-t border-border/50">
-                    {canClaim ? (
+                  <div className="mt-2.5 pt-2.5 border-t border-border">
+                    {isLocked ? (
+                      <Button disabled variant="outline" className="w-full h-9 text-[10px]">
+                        <span className="opacity-70 mr-1">🔒 Payout otomatis saat kontrak selesai:</span>
+                        <span className="font-semibold">{formatCurrency(finalPayout)}</span>
+                      </Button>
+                    ) : canClaim ? (
                       <Button
                         onClick={() => handleOpenClaimDialog(inv)}
                         className="w-full h-9 text-xs font-semibold"
