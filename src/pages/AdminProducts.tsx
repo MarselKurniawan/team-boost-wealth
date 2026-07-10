@@ -314,6 +314,19 @@ const AdminProducts = () => {
               </p>
             </div>
             <div className="space-y-2">
+              <Label>Mode Profit</Label>
+              <Select value={formData.profit_mode} onValueChange={(value) => setFormData({ ...formData, profit_mode: value })}>
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="daily">💰 Harian — profit masuk saldo tiap 24 jam</SelectItem>
+                  <SelectItem value="locked">🔒 Terkunci — payout total di akhir kontrak</SelectItem>
+                </SelectContent>
+              </Select>
+              <p className="text-[10px] text-muted-foreground">
+                Locked: user tidak dapat profit harian. Semua profit dikumpulkan dan cair sekaligus saat kontrak selesai.
+              </p>
+            </div>
+            <div className="space-y-2">
               <Label>Maks. Pembelian per User</Label>
               <Input
                 type="number"
