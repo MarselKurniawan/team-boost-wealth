@@ -117,7 +117,7 @@ const Auth = () => {
 
     toast({
       title: "Login Berhasil!",
-      description: "Selamat datang kembali di Apptronik",
+      description: "Selamat datang kembali di InvestPro",
     });
     navigate("/");
   };
@@ -258,9 +258,9 @@ const Auth = () => {
 
         <div className="relative z-10">
           <div className="flex items-center gap-2 mb-2">
-            <img src={appLogo} alt="Apptronik" className="w-10 h-10 rounded-lg object-contain bg-white/5 p-1" />
+            <img src={appLogo} alt="InvestPro" className="w-10 h-10 rounded-lg object-contain bg-white/5 p-1" />
             <h1 className="font-heading text-4xl font-bold text-foreground">
-              Apptronik
+              InvestPro
             </h1>
           </div>
           <p className="text-muted-foreground">Robot AI Humanoid Platform</p>
@@ -299,7 +299,7 @@ const Auth = () => {
         </div>
 
         <div className="relative z-10">
-          <p className="text-muted-foreground text-sm">© 2024 Apptronik. All rights reserved.</p>
+          <p className="text-muted-foreground text-sm">© 2024 InvestPro. All rights reserved.</p>
         </div>
       </div>
 
@@ -309,8 +309,8 @@ const Auth = () => {
           {/* Mobile logo */}
           <div className="lg:hidden text-center mb-8">
             <div className="flex items-center justify-center gap-2 mb-1">
-              <img src={appLogo} alt="Apptronik" className="w-9 h-9 rounded-lg object-contain bg-white/5 p-1" />
-              <h1 className="font-heading text-3xl font-bold text-foreground">Apptronik</h1>
+              <img src={appLogo} alt="InvestPro" className="w-9 h-9 rounded-lg object-contain bg-white/5 p-1" />
+              <h1 className="font-heading text-3xl font-bold text-foreground">InvestPro</h1>
             </div>
             <p className="text-muted-foreground text-sm">Robot AI Humanoid Platform</p>
           </div>
