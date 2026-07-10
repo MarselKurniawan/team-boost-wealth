@@ -138,28 +138,29 @@ const Account = () => {
     }
   };
 
-  // Count claimable investments
-  const claimableInvestments = activeInvestments.filter(inv => canClaimToday(inv.last_claimed_at, inv.created_at));
+  // Count claimable investments (exclude locked mode — those pay at contract end)
+  const claimableInvestments = activeInvestments.filter(inv =>
+    (inv as any).profit_mode !== 'locked' && canClaimToday(inv.last_claimed_at, inv.created_at)
+  );
   const totalClaimable = claimableInvestments.reduce((sum, inv) => sum + inv.daily_income, 0);
 
   return (
     <div className="space-y-4 p-4 pt-5">
       {/* Claimable Notification Banner */}
       {claimableInvestments.length > 0 && (
-        <div className="rounded-xl bg-card/80 border border-success/30 p-3.5">
+        <div className="modal-card p-3.5">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 bg-success/15 rounded-lg flex items-center justify-center shrink-0">
-              <Bell className="w-4 h-4 text-success" />
+            <div className="w-9 h-9 bg-muted rounded-lg flex items-center justify-center shrink-0">
+              <Bell className="w-4 h-4 text-primary" />
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-xs font-semibold text-foreground">
                 {claimableInvestments.length} Robot Siap Diklaim
               </p>
               <p className="text-[10px] text-muted-foreground break-all">
-                Total: <span className="font-bold text-success">{formatCurrency(totalClaimable)}</span>
+                Total: <span className="font-bold text-primary">{formatCurrency(totalClaimable)}</span>
               </p>
             </div>
-            <Sparkles className="w-4 h-4 text-success" />
           </div>
         </div>
       )}
