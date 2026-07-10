@@ -314,23 +314,31 @@ const Auth = () => {
           </div>
 
 
-          <Card className="border-border/50 shadow-card">
-            <CardHeader className="space-y-1 pb-3">
-              <CardTitle className="text-base font-heading flex items-center gap-1.5">
-                <Zap className="w-4 h-4 text-primary" />
-                Selamat Datang
-              </CardTitle>
-              <CardDescription className="text-[11px]">Masuk atau daftar untuk mulai berinvestasi</CardDescription>
-            </CardHeader>
-            <CardContent className="text-xs">
+          <div>
+            <div className="mb-6">
+              <h1 className="font-heading text-4xl font-bold text-[#2557D6] mb-2">Log In</h1>
+              <p className="text-sm text-slate-500">
+                Belum punya akun?{" "}
+                <button
+                  type="button"
+                  onClick={() => document.getElementById('tab-register-trigger')?.click()}
+                  className="text-[#2557D6] font-semibold hover:underline"
+                >
+                  Buat akun
+                </button>
+              </p>
+              <p className="text-xs text-slate-400 mt-1">Prosesnya kurang dari satu menit.</p>
+            </div>
+            <div className="text-xs">
               {showForgotPassword ? (
                 <ForgotPasswordFlow onBack={() => setShowForgotPassword(false)} />
               ) : (
               <Tabs defaultValue="login" className="w-full">
-                <TabsList className="grid w-full grid-cols-2 mb-4 bg-muted h-8">
-                  <TabsTrigger value="login" className="text-[11px] h-6">Masuk</TabsTrigger>
-                  <TabsTrigger value="register" className="text-[11px] h-6">Daftar</TabsTrigger>
+                <TabsList className="grid w-full grid-cols-2 mb-6 bg-slate-100 h-9 rounded-none p-0.5">
+                  <TabsTrigger value="login" className="text-xs h-8 rounded-none data-[state=active]:bg-[#2557D6] data-[state=active]:text-white">Masuk</TabsTrigger>
+                  <TabsTrigger id="tab-register-trigger" value="register" className="text-xs h-8 rounded-none data-[state=active]:bg-[#2557D6] data-[state=active]:text-white">Daftar</TabsTrigger>
                 </TabsList>
+
 
                 {/* Login Tab */}
                 <TabsContent value="login">
