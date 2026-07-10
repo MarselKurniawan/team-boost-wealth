@@ -1,5 +1,6 @@
 import LegalLayout from "@/components/LegalLayout";
-import { Mail, MessageCircle, MapPin, Clock } from "lucide-react";
+import { Mail, MapPin, Clock } from "lucide-react";
+import { WhatsAppIcon } from "@/components/icons/WhatsAppIcon";
 
 const Contact = () => (
   <LegalLayout title="Hubungi Kami">
@@ -16,7 +17,7 @@ const Contact = () => (
         className="border border-border rounded-lg p-4 hover:bg-muted/50 transition"
       >
         <div className="flex items-center gap-2 mb-1">
-          <MessageCircle className="w-4 h-4 text-success" />
+          <WhatsAppIcon size={16} className="text-success" />
           <span className="font-semibold text-sm">WhatsApp CS</span>
         </div>
         <p className="text-xs text-muted-foreground">+44 7529 467172</p>

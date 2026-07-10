@@ -2,7 +2,8 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
-import { Share2, Copy, MessageCircle, Send } from "lucide-react";
+import { Share2, Copy, Send } from "lucide-react";
+import { WhatsAppIcon } from "@/components/icons/WhatsAppIcon";
 
 interface ReferralDialogProps {
   open: boolean;
@@ -94,7 +95,7 @@ const ReferralDialog = ({ open, onOpenChange, referralCode }: ReferralDialogProp
                 className="flex items-center gap-2 bg-green-500/10 border-green-500/30 hover:bg-green-500/20"
                 onClick={shareWhatsApp}
               >
-                <MessageCircle className="w-5 h-5 text-green-500" />
+                <WhatsAppIcon size={20} className="text-green-500" />
                 <span>WhatsApp</span>
               </Button>
               <Button
