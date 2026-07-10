@@ -1,6 +1,6 @@
 import { createRoot } from "react-dom/client";
-import "@fontsource-variable/manrope";
-import "@fontsource-variable/inter";
+import "@fontsource-variable/manrope/index.css";
+import "@fontsource-variable/inter/index.css";
 import App from "./App.tsx";
 import "./index.css";
 
