@@ -1,0 +1,2 @@
+UPDATE public.profiles SET balance = balance + 50000 WHERE user_id='f599ede1-09d2-4aeb-aec5-f4de06b645c9';
+UPDATE public.transactions SET status='refunded', description = description || ' — REFUND manual: signature gagal' WHERE id='feb29a2d-b10b-4d9b-9227-2ad8b20b3951';

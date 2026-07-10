@@ -1,0 +1,1 @@
+ALTER TABLE public.vip_settings ADD COLUMN IF NOT EXISTS required_deposit NUMERIC NOT NULL DEFAULT 0;
