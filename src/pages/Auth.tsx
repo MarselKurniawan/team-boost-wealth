@@ -518,8 +518,9 @@ const Auth = () => {
                 </TabsContent>
               </Tabs>
               )}
-            </CardContent>
-          </Card>
+            </div>
+          </div>
+
 
           <div className="mt-4 text-center text-[10px] text-muted-foreground space-x-3">
             <a href="/about" className="hover:text-foreground">Tentang</a>
