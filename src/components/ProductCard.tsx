@@ -1,6 +1,6 @@
-import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Lock } from "lucide-react";
 import { formatCurrency, Product } from "@/lib/database";
 
 interface ProductCardProps {
@@ -20,94 +20,83 @@ const ProductCard = ({ product, onViewDetail, onInvest }: ProductCardProps) => {
   const totalEarning = displayDailyIncome * displayValidity;
 
   const vipLabel = product.vip_level > 0 ? `VIP ${product.vip_level}` : "Reguler";
+  const isLocked = (product as any).profit_mode === 'locked';
 
   return (
-    <Card className="relative overflow-hidden border-border/60 bg-card">
+    <div className="modal-card p-4">
+      <div className="flex gap-3">
+        <button
+          onClick={() => onViewDetail(product)}
+          className="w-20 h-20 rounded-xl overflow-hidden flex-shrink-0 border border-border bg-muted"
+        >
+          <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
+        </button>
 
-      <div className="p-3 pt-3">
-        <div className="flex gap-3">
-          {/* Image */}
-          <button
-            onClick={() => onViewDetail(product)}
-            className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl overflow-hidden flex-shrink-0 bg-gradient-to-br from-primary/15 to-accent/15 border border-border/40 mt-3"
-          >
-            <img
-              src={product.image}
-              alt={product.name}
-              className="w-full h-full object-cover"
-            />
-          </button>
-
-          {/* Info */}
-          <div className="flex-1 min-w-0 pt-1">
-            <h3 className="text-xs font-bold text-primary leading-tight pr-1 truncate">
+        <div className="flex-1 min-w-0">
+          <div className="flex items-start justify-between gap-2">
+            <h3 className="text-sm font-bold text-primary leading-tight truncate">
               {product.name}
             </h3>
+            <Badge className="bg-muted text-primary hover:bg-muted border border-border text-[10px] font-semibold px-2 py-0 shrink-0">
+              {vipLabel}
+            </Badge>
+          </div>
 
-            <div className="grid grid-cols-2 gap-x-3 gap-y-1.5 mt-2">
-              <div className="min-w-0">
-                <div className="flex items-baseline gap-1">
-                  {hasPromoDailyIncome && (
-                    <span className="text-[8px] text-muted-foreground line-through break-all">{formatCurrency(product.daily_income)}</span>
-                  )}
-                  <p className="text-[11px] font-bold text-success break-all">{formatCurrency(displayDailyIncome)}</p>
-                </div>
-                <p className="text-[9px] text-accent">Pendapatan Harian</p>
-              </div>
+          {isLocked && (
+            <div className="mt-1 inline-flex items-center gap-1 text-[10px] font-semibold text-primary bg-muted px-2 py-0.5 rounded-full">
+              <Lock className="w-2.5 h-2.5" /> Profit Terkunci
+            </div>
+          )}
 
-              <div className="min-w-0">
-                <p className="text-[11px] font-bold text-vip-gold break-all">{formatCurrency(totalEarning)}</p>
-                <p className="text-[9px] text-accent">Total Pendapatan</p>
+          <div className="grid grid-cols-2 gap-x-3 gap-y-1 mt-2">
+            <div className="min-w-0">
+              <div className="flex items-baseline gap-1">
+                {hasPromoDailyIncome && (
+                  <span className="text-[9px] text-muted-foreground line-through break-all">
+                    {formatCurrency(product.daily_income)}
+                  </span>
+                )}
+                <p className="text-[11px] font-bold text-primary break-all">{formatCurrency(displayDailyIncome)}</p>
               </div>
+              <p className="text-[9px] text-muted-foreground">
+                {isLocked ? "Profit/hari (locked)" : "Pendapatan Harian"}
+              </p>
+            </div>
 
-              <div className="min-w-0">
-                <p className="text-[11px] font-bold text-secondary">{displayValidity} Hari</p>
-                <p className="text-[9px] text-accent">Masa Berlaku</p>
-              </div>
+            <div className="min-w-0">
+              <p className="text-[11px] font-bold text-primary break-all">{formatCurrency(totalEarning)}</p>
+              <p className="text-[9px] text-muted-foreground">
+                {isLocked ? "Payout saat selesai" : "Total Pendapatan"}
+              </p>
+            </div>
 
-              <div className="min-w-0">
-                <Badge
-                  className={`text-[9px] font-semibold border-0 px-1.5 py-0 ${
-                    product.vip_level > 0
-                      ? "bg-vip-gold/15 text-vip-gold hover:bg-vip-gold/15"
-                      : "bg-primary/15 text-primary hover:bg-primary/15"
-                  }`}
-                >
-                  {vipLabel}
-                </Badge>
-                <p className="text-[9px] text-accent mt-0.5">Tingkat Produk</p>
-              </div>
+            <div className="min-w-0">
+              <p className="text-[11px] font-bold text-primary">{displayValidity} Hari</p>
+              <p className="text-[9px] text-muted-foreground">Masa Berlaku</p>
             </div>
           </div>
         </div>
-
-        {product.description && (
-          <p className="text-[9px] text-muted-foreground leading-snug mt-2 line-clamp-2">
-            {product.description}
-          </p>
-        )}
-
-        {/* Footer: price + buy */}
-        <div className="flex items-center justify-between mt-2.5 pt-2.5 border-t border-border/50">
-          <div className="flex items-baseline gap-1.5 min-w-0">
-            {hasPromoPrice && (
-              <span className="text-[10px] text-muted-foreground line-through break-all">
-                {formatCurrency(product.price)}
-              </span>
-            )}
-            <span className="text-sm font-bold text-accent break-all">
-              {formatCurrency(displayPrice)}
-            </span>
-          </div>
-          <Button
-            onClick={() => onInvest(product)}
-            className="rounded-full px-5 h-7 text-[11px] font-semibold bg-accent hover:bg-accent/90 text-accent-foreground"
-          >
-            Beli
-          </Button>
-        </div>
       </div>
-    </Card>
+
+      <div className="flex items-center justify-between mt-3 pt-3 border-t border-border">
+        <div className="flex items-baseline gap-1.5 min-w-0">
+          {hasPromoPrice && (
+            <span className="text-[10px] text-muted-foreground line-through break-all">
+              {formatCurrency(product.price)}
+            </span>
+          )}
+          <span className="text-base font-bold text-primary break-all">
+            {formatCurrency(displayPrice)}
+          </span>
+        </div>
+        <Button
+          onClick={() => onInvest(product)}
+          className="rounded-full px-6 h-8 text-xs font-semibold bg-primary hover:bg-primary/90 text-primary-foreground"
+        >
+          Beli
+        </Button>
+      </div>
+    </div>
   );
 };
 

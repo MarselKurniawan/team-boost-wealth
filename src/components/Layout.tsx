@@ -1,71 +1,39 @@
-import { useState } from "react";
 import { NavLink } from "@/components/NavLink";
-import { Home, Store, Hexagon, UserCircle, LayoutGrid } from "lucide-react";
-import QuickMenuSheet from "@/components/QuickMenuSheet";
+import { Home, Store, Users, User, LayoutGrid } from "lucide-react";
 
 const Layout = ({ children, wide = false }: { children: React.ReactNode; wide?: boolean }) => {
-  const [menuOpen, setMenuOpen] = useState(false);
+  const items = [
+    { to: "/", icon: Home, label: "Beranda" },
+    { to: "/product", icon: Store, label: "Produk" },
+    { to: "/account", icon: LayoutGrid, label: "Akun" },
+    { to: "/team", icon: Users, label: "Tim" },
+    { to: "/profile", icon: User, label: "Saya" },
+  ];
 
   return (
-    <div className="min-h-screen bg-robot-radial pb-20">
-
-      <div className={`mx-auto ${wide ? "max-w-4xl" : "max-w-md"} relative z-10`}>
-        {children}
-      </div>
-
-      {/* Bottom Navigation */}
-      <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-border/60 bg-card">
-        <div className="mx-auto max-w-md grid grid-cols-5 items-center py-2.5">
-          <NavLink
-            to="/"
-            className="flex flex-col items-center gap-0.5 py-1.5 text-muted-foreground transition-colors"
-            activeClassName="text-primary"
-          >
-            <Home className="w-5 h-5" strokeWidth={1.75} />
-            <span className="text-[10px]">Rumah</span>
-          </NavLink>
-
-          <NavLink
-            to="/product"
-            className="flex flex-col items-center gap-0.5 py-1.5 text-muted-foreground transition-colors"
-            activeClassName="text-primary"
-          >
-            <Store className="w-5 h-5" strokeWidth={1.75} />
-            <span className="text-[10px]">Toko</span>
-          </NavLink>
-
-          {/* Center Menu */}
-          <button
-            onClick={() => setMenuOpen(true)}
-            className="flex flex-col items-center gap-0.5 -mt-7"
-          >
-            <div className="w-12 h-12 rounded-2xl bg-gradient-primary flex items-center justify-center shadow-glow">
-              <Hexagon className="w-6 h-6 text-primary-foreground" strokeWidth={2} />
-            </div>
-            <span className="text-[10px] text-primary font-medium mt-0.5">Beranda</span>
-          </button>
-
-          <NavLink
-            to="/team"
-            className="flex flex-col items-center gap-0.5 py-1.5 text-muted-foreground transition-colors"
-            activeClassName="text-primary"
-          >
-            <LayoutGrid className="w-5 h-5" strokeWidth={1.75} />
-            <span className="text-[10px]">Tim</span>
-          </NavLink>
-
-          <NavLink
-            to="/profile"
-            className="flex flex-col items-center gap-0.5 py-1.5 text-muted-foreground transition-colors"
-            activeClassName="text-primary"
-          >
-            <UserCircle className="w-5 h-5" strokeWidth={1.75} />
-            <span className="text-[10px]">Saya</span>
-          </NavLink>
+    <div className="min-h-screen bg-background pt-16">
+      {/* Top Navigation */}
+      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-border bg-background">
+        <div className={`mx-auto ${wide ? "max-w-4xl" : "max-w-md"} px-3`}>
+          <div className="flex items-center justify-between h-14 gap-1 overflow-x-auto no-scrollbar">
+            {items.map((item) => (
+              <NavLink
+                key={item.to}
+                to={item.to}
+                className="flex-1 min-w-[60px] flex flex-col items-center gap-0.5 py-1 rounded-lg text-muted-foreground transition-colors"
+                activeClassName="text-primary bg-muted"
+              >
+                <item.icon className="w-4 h-4" strokeWidth={2} />
+                <span className="text-[10px] font-medium">{item.label}</span>
+              </NavLink>
+            ))}
+          </div>
         </div>
       </nav>
 
-      <QuickMenuSheet open={menuOpen} onOpenChange={setMenuOpen} />
+      <div className={`mx-auto ${wide ? "max-w-4xl" : "max-w-md"} relative z-10 pb-8`}>
+        {children}
+      </div>
     </div>
   );
 };
