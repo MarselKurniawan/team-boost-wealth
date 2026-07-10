@@ -265,13 +265,33 @@ const AdminProducts = () => {
                      <Badge className={`text-[10px] ml-1 ${(product as any).term_type === 'short' ? 'bg-amber-500/20 text-amber-600 border border-amber-500/40' : 'bg-emerald-500/20 text-emerald-600 border border-emerald-500/40'}`}>
                        {(product as any).term_type === 'short' ? '⚡ Jangka Pendek' : '📈 Jangka Panjang'}
                      </Badge>
+                     <Badge className={`text-[10px] ml-1 ${(product as any).profit_mode === 'locked' ? 'bg-primary/15 text-primary border border-primary/40' : 'bg-muted text-muted-foreground border border-border'}`}>
+                       {(product as any).profit_mode === 'locked' ? '🔒 Locked Payout' : '💰 Profit Harian'}
+                     </Badge>
+                     <Badge className={`text-[10px] ml-1 ${product.is_active ? 'bg-emerald-500/15 text-emerald-600 border border-emerald-500/40' : 'bg-destructive/15 text-destructive border border-destructive/40'}`}>
+                       {product.is_active ? '🟢 Dibuka' : '🔴 Tertutup'}
+                     </Badge>
                   </div>
                   <div className="grid grid-cols-3 gap-2 text-xs mb-2">
                     <div><p className="text-muted-foreground">Harga</p><p className="font-semibold text-primary">{formatCurrency(product.price)}</p></div>
                     <div><p className="text-muted-foreground">Harian</p><p className="font-semibold text-success">{formatCurrency(product.daily_income)}</p></div>
                     <div><p className="text-muted-foreground">Total</p><p className="font-semibold text-accent">{formatCurrency(product.total_income)}</p></div>
                   </div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <Button
+                      variant={product.is_active ? "outline" : "default"}
+                      size="sm"
+                      onClick={async () => {
+                        await updateProduct(product.id, { is_active: !product.is_active });
+                        toast({
+                          title: product.is_active ? "Produk Ditutup" : "Produk Dibuka",
+                          description: `${product.name} ${product.is_active ? 'disembunyikan dari member' : 'sekarang tampil di halaman produk'}.`,
+                        });
+                        loadProducts();
+                      }}
+                    >
+                      {product.is_active ? "Tutup" : "Buka"}
+                    </Button>
                     <Button variant="outline" size="sm" onClick={() => openEditDialog(product)}><Edit className="w-3 h-3 mr-1" />Edit</Button>
                     <Button variant="destructive" size="sm" onClick={() => openDeleteDialog(product)}><Trash2 className="w-3 h-3 mr-1" />Hapus</Button>
                   </div>
