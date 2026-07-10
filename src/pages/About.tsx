@@ -1,9 +1,9 @@
 import LegalLayout from "@/components/LegalLayout";
 
 const About = () => (
-  <LegalLayout title="Tentang Apptronik">
+  <LegalLayout title="Tentang InvestPro">
     <p>
-      <strong>Apptronik</strong> adalah platform investasi digital berbasis kecerdasan buatan
+      <strong>InvestPro</strong> adalah platform investasi digital berbasis kecerdasan buatan
       yang fokus pada sektor robotika dan otomasi humanoid. Kami menghubungkan pengguna individu
       dengan peluang penghasilan harian melalui produk sewa robot AI yang dikelola secara transparan.
     </p>
@@ -20,17 +20,17 @@ const About = () => (
 
     <h2>Profil Perusahaan</h2>
     <ul>
-      <li><strong>Nama Brand:</strong> Apptronik</li>
+      <li><strong>Nama Brand:</strong> InvestPro</li>
       <li><strong>Bidang Usaha:</strong> Platform Investasi Digital & Robotika AI</li>
       <li><strong>Tahun Berdiri:</strong> 2026</li>
       <li><strong>Alamat Operasional:</strong> Jakarta, Indonesia</li>
-      <li><strong>Email Resmi:</strong> support@apptronik.id</li>
+      <li><strong>Email Resmi:</strong> support@investpro.id</li>
       <li><strong>Layanan Pelanggan:</strong> 24 Jam via WhatsApp</li>
     </ul>
 
     <h2>Komitmen Kami</h2>
     <p>
-      Apptronik berkomitmen menjaga keamanan data pengguna, kelancaran proses deposit dan penarikan,
+      InvestPro berkomitmen menjaga keamanan data pengguna, kelancaran proses deposit dan penarikan,
       serta memberikan dukungan pelanggan yang responsif. Kami tidak akan pernah meminta password,
       OTP, atau PIN bank Anda melalui saluran apapun.
     </p>

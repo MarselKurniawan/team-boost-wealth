@@ -17,7 +17,7 @@ const Layout = ({ children, wide = false }: { children: React.ReactNode; wide?: 
       <header className="border-b border-border bg-background">
         <div className={`mx-auto ${wide ? "max-w-4xl" : "max-w-md"} px-5 h-12 flex items-center justify-between`}>
           <span className="font-heading text-[13px] font-bold tracking-tight text-foreground">
-            APPTRONIK<span className="text-primary">.</span>
+            INVESTPRO<span className="text-primary">.</span>
           </span>
           <span className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground">Mobile Edition</span>
         </div>

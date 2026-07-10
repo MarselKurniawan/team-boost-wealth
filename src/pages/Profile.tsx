@@ -236,7 +236,7 @@ const Profile = () => {
           <LogOut className="w-4 h-4" /> Keluar
         </Button>
         <p className="mt-6 text-center text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
-          Apptronik · v2.0
+          InvestPro · v2.0
         </p>
       </section>
 

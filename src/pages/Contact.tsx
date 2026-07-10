@@ -5,7 +5,7 @@ import { WhatsAppIcon } from "@/components/icons/WhatsAppIcon";
 const Contact = () => (
   <LegalLayout title="Hubungi Kami">
     <p>
-      Tim Customer Service Apptronik siap membantu Anda 24 jam setiap hari. Silakan hubungi kami melalui salah satu
+      Tim Customer Service InvestPro siap membantu Anda 24 jam setiap hari. Silakan hubungi kami melalui salah satu
       saluran resmi di bawah ini.
     </p>
 
@@ -25,14 +25,14 @@ const Contact = () => (
       </a>
 
       <a
-        href="mailto:support@apptronik.id"
+        href="mailto:support@investpro.id"
         className="border border-border rounded-lg p-4 hover:bg-muted/50 transition"
       >
         <div className="flex items-center gap-2 mb-1">
           <Mail className="w-4 h-4 text-primary" />
           <span className="font-semibold text-sm">Email Resmi</span>
         </div>
-        <p className="text-xs text-muted-foreground">support@apptronik.com</p>
+        <p className="text-xs text-muted-foreground">support@investpro.com</p>
         <p className="text-[10px] text-muted-foreground mt-1">Respon 1×24 jam kerja</p>
       </a>
 
@@ -56,10 +56,10 @@ const Contact = () => (
     <h2>Peringatan Keamanan</h2>
     <ul>
       <li>
-        Staf Apptronik <strong>tidak pernah</strong> meminta password, OTP, atau PIN.
+        Staf InvestPro <strong>tidak pernah</strong> meminta password, OTP, atau PIN.
       </li>
       <li>Selalu pastikan Anda menghubungi nomor & email resmi yang tertera di halaman ini.</li>
-      <li>Waspadai akun palsu yang mengatasnamakan Apptronik di media sosial.</li>
+      <li>Waspadai akun palsu yang mengatasnamakan InvestPro di media sosial.</li>
     </ul>
   </LegalLayout>
 );

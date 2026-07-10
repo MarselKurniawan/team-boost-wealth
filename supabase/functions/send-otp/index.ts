@@ -97,7 +97,7 @@ Deno.serve(async (req) => {
     }
 
     // Send OTP via Fonnte
-    const message = `Kode verifikasi Apptronik Anda: *${otp}*\n\nKode berlaku 5 menit. Jangan berikan kode ini kepada siapapun.`;
+    const message = `Kode verifikasi InvestPro Anda: *${otp}*\n\nKode berlaku 5 menit. Jangan berikan kode ini kepada siapapun.`;
 
     const formData = new FormData();
     formData.append("target", normalizedPhone);

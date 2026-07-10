@@ -32,7 +32,7 @@ const CompanyProfileDialog = ({ open, onOpenChange }: CompanyProfileDialogProps)
             Profil Perusahaan
           </DialogTitle>
           <DialogDescription>
-            Informasi lengkap tentang Apptronik Indonesia
+            Informasi lengkap tentang InvestPro Indonesia
           </DialogDescription>
         </DialogHeader>
 
@@ -41,7 +41,7 @@ const CompanyProfileDialog = ({ open, onOpenChange }: CompanyProfileDialogProps)
           <div className="relative rounded-xl overflow-hidden">
             <img 
               src={companyBuilding} 
-              alt="Kantor Pusat Apptronik" 
+              alt="Kantor Pusat InvestPro" 
               className="w-full h-40 object-cover"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
@@ -53,9 +53,9 @@ const CompanyProfileDialog = ({ open, onOpenChange }: CompanyProfileDialogProps)
           {/* Company Logo & Name */}
           <div className="text-center">
             <div className="w-20 h-20 mx-auto bg-card border border-border rounded-2xl flex items-center justify-center mb-4 overflow-hidden">
-              <img src={appLogo} alt="Apptronik" className="w-full h-full object-contain p-2" />
+              <img src={appLogo} alt="InvestPro" className="w-full h-full object-contain p-2" />
             </div>
-            <h2 className="text-xl font-bold text-foreground">PT Apptronik Indonesia</h2>
+            <h2 className="text-xl font-bold text-foreground">PT InvestPro Indonesia</h2>
             <Badge variant="vip" className="mt-2">Platform Investasi Digital Terpercaya</Badge>
           </div>
 
@@ -68,7 +68,7 @@ const CompanyProfileDialog = ({ open, onOpenChange }: CompanyProfileDialogProps)
               Tentang Kami
             </h3>
             <p className="text-sm text-muted-foreground leading-relaxed">
-              <strong className="text-foreground">Apptronik</strong> adalah perusahaan spin-off dari Human Centered Robotics Lab di Universitas Texas di Austin. Kami didirikan pada awal tahun 2016 dengan tujuan menghadirkan generasi robot berikutnya yang akan mengubah cara kita hidup dan bekerja. Kami telah membangun beberapa robot yang paling beragam, mulai dari eksoskeleton hingga torso humanoid, platform mobilitas bipedal, dan lengan robot unik yang mampu mengangkat beban lebih berat daripada beratnya sendiri. Pengalaman dan pembelajaran dari semua pekerjaan ini mengarah pada pengembangan <strong className="text-foreground">Apollo</strong>, robot humanoid tercanggih di dunia.
+              <strong className="text-foreground">InvestPro</strong> adalah perusahaan spin-off dari Human Centered Robotics Lab di Universitas Texas di Austin. Kami didirikan pada awal tahun 2016 dengan tujuan menghadirkan generasi robot berikutnya yang akan mengubah cara kita hidup dan bekerja. Kami telah membangun beberapa robot yang paling beragam, mulai dari eksoskeleton hingga torso humanoid, platform mobilitas bipedal, dan lengan robot unik yang mampu mengangkat beban lebih berat daripada beratnya sendiri. Pengalaman dan pembelajaran dari semua pekerjaan ini mengarah pada pengembangan <strong className="text-foreground">Apollo</strong>, robot humanoid tercanggih di dunia.
             </p>
             <p className="text-sm text-muted-foreground leading-relaxed">
               Kami membangun mesin yang memberdayakan manusia untuk hidup dengan potensi penuh. Kami percaya bahwa bukan <em>Manusia vs. Mesin</em>, melainkan <em>Manusia + Mesin</em> yang akan membawa umat manusia ke tahap evolusi selanjutnya.
@@ -106,7 +106,7 @@ const CompanyProfileDialog = ({ open, onOpenChange }: CompanyProfileDialogProps)
           <div className="relative rounded-xl overflow-hidden">
             <img 
               src={companyOffice} 
-              alt="Suasana Kantor Apptronik" 
+              alt="Suasana Kantor InvestPro" 
               className="w-full h-32 object-cover"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent" />
@@ -140,7 +140,7 @@ const CompanyProfileDialog = ({ open, onOpenChange }: CompanyProfileDialogProps)
             </div>
             <p className="text-xs text-muted-foreground bg-muted/30 p-2 rounded-lg">
               💡 <strong>Apa artinya?</strong> Dengan lebih dari 100.000 investor dan rata-rata 
-              return 15% per tahun, Apptronik telah membuktikan komitmen dalam memberikan hasil investasi yang optimal.
+              return 15% per tahun, InvestPro telah membuktikan komitmen dalam memberikan hasil investasi yang optimal.
             </p>
           </div>
 
@@ -150,7 +150,7 @@ const CompanyProfileDialog = ({ open, onOpenChange }: CompanyProfileDialogProps)
           <div className="space-y-3">
             <h3 className="font-semibold text-foreground flex items-center gap-2">
               <CheckCircle2 className="w-4 h-4 text-success" />
-              Mengapa Pilih Apptronik?
+              Mengapa Pilih InvestPro?
             </h3>
             <div className="space-y-2">
               <div className="flex items-start gap-3 p-2 bg-muted/50 rounded-lg">
@@ -205,12 +205,12 @@ const CompanyProfileDialog = ({ open, onOpenChange }: CompanyProfileDialogProps)
               
               <div className="flex items-center gap-3 p-2 bg-muted/50 rounded-lg">
                 <Mail className="w-4 h-4 text-muted-foreground" />
-                <span className="text-sm text-foreground break-all">info@apptronik.com</span>
+                <span className="text-sm text-foreground break-all">info@investpro.com</span>
               </div>
               
               <div className="flex items-center gap-3 p-2 bg-muted/50 rounded-lg">
                 <Globe className="w-4 h-4 text-muted-foreground" />
-                <span className="text-sm text-foreground">apptronik.com</span>
+                <span className="text-sm text-foreground">investpro.com</span>
               </div>
             </div>
           </div>

@@ -15,8 +15,8 @@ const LegalLayout = ({ title, updated = "11 Juni 2026", children }: LegalLayoutP
       <header className="border-b border-border bg-card/40 backdrop-blur">
         <div className="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2">
-            <img src={appLogo} alt="Apptronik" className="h-7 w-7" />
-            <span className="font-semibold text-sm">Apptronik</span>
+            <img src={appLogo} alt="InvestPro" className="h-7 w-7" />
+            <span className="font-semibold text-sm">InvestPro</span>
           </Link>
           <Button asChild variant="ghost" size="sm" className="text-xs">
             <Link to="/auth"><ArrowLeft className="w-3.5 h-3.5 mr-1" /> Kembali</Link>
@@ -34,7 +34,7 @@ const LegalLayout = ({ title, updated = "11 Juni 2026", children }: LegalLayoutP
 
       <footer className="border-t border-border mt-8">
         <div className="max-w-3xl mx-auto px-4 py-5 text-[11px] text-muted-foreground flex flex-wrap gap-x-4 gap-y-2 justify-between">
-          <div>© {new Date().getFullYear()} Apptronik. Hak cipta dilindungi.</div>
+          <div>© {new Date().getFullYear()} InvestPro. Hak cipta dilindungi.</div>
           <nav className="flex gap-3">
             <Link to="/about" className="hover:text-foreground">Tentang</Link>
             <Link to="/contact" className="hover:text-foreground">Kontak</Link>
