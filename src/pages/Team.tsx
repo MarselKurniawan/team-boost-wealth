@@ -66,14 +66,8 @@ const Team = () => {
     ? Math.min(((personalDeposit - prevDeposit) / (requiredDeposit - prevDeposit)) * 100, 100) : 100;
   const progressPercentage = Math.min(memberProgress, depositProgress);
 
-  useEffect(() => {
-    if (!thresholdsReady || !profile?.user_id) return;
-    const computed = calculateVipLevel(totalReferrals, personalDeposit);
-    if (computed > currentVipLevel) {
-      updateProfile(profile.user_id, { vip_level: computed } as any).then(() => refreshProfile());
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [thresholdsReady, totalReferrals, personalDeposit, currentVipLevel, profile?.user_id]);
+  // VIP level diatur manual oleh admin — tidak ada auto-upgrade dari sisi klien.
+
 
   const copy = (text: string, label: string) => {
     navigator.clipboard.writeText(text);
