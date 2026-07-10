@@ -33,17 +33,11 @@ const Layout = ({ children, wide = false }: { children: React.ReactNode; wide?: 
             <NavLink
               key={item.to}
               to={item.to}
-              className="group relative flex items-center justify-center gap-1.5 h-10 px-3 rounded-full transition-all"
-              activeClassName="bg-background text-foreground px-4"
+              className="group flex items-center justify-center gap-1.5 h-10 px-3 rounded-full transition-all hover:bg-background/10"
+              activeClassName="!bg-background !text-foreground px-4 hover:!bg-background"
             >
-              {({ isActive }: any) => (
-                <>
-                  <item.icon className="w-4 h-4" strokeWidth={2} />
-                  {isActive && (
-                    <span className="text-[11px] font-semibold tracking-tight">{item.label}</span>
-                  )}
-                </>
-              )}
+              <item.icon className="w-4 h-4" strokeWidth={2} />
+              <span className="hidden group-[.\\!bg-background]:inline text-[11px] font-semibold tracking-tight">{item.label}</span>
             </NavLink>
           ))}
         </div>
