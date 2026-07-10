@@ -238,82 +238,81 @@ const Auth = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="animate-pulse text-primary">Memuat...</div>
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="animate-pulse text-[#2563EB] text-sm">Memuat...</div>
       </div>
     );
   }
 
   return (
-    <div className="dark min-h-screen bg-background text-foreground flex relative overflow-hidden">
-      {/* Background decorations */}
-      <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 right-0 w-80 h-80 bg-accent/20 rounded-full blur-3xl" />
+    <div className="min-h-screen bg-white text-slate-900 flex">
+      {/* Left - Blue welcome panel */}
+      <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden text-white" style={{ background: "linear-gradient(160deg, #2F6BE8 0%, #2557D6 55%, #1E48BF 100%)" }}>
+        {/* Decorative blobs */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute -top-24 -left-16 w-[420px] h-[420px] rounded-full bg-white/10 blur-3xl" />
+          <div className="absolute top-1/3 -right-24 w-[380px] h-[380px] rounded-full bg-white/10 blur-3xl" />
+          <div className="absolute bottom-10 left-10 w-24 h-24 rounded-full border border-white/20" />
+          <div className="absolute top-24 right-24 w-3 h-3 rounded-full bg-white/70" />
+          <div className="absolute bottom-24 right-40 w-2 h-2 rounded-full bg-white/60" />
+          <div className="absolute top-1/2 left-8 w-1.5 h-1.5 rounded-full bg-white/50" />
+        </div>
+
+        <div className="relative z-10 flex flex-col justify-between p-12 w-full">
+          {/* Logo */}
+          <div className="flex items-center gap-2.5">
+            <div className="w-10 h-10 bg-white/15 backdrop-blur border border-white/30 flex items-center justify-center">
+              <span className="font-bold text-lg tracking-tight">I</span>
+            </div>
+            <span className="font-heading font-bold text-xl tracking-tight">InvestPro</span>
+          </div>
+
+          {/* Center illustration */}
+          <div className="flex-1 flex items-center justify-center py-10">
+            <div className="relative w-[280px] h-[220px]">
+              <div className="absolute inset-0 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20" />
+              <div className="absolute inset-6 grid grid-cols-3 grid-rows-3 gap-2">
+                {Array.from({ length: 9 }).map((_, i) => (
+                  <div key={i} className={cn("border border-white/30 flex items-center justify-center", [0,1,4,7].includes(i) ? "bg-white/20" : "bg-white/5")}>
+                    {[0,1,4].includes(i) && <Check className="w-4 h-4 text-white" strokeWidth={3} />}
+                  </div>
+                ))}
+              </div>
+              <div className="absolute -bottom-3 -right-3 w-16 h-16 rounded-full bg-white/95 flex items-center justify-center shadow-lg">
+                <TrendingUp className="w-8 h-8 text-[#2557D6]" strokeWidth={2.5} />
+              </div>
+              <div className="absolute -top-4 -left-4 w-12 h-12 bg-white/20 rounded flex items-center justify-center border border-white/30">
+                <Sparkles className="w-5 h-5 text-white" />
+              </div>
+            </div>
+          </div>
+
+          {/* Bottom copy */}
+          <div>
+            <h2 className="font-heading text-4xl font-bold mb-3">Welcome!</h2>
+            <p className="text-white/85 text-sm max-w-sm leading-relaxed">
+              Platform investasi cerdas berbasis AI. Kelola portofolio, robot, dan pendapatan harian Anda dalam satu tempat.
+            </p>
+            <div className="flex items-center gap-1.5 mt-6">
+              <span className="w-6 h-1.5 bg-white rounded-full" />
+              <span className="w-1.5 h-1.5 bg-white/50 rounded-full" />
+              <span className="w-1.5 h-1.5 bg-white/50 rounded-full" />
+            </div>
+          </div>
+        </div>
       </div>
 
-      {/* Left side - Branding */}
-      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-primary/15 via-card to-accent/15 p-12 flex-col justify-between relative">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-primary/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-
-        <div className="relative z-10">
-          <div className="flex items-center gap-2 mb-2">
-            <img src={appLogo} alt="InvestPro" className="w-10 h-10 rounded-lg object-contain bg-white/5 p-1" />
-            <h1 className="font-heading text-4xl font-bold text-foreground">
-              InvestPro
-            </h1>
-          </div>
-          <p className="text-muted-foreground">Robot AI Humanoid Platform</p>
-        </div>
-
-        <div className="relative z-10 space-y-8">
-          <div className="flex items-start gap-4">
-            <div className="w-12 h-12 rounded-xl bg-primary/20 border border-primary/30 flex items-center justify-center">
-              <TrendingUp className="w-6 h-6 text-primary" />
-            </div>
-            <div>
-              <h3 className="text-foreground font-semibold text-lg">Return Tinggi</h3>
-              <p className="text-muted-foreground text-sm">Dapatkan keuntungan hingga 10% per hari</p>
-            </div>
-          </div>
-
-          <div className="flex items-start gap-4">
-            <div className="w-12 h-12 rounded-xl bg-success/20 border border-success/30 flex items-center justify-center">
-              <Shield className="w-6 h-6 text-success" />
-            </div>
-            <div>
-              <h3 className="text-foreground font-semibold text-lg">Aman & Terpercaya</h3>
-              <p className="text-muted-foreground text-sm">Dilindungi sistem keamanan berlapis</p>
-            </div>
-          </div>
-
-          <div className="flex items-start gap-4">
-            <div className="w-12 h-12 rounded-xl bg-secondary/20 border border-secondary/30 flex items-center justify-center">
-              <Users className="w-6 h-6 text-secondary" />
-            </div>
-            <div>
-              <h3 className="text-foreground font-semibold text-lg">Bonus Referral</h3>
-              <p className="text-muted-foreground text-sm">Ajak teman dan dapatkan komisi hingga 10%</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="relative z-10">
-          <p className="text-muted-foreground text-sm">© 2024 InvestPro. All rights reserved.</p>
-        </div>
-      </div>
-
-      {/* Right side - Auth Form */}
-      <div className="flex-1 flex items-center justify-center p-6 lg:p-12 relative z-10">
+      {/* Right - Form */}
+      <div className="flex-1 flex items-center justify-center p-6 lg:p-16 bg-white">
         <div className="w-full max-w-md">
           {/* Mobile logo */}
-          <div className="lg:hidden text-center mb-8">
-            <div className="flex items-center justify-center gap-2 mb-1">
-              <img src={appLogo} alt="InvestPro" className="w-9 h-9 rounded-lg object-contain bg-white/5 p-1" />
-              <h1 className="font-heading text-3xl font-bold text-foreground">InvestPro</h1>
+          <div className="lg:hidden mb-8 flex items-center gap-2.5">
+            <div className="w-10 h-10 bg-[#2557D6] flex items-center justify-center text-white">
+              <span className="font-bold text-lg">I</span>
             </div>
-            <p className="text-muted-foreground text-sm">Robot AI Humanoid Platform</p>
+            <span className="font-heading font-bold text-xl text-slate-900">InvestPro</span>
           </div>
+
 
           <Card className="border-border/50 shadow-card">
             <CardHeader className="space-y-1 pb-3">
