@@ -44,6 +44,7 @@ const AdminProducts = () => {
     max_per_user: "1",
     term_type: "long",
     stock: "",
+    profit_mode: "daily",
   });
   
   
@@ -63,7 +64,7 @@ const AdminProducts = () => {
   const calculateTotalIncome = (dailyIncome: number, validity: number) => dailyIncome * validity;
 
   const resetForm = () => {
-    setFormData({ name: "", price: "", daily_income: "", validity: "", vip_level: "0", image: "", description: "", category: "reguler", promo_price: "", promo_daily_income: "", promo_validity: "", max_per_user: "1", term_type: "long", stock: "" });
+    setFormData({ name: "", price: "", daily_income: "", validity: "", vip_level: "0", image: "", description: "", category: "reguler", promo_price: "", promo_daily_income: "", promo_validity: "", max_per_user: "1", term_type: "long", stock: "", profit_mode: "daily" });
   };
 
   const openCreateDialog = () => {
@@ -94,6 +95,7 @@ const AdminProducts = () => {
       max_per_user: product.max_per_user == null ? "0" : product.max_per_user.toString(),
       term_type: (product as any).term_type === 'short' ? 'short' : 'long',
       stock: (product as any).stock == null ? "" : String((product as any).stock),
+      profit_mode: (product as any).profit_mode === 'locked' ? 'locked' : 'daily',
     });
     
     setPreviewImage(product.image || "");
@@ -183,6 +185,7 @@ const AdminProducts = () => {
       max_per_user: isNaN(maxPerUserNum) || maxPerUserNum <= 0 ? null : maxPerUserNum,
       term_type: formData.term_type === 'short' ? 'short' : 'long',
       stock: formData.stock.trim() === "" ? null : Math.max(0, parseInt(formData.stock) || 0),
+      profit_mode: formData.profit_mode === 'locked' ? 'locked' : 'daily',
     } as any;
 
     if (isCreating) {
