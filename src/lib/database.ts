@@ -681,6 +681,7 @@ export interface VipSetting {
   vip_level: number;
   required_members: number;
   required_deposit: number;
+  title: string | null;
   updated_at: string;
 }
 
@@ -697,6 +698,7 @@ export const getVipSettings = async (): Promise<VipSetting[]> => {
   return (data || []).map((d: any) => ({
     ...d,
     required_deposit: Number(d.required_deposit ?? 0),
+    title: d.title ?? null,
   })) as VipSetting[];
 };
 
@@ -704,6 +706,7 @@ export const updateVipSetting = async (
   vipLevel: number,
   requiredMembers: number,
   requiredDeposit: number = 0,
+  title: string | null = null,
 ): Promise<boolean> => {
   const { error } = await supabase
     .from('vip_settings')
@@ -711,6 +714,7 @@ export const updateVipSetting = async (
       vip_level: vipLevel,
       required_members: requiredMembers,
       required_deposit: requiredDeposit,
+      title,
       updated_at: new Date().toISOString(),
     } as any, { onConflict: 'vip_level' });
 
@@ -720,3 +724,16 @@ export const updateVipSetting = async (
   }
   return true;
 };
+
+export const defaultVipTitle = (level: number): string => {
+  const map: Record<number, string> = {
+    0: 'Pemula',
+    1: 'Asisten Magang',
+    2: 'Kepala Pemasaran',
+    3: 'Asisten Manager',
+    4: 'Supervisor',
+    5: 'Manager',
+  };
+  return map[level] ?? `VIP ${level}`;
+};
+
