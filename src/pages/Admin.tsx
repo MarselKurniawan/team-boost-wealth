@@ -629,9 +629,19 @@ const Admin = () => {
           </DialogHeader>
           <div className="flex-1 min-h-0 overflow-y-auto px-6 py-3 space-y-3">
             <p className="text-xs text-muted-foreground">Atur syarat naik VIP. Wajib penuhi <b>kedua syarat</b>: jumlah bawahan yang sudah beli produk <b>dan</b> akumulasi deposit pribadi user.</p>
-            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((level) => (
+            {[0, 1, 2, 3, 4, 5].map((level) => (
               <div key={level} className="p-3 rounded-lg bg-muted/50 space-y-2">
                 <Badge className="bg-secondary/20 text-secondary border-0 font-bold shrink-0">VIP {level}</Badge>
+                <div>
+                  <Label className="text-[10px] text-muted-foreground">Nama Tingkatan (mis. Asisten Magang)</Label>
+                  <Input
+                    type="text"
+                    placeholder={`Nama untuk VIP ${level}`}
+                    value={editingVip[level]?.title ?? ''}
+                    onChange={(e) => setEditingVip(prev => ({ ...prev, [level]: { members: prev[level]?.members ?? 0, deposit: prev[level]?.deposit ?? 0, title: e.target.value } }))}
+                    className="h-8 text-sm"
+                  />
+                </div>
                 <div className="grid grid-cols-2 gap-2">
                   <div>
                     <Label className="text-[10px] text-muted-foreground">Minimal Member</Label>
@@ -639,7 +649,7 @@ const Admin = () => {
                       type="number"
                       min={0}
                       value={editingVip[level]?.members ?? 0}
-                      onChange={(e) => setEditingVip(prev => ({ ...prev, [level]: { ...(prev[level] ?? { members: 0, deposit: 0 }), members: parseInt(e.target.value) || 0 } }))}
+                      onChange={(e) => setEditingVip(prev => ({ ...prev, [level]: { members: parseInt(e.target.value) || 0, deposit: prev[level]?.deposit ?? 0, title: prev[level]?.title ?? '' } }))}
                       className="h-8 text-sm"
                     />
                   </div>
@@ -649,13 +659,14 @@ const Admin = () => {
                       type="number"
                       min={0}
                       value={editingVip[level]?.deposit ?? 0}
-                      onChange={(e) => setEditingVip(prev => ({ ...prev, [level]: { ...(prev[level] ?? { members: 0, deposit: 0 }), deposit: parseInt(e.target.value) || 0 } }))}
+                      onChange={(e) => setEditingVip(prev => ({ ...prev, [level]: { members: prev[level]?.members ?? 0, deposit: parseInt(e.target.value) || 0, title: prev[level]?.title ?? '' } }))}
                       className="h-8 text-sm"
                     />
                   </div>
                 </div>
               </div>
             ))}
+
           </div>
           <div className="px-6 pb-6 pt-2 border-t border-border/50">
             <Button onClick={handleSaveVipSettings} className="w-full" disabled={isLoading === 'vip'}>
