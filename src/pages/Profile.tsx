@@ -78,10 +78,7 @@ const Profile = () => {
   if (!profile) return null;
 
   const uid = profile.user_id.slice(0, 6).toUpperCase();
-  const registeredAt = new Date(profile.created_at).toLocaleString("id-ID", {
-    year: "numeric", month: "2-digit", day: "2-digit",
-    hour: "2-digit", minute: "2-digit", second: "2-digit",
-  });
+
 
   const gridItems = [
     { icon: ClipboardList, label: "Pesanan", desc: "Riwayat investasi saya", action: () => navigate("/account") },
@@ -135,9 +132,7 @@ const Profile = () => {
               <button onClick={handleCopyUID} className="mt-1 flex items-center gap-1 text-[10px] text-muted-foreground hover:text-primary">
                 UID {uid} <Copy className="w-2.5 h-2.5" />
               </button>
-              <p className="mt-0.5 text-[9px] text-muted-foreground">
-                Terdaftar: {registeredAt}
-              </p>
+
             </div>
           </div>
         </div>
