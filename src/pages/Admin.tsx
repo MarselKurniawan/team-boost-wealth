@@ -104,9 +104,10 @@ const Admin = () => {
     setAllTransactions(enrichTransactions(allTxData, profilesData));
     setCoupons(couponData);
     setVipSettings(vipData);
-    const vipMap: Record<number, { members: number; deposit: number }> = {};
-    vipData.forEach(v => { vipMap[v.vip_level] = { members: v.required_members, deposit: Number(v.required_deposit || 0) }; });
+    const vipMap: Record<number, { members: number; deposit: number; title: string }> = {};
+    vipData.forEach(v => { vipMap[v.vip_level] = { members: v.required_members, deposit: Number(v.required_deposit || 0), title: v.title ?? '' }; });
     setEditingVip(vipMap);
+
   };
 
   useEffect(() => {
