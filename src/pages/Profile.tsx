@@ -20,6 +20,8 @@ import ReferralDialog from "@/components/ReferralDialog";
 import DailyCheckinDialog from "@/components/DailyCheckinDialog";
 import SpinWheelDialog from "@/components/SpinWheelDialog";
 import TransactionHistoryDialog from "@/components/TransactionHistoryDialog";
+import { useVipTitles } from "@/hooks/useVipTitles";
+
 
 const Profile = () => {
   const navigate = useNavigate();
