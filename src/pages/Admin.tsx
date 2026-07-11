@@ -146,11 +146,12 @@ const Admin = () => {
   const handleSaveVipSettings = async () => {
     setIsLoading('vip');
     let success = true;
-    for (const level of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]) {
-      const cfg = editingVip[level] ?? { members: 0, deposit: 0 };
-      const result = await updateVipSetting(level, cfg.members, cfg.deposit);
+    for (const level of [0, 1, 2, 3, 4, 5]) {
+      const cfg = editingVip[level] ?? { members: 0, deposit: 0, title: '' };
+      const result = await updateVipSetting(level, cfg.members, cfg.deposit, cfg.title?.trim() || null);
       if (!result) success = false;
     }
+
     if (success) {
       toast({ title: "VIP Setting Disimpan", description: "Threshold berhasil diupdate" });
     } else {
