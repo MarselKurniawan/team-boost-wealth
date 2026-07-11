@@ -1,6 +1,5 @@
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Lock, ArrowUpRight } from "lucide-react";
+import { Lock, ArrowUpRight, TrendingUp, Clock, Coins } from "lucide-react";
 import { formatCurrency, Product } from "@/lib/database";
 
 interface ProductCardProps {
@@ -19,84 +18,102 @@ const ProductCard = ({ product, onViewDetail, onInvest }: ProductCardProps) => {
   const displayValidity = hasPromoValidity ? product.promo_validity! : product.validity;
   const totalEarning = displayDailyIncome * displayValidity;
 
-  const vipLabel = product.vip_level > 0 ? `VIP ${product.vip_level}` : "Reguler";
-  const isLocked = (product as any).profit_mode === "locked";
+  const isLocked = (product as any).profit_mode === "locked" || product.category === "vip" || (product.vip_level ?? 0) > 0;
+  const roiPct = displayPrice > 0 ? Math.round(((totalEarning - displayPrice) / displayPrice) * 100) : 0;
 
   return (
-    <article className="group border border-border bg-card hover:border-foreground transition-colors">
-      {/* Metadata bar — top */}
-      <div className="flex items-center justify-between px-4 py-2 border-b border-border">
-        <div className="flex items-center gap-2">
-          <span className="text-[9px] uppercase tracking-[0.18em] text-muted-foreground font-semibold">
-            {vipLabel}
+    <article className="group relative overflow-hidden rounded-2xl bg-white border border-blue-100/70 shadow-[0_4px_18px_-10px_rgba(30,64,175,0.25)] hover:shadow-[0_10px_25px_-10px_rgba(30,64,175,0.4)] hover:-translate-y-0.5 transition-all">
+      {/* Corner decoration */}
+      <div className="absolute -top-8 -right-8 w-24 h-24 rounded-full bg-blue-50/70 pointer-events-none" />
+      <div className="absolute -bottom-6 -left-6 w-16 h-16 rounded-full bg-cyan-50/60 pointer-events-none" />
+
+      {/* Top ribbon */}
+      <div className="relative flex items-center justify-between px-3.5 pt-3">
+        <div className="flex items-center gap-1.5">
+          <span
+            className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider ${
+              isLocked
+                ? "bg-gradient-to-r from-primary to-primary-glow text-white shadow-sm"
+                : "bg-blue-50 text-primary border border-blue-100"
+            }`}
+          >
+            {isLocked ? <Lock className="w-2.5 h-2.5" /> : <TrendingUp className="w-2.5 h-2.5" />}
+            {isLocked ? "Kontrak" : "Harian"}
           </span>
-          {isLocked && (
-            <span className="inline-flex items-center gap-1 text-[9px] uppercase tracking-[0.18em] text-primary font-semibold">
-              <Lock className="w-2.5 h-2.5" /> Locked
+          {hasPromoPrice && (
+            <span className="inline-flex px-1.5 py-0.5 rounded-md bg-destructive/10 text-destructive text-[9px] font-bold">
+              PROMO
             </span>
           )}
         </div>
-        <span className="text-[10px] font-mono text-muted-foreground">
-          #{String(product.id).slice(0, 6)}
-        </span>
+        <span className="text-[9px] font-mono text-muted-foreground">#{String(product.id).slice(0, 6)}</span>
       </div>
 
-      {/* Horizontal body */}
-      <div className="flex gap-0">
+      {/* Body */}
+      <div className="relative flex gap-3 p-3.5 pt-3">
         <button
           onClick={() => onViewDetail(product)}
-          className="w-28 h-28 flex-shrink-0 border-r border-border bg-muted overflow-hidden"
+          className="relative w-24 h-24 flex-shrink-0 rounded-xl overflow-hidden bg-gradient-to-br from-blue-100 to-blue-50 ring-1 ring-blue-100"
         >
           <img
             src={product.image}
             alt={product.name}
-            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
           />
+          <div className="absolute inset-0 bg-gradient-to-t from-primary/10 to-transparent" />
         </button>
 
-        <div className="flex-1 min-w-0 p-4 flex flex-col justify-between">
+        <div className="flex-1 min-w-0 flex flex-col justify-between">
           <div>
-            <h3 className="text-sm font-heading font-semibold text-foreground leading-tight truncate">
+            <h3 className="text-sm font-heading font-bold text-foreground leading-tight line-clamp-2">
               {product.name}
             </h3>
-            <div className="grid grid-cols-2 gap-x-3 gap-y-2 mt-3">
-              <Stat
-                label={isLocked ? "Profit/hari" : "Harian"}
-                value={formatCurrency(displayDailyIncome)}
-                strike={hasPromoDailyIncome ? formatCurrency(product.daily_income) : undefined}
-              />
-              <Stat label="Durasi" value={`${displayValidity} hari`} />
+            <div className="mt-2 flex items-center gap-1.5 flex-wrap">
+              <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-blue-50 text-primary text-[9px] font-semibold">
+                <Clock className="w-2.5 h-2.5" /> {displayValidity} hari
+              </span>
+              <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-cyan-50 text-cyan-700 text-[9px] font-semibold">
+                <Coins className="w-2.5 h-2.5" /> ROI {roiPct}%
+              </span>
             </div>
           </div>
-        </div>
-      </div>
 
-      {/* Action row — asymmetric, action on right, price left */}
-      <div className="flex items-stretch border-t border-border">
-        <div className="flex-1 px-4 py-3 border-r border-border">
-          <p className="text-[9px] uppercase tracking-[0.18em] text-muted-foreground">
-            {isLocked ? "Payout akhir" : "Total return"}
-          </p>
-          <p className="text-sm font-heading font-semibold text-foreground break-all">
-            {formatCurrency(totalEarning)}
-          </p>
-        </div>
-        <div className="flex-1 px-4 py-3">
-          <p className="text-[9px] uppercase tracking-[0.18em] text-muted-foreground">Harga</p>
-          <div className="flex items-baseline gap-1.5">
+          <div className="mt-2 flex items-baseline gap-1.5">
             {hasPromoPrice && (
               <span className="text-[10px] text-muted-foreground line-through">
                 {formatCurrency(product.price)}
               </span>
             )}
-            <span className="text-sm font-heading font-semibold text-foreground break-all">
+            <span className="text-base font-heading font-bold text-primary break-all">
               {formatCurrency(displayPrice)}
             </span>
           </div>
         </div>
+      </div>
+
+      {/* Stats + CTA */}
+      <div className="relative mx-3.5 mb-3.5 rounded-xl bg-gradient-to-br from-blue-50/80 to-cyan-50/50 border border-blue-100/60 p-2.5 flex items-center gap-2">
+        <div className="flex-1 grid grid-cols-2 gap-2">
+          <div className="min-w-0">
+            <p className="text-[9px] uppercase tracking-wider text-muted-foreground font-semibold">
+              {isLocked ? "Profit/hari" : "Harian"}
+            </p>
+            <p className="text-[11px] font-bold text-foreground break-all">
+              {formatCurrency(displayDailyIncome)}
+            </p>
+          </div>
+          <div className="min-w-0">
+            <p className="text-[9px] uppercase tracking-wider text-muted-foreground font-semibold">
+              {isLocked ? "Payout akhir" : "Total return"}
+            </p>
+            <p className="text-[11px] font-bold text-primary break-all">
+              {formatCurrency(totalEarning)}
+            </p>
+          </div>
+        </div>
         <Button
           onClick={() => onInvest(product)}
-          className="h-auto px-5 rounded-none border-0 bg-foreground text-background hover:bg-primary"
+          className="h-10 px-3 rounded-xl bg-gradient-to-br from-primary to-primary-glow text-primary-foreground hover:shadow-lg hover:shadow-primary/30 text-[11px] font-bold shrink-0"
         >
           Beli <ArrowUpRight className="w-3.5 h-3.5" />
         </Button>
@@ -104,15 +121,5 @@ const ProductCard = ({ product, onViewDetail, onInvest }: ProductCardProps) => {
     </article>
   );
 };
-
-const Stat = ({ label, value, strike }: { label: string; value: string; strike?: string }) => (
-  <div className="min-w-0">
-    <p className="text-[9px] uppercase tracking-[0.18em] text-muted-foreground">{label}</p>
-    <div className="flex items-baseline gap-1">
-      {strike && <span className="text-[9px] text-muted-foreground line-through break-all">{strike}</span>}
-      <p className="text-[12px] font-semibold text-foreground break-all">{value}</p>
-    </div>
-  </div>
-);
 
 export default ProductCard;
