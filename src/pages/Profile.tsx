@@ -20,12 +20,16 @@ import ReferralDialog from "@/components/ReferralDialog";
 import DailyCheckinDialog from "@/components/DailyCheckinDialog";
 import SpinWheelDialog from "@/components/SpinWheelDialog";
 import TransactionHistoryDialog from "@/components/TransactionHistoryDialog";
+import { useVipTitles } from "@/hooks/useVipTitles";
+
 
 const Profile = () => {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const { toast } = useToast();
   const { profile, isAdmin, signOut, refreshProfile } = useAuth();
+  const { titleFor } = useVipTitles();
+
 
   const [profileDialogOpen, setProfileDialogOpen] = useState(false);
   const [dialogMode, setDialogMode] = useState<"profile" | "password">("profile");
@@ -121,8 +125,9 @@ const Profile = () => {
               <div className="flex items-center gap-2 flex-wrap">
                 <h1 className="text-base font-heading font-bold text-foreground truncate">{profile.name}</h1>
                 <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-primary text-primary-foreground text-[9px] font-bold">
-                  <Crown className="w-2.5 h-2.5" /> VIP{profile.vip_level}
+                  <Crown className="w-2.5 h-2.5" /> {titleFor(profile.vip_level)}
                 </span>
+
                 {isAdmin && (
                   <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-destructive text-destructive-foreground text-[9px] font-bold">
                     <Shield className="w-2.5 h-2.5" /> Admin
