@@ -75,7 +75,8 @@ const Admin = () => {
   const [legalityDialogOpen, setLegalityDialogOpen] = useState(false);
   const [coupons, setCoupons] = useState<Coupon[]>([]);
   const [vipSettings, setVipSettings] = useState<VipSetting[]>([]);
-  const [editingVip, setEditingVip] = useState<Record<number, { members: number; deposit: number }>>({});
+  const [editingVip, setEditingVip] = useState<Record<number, { members: number; deposit: number; title: string }>>({});
+
   const [txFilter, setTxFilter] = useState<string>("all");
 
   const enrichTransactions = (txData: Transaction[], profilesData: Profile[]): PendingTx[] => {
