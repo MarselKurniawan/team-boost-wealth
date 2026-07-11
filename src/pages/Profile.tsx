@@ -28,6 +28,8 @@ const Profile = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { toast } = useToast();
   const { profile, isAdmin, signOut, refreshProfile } = useAuth();
+  const { titleFor } = useVipTitles();
+
 
   const [profileDialogOpen, setProfileDialogOpen] = useState(false);
   const [dialogMode, setDialogMode] = useState<"profile" | "password">("profile");
