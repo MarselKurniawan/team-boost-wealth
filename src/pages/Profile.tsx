@@ -125,8 +125,9 @@ const Profile = () => {
               <div className="flex items-center gap-2 flex-wrap">
                 <h1 className="text-base font-heading font-bold text-foreground truncate">{profile.name}</h1>
                 <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-primary text-primary-foreground text-[9px] font-bold">
-                  <Crown className="w-2.5 h-2.5" /> VIP{profile.vip_level}
+                  <Crown className="w-2.5 h-2.5" /> {titleFor(profile.vip_level)}
                 </span>
+
                 {isAdmin && (
                   <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-destructive text-destructive-foreground text-[9px] font-bold">
                     <Shield className="w-2.5 h-2.5" /> Admin
