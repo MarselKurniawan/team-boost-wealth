@@ -557,6 +557,7 @@ export type Database = {
           id: string
           required_deposit: number
           required_members: number
+          title: string | null
           updated_at: string | null
           vip_level: number
         }
@@ -564,6 +565,7 @@ export type Database = {
           id?: string
           required_deposit?: number
           required_members?: number
+          title?: string | null
           updated_at?: string | null
           vip_level: number
         }
@@ -571,6 +573,7 @@ export type Database = {
           id?: string
           required_deposit?: number
           required_members?: number
+          title?: string | null
           updated_at?: string | null
           vip_level?: number
         }
