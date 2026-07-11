@@ -42,9 +42,16 @@ const ProductPage = () => {
   const getPrice = (p: Product) => p.promo_price ?? p.price;
   const getValidity = (p: Product) => p.promo_validity ?? p.validity;
 
-  let filteredProducts = activeCategory === "all"
-    ? products
-    : products.filter(p => p.category === activeCategory);
+  // 2 versi produk: "harian" (profit tiap hari) & "kontrak" (payout di akhir kontrak).
+  // Mapping dari data existing: kontrak = kategori 'vip' atau vip_level > 0, sisanya harian.
+  const isKontrak = (p: Product) => p.category === "vip" || (p.vip_level ?? 0) > 0;
+  let filteredProducts =
+    activeCategory === "all"
+      ? products
+      : activeCategory === "kontrak"
+      ? products.filter(isKontrak)
+      : products.filter((p) => !isKontrak(p));
+
 
   if (vipLevelFilter !== "all") {
     filteredProducts = filteredProducts.filter(p => p.vip_level === vipLevelFilter);
@@ -165,17 +172,17 @@ const ProductPage = () => {
         </DropdownMenuContent>
       </DropdownMenu>
 
-      {/* Category Tabs */}
+      {/* Category Tabs — 2 versi produk */}
       <div className="sticky top-0 z-10 bg-background/80 backdrop-blur-sm -mx-4 px-4 py-2">
         <Tabs value={activeCategory} onValueChange={setActiveCategory}>
-          <TabsList className="w-full grid grid-cols-4 h-9 bg-card/60 border border-border/50">
-            <TabsTrigger value="all" className="text-[11px]">Semua</TabsTrigger>
-            <TabsTrigger value="reguler" className="text-[11px]">Reguler</TabsTrigger>
-            <TabsTrigger value="promo" className="text-[11px]">Promo</TabsTrigger>
-            <TabsTrigger value="vip" className="text-[11px]">VIP</TabsTrigger>
+          <TabsList className="w-full grid grid-cols-3 h-10 bg-primary/5 border border-primary/15 rounded-full p-1">
+            <TabsTrigger value="all" className="text-[11px] rounded-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Semua</TabsTrigger>
+            <TabsTrigger value="harian" className="text-[11px] rounded-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Harian</TabsTrigger>
+            <TabsTrigger value="kontrak" className="text-[11px] rounded-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Kontrak</TabsTrigger>
           </TabsList>
         </Tabs>
       </div>
+
 
       {/* Available Products */}
       <div className="space-y-2.5">

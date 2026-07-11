@@ -5,9 +5,10 @@ import { useAuth } from "@/hooks/useAuth";
 import { formatCurrency } from "@/lib/database";
 import { useState, useEffect } from "react";
 import {
-  User as UserIcon, Shield, LogOut, ChevronRight, Lock, Landmark, Settings, Share2,
-  Headphones, Wallet, Building2, ArrowUpRight, ArrowDownRight, Copy, ClipboardList,
-  Trophy, Volume2, Gift, CalendarCheck, FileText, ScrollText, Info, Coins,
+  User as UserIcon, Shield, LogOut, ChevronRight, Copy, Eye, EyeOff,
+  ClipboardList, Receipt, Crown, Users, ArrowDownToLine, ArrowUpFromLine,
+  Bell, Settings, Lock, Globe, Landmark, Headphones, Share2, Gift,
+  CalendarCheck, FileText,
 } from "lucide-react";
 import ProfileDialog from "@/components/ProfileDialog";
 import CouponDialog from "@/components/CouponDialog";
@@ -37,6 +38,7 @@ const Profile = () => {
   const [checkinOpen, setCheckinOpen] = useState(false);
   const [spinOpen, setSpinOpen] = useState(false);
   const [historyOpen, setHistoryOpen] = useState(false);
+  const [balanceHidden, setBalanceHidden] = useState(false);
 
   const openProfileDialog = (mode: "profile" | "password") => {
     setDialogMode(mode);
@@ -75,170 +77,196 @@ const Profile = () => {
 
   if (!profile) return null;
 
-  const menuGroups: { title: string; items: { icon: any; label: string; action: () => void }[] }[] = [
-    {
-      title: "Aset",
-      items: [
-        { icon: Landmark, label: "Akun Bank", action: () => setBankDialogOpen(true) },
-        { icon: ClipboardList, label: "Riwayat Keuangan", action: () => setHistoryOpen(true) },
-        { icon: Wallet, label: "Kupon", action: () => setCouponDialogOpen(true) },
-      ],
-    },
-    {
-      title: "Aktivitas",
-      items: [
-        { icon: Trophy, label: "Tantangan", action: () => navigate("/account") },
-        { icon: Gift, label: "Roda Putar", action: () => setSpinOpen(true) },
-        { icon: CalendarCheck, label: "Check-in Harian", action: () => setCheckinOpen(true) },
-        { icon: Share2, label: "Undang Pengguna", action: () => setReferralOpen(true) },
-      ],
-    },
-    {
-      title: "Preferensi",
-      items: [
-        { icon: Settings, label: "Pengaturan Profil", action: () => openProfileDialog("profile") },
-        { icon: Lock, label: "Ganti Password", action: () => openProfileDialog("password") },
-        { icon: Volume2, label: "Notifikasi", action: () => navigate("/notifications") },
-      ],
-    },
-    {
-      title: "Perusahaan",
-      items: [
-        { icon: Building2, label: "Tentang Kami", action: () => setCompanyDialogOpen(true) },
-        { icon: FileText, label: "Terms of Service", action: () => setCompanyDialogOpen(true) },
-        { icon: ScrollText, label: "Privacy Policy", action: () => setCompanyDialogOpen(true) },
-        { icon: Headphones, label: "Pelayanan Pelanggan", action: () => toast({ title: "Hubungi Kami", description: "WhatsApp: +62 812-3456-7890" }) },
-        { icon: Info, label: "FAQ", action: () => setCompanyDialogOpen(true) },
-      ],
-    },
+  const uid = profile.user_id.slice(0, 6).toUpperCase();
+  const registeredAt = new Date(profile.created_at).toLocaleString("id-ID", {
+    year: "numeric", month: "2-digit", day: "2-digit",
+    hour: "2-digit", minute: "2-digit", second: "2-digit",
+  });
+
+  const gridItems = [
+    { icon: ClipboardList, label: "Pesanan", desc: "Riwayat investasi saya", action: () => navigate("/account") },
+    { icon: Receipt, label: "Tagihan", desc: "Riwayat transaksi", action: () => setHistoryOpen(true) },
+    { icon: Crown, label: "VIP", desc: "Komisi maks 15%", action: () => setReferralOpen(true) },
+    { icon: Users, label: "Tim", desc: "Kelola tim & referral", action: () => navigate("/team") },
+  ];
+
+  const listItems = [
+    { icon: ArrowDownToLine, label: "Riwayat Deposit", action: () => setHistoryOpen(true) },
+    { icon: ArrowUpFromLine, label: "Riwayat Penarikan", action: () => setHistoryOpen(true) },
+    { icon: Landmark, label: "Akun Bank", action: () => setBankDialogOpen(true) },
+    { icon: Gift, label: "Kupon", action: () => setCouponDialogOpen(true) },
+    { icon: CalendarCheck, label: "Check-in Harian", action: () => setCheckinOpen(true) },
+    { icon: Bell, label: "Notifikasi", badge: 1, action: () => navigate("/notifications") },
+    { icon: Globe, label: "Bahasa", value: "Indonesia", action: () => toast({ title: "Bahasa", description: "Saat ini hanya Bahasa Indonesia" }) },
+    { icon: Lock, label: "Ganti Password", action: () => openProfileDialog("password") },
+    { icon: Settings, label: "Pengaturan", action: () => openProfileDialog("profile") },
+    { icon: Headphones, label: "Layanan Pelanggan", action: () => toast({ title: "Hubungi Kami", description: "WhatsApp: +62 812-3456-7890" }) },
+    { icon: FileText, label: "Tentang & Legal", action: () => setCompanyDialogOpen(true) },
   ];
 
   return (
-    <div className="profile-stable">
-      {/* Split-panel header with grid pattern */}
-      <section className="relative border-b border-border pattern-grid">
-        <div className="relative px-6 pt-10 pb-8">
-          <div className="flex items-start justify-between gap-4">
-            <div className="min-w-0 flex-1">
-              <p className="text-[9px] uppercase tracking-[0.28em] text-muted-foreground mb-3">
-                Member profile
-              </p>
-              <h1 className="text-2xl font-heading font-bold text-foreground leading-none tracking-tight truncate">
-                {profile.name}
-              </h1>
-              <div className="mt-3 flex flex-wrap items-center gap-2 text-[10px] uppercase tracking-[0.18em]">
-                <span className="px-2 py-1 border border-foreground text-foreground font-semibold">
-                  VIP {profile.vip_level}
+    <div className="bg-[#f4f6fb] min-h-screen pb-8">
+      {/* Header banner */}
+      <div className="bg-primary pt-8 pb-20 px-4">
+        <p className="text-[10px] uppercase tracking-[0.28em] text-primary-foreground/60 text-center">
+          Akun Saya
+        </p>
+      </div>
+
+      <div className="px-4 -mt-14 space-y-3">
+        {/* Identity card */}
+        <div className="bg-white rounded-2xl border border-primary/10 shadow-sm p-4">
+          <div className="flex items-start gap-3">
+            <div className="w-14 h-14 rounded-full bg-primary/10 border-2 border-primary/20 flex items-center justify-center shrink-0">
+              <UserIcon className="w-7 h-7 text-primary" strokeWidth={1.75} />
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2 flex-wrap">
+                <h1 className="text-base font-heading font-bold text-foreground truncate">{profile.name}</h1>
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-primary text-primary-foreground text-[9px] font-bold">
+                  <Crown className="w-2.5 h-2.5" /> VIP{profile.vip_level}
                 </span>
                 {isAdmin && (
-                  <span className="px-2 py-1 border border-destructive text-destructive font-semibold inline-flex items-center gap-1">
-                    <Shield className="w-3 h-3" /> Admin
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-destructive text-destructive-foreground text-[9px] font-bold">
+                    <Shield className="w-2.5 h-2.5" /> Admin
                   </span>
                 )}
-                <button
-                  onClick={handleCopyUID}
-                  className="inline-flex items-center gap-1 text-muted-foreground hover:text-foreground"
-                >
-                  ID {profile.user_id.slice(0, 6).toUpperCase()} <Copy className="w-3 h-3" />
-                </button>
               </div>
-            </div>
-            <div className="w-16 h-16 border border-foreground bg-background flex items-center justify-center shrink-0">
-              <UserIcon className="w-8 h-8 text-foreground" strokeWidth={1.5} />
+              <button onClick={handleCopyUID} className="mt-1 flex items-center gap-1 text-[10px] text-muted-foreground hover:text-primary">
+                UID {uid} <Copy className="w-2.5 h-2.5" />
+              </button>
+              <p className="mt-0.5 text-[9px] text-muted-foreground">
+                Terdaftar: {registeredAt}
+              </p>
             </div>
           </div>
+        </div>
 
-          <div className="mt-6 flex gap-2">
-            <Button variant="default" size="sm" className="flex-1" onClick={() => openProfileDialog("profile")}>
-              Edit Profil
+        {/* Balance card */}
+        <div className="bg-white rounded-2xl border border-primary/10 shadow-sm p-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-1.5">
+              <p className="text-[11px] text-muted-foreground">Saldo Total</p>
+              <button onClick={() => setBalanceHidden(v => !v)} className="text-muted-foreground hover:text-primary">
+                {balanceHidden ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+              </button>
+            </div>
+          </div>
+          <p className="mt-1 font-heading text-3xl font-bold text-primary break-all">
+            {balanceHidden ? "••••••" : formatCurrency(profile.balance || 0)}
+          </p>
+          <div className="mt-3 grid grid-cols-2 gap-4 text-[10px]">
+            <div>
+              <p className="text-muted-foreground">Total Isi Ulang</p>
+              <p className="font-semibold text-foreground break-all mt-0.5">{formatCurrency(profile.total_recharge || 0)}</p>
+            </div>
+            <div>
+              <p className="text-muted-foreground">Total Pendapatan</p>
+              <p className="font-semibold text-foreground break-all mt-0.5">{formatCurrency(profile.total_income || 0)}</p>
+            </div>
+          </div>
+          <div className="mt-4 grid grid-cols-2 gap-2">
+            <Button
+              onClick={() => setRechargeOpen(true)}
+              className="h-10 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground text-xs font-semibold"
+            >
+              Deposit
             </Button>
-            <Button variant="outline" size="sm" className="flex-1" onClick={() => setReferralOpen(true)}>
-              <Share2 className="w-3.5 h-3.5" /> Undang
+            <Button
+              onClick={() => setWithdrawOpen(true)}
+              variant="outline"
+              className="h-10 rounded-xl border-primary/30 text-primary hover:bg-primary/5 text-xs font-semibold"
+            >
+              Tarik Dana
             </Button>
           </div>
         </div>
-      </section>
 
-      {/* Balance strip — asymmetric 3-cell */}
-      <section className="grid grid-cols-3 border-b border-border">
-        <BalanceCell label="Saldo" value={formatCurrency(profile.balance || 0)} accent />
-        <BalanceCell label="Isi Ulang" value={formatCurrency(profile.total_recharge || 0)} />
-        <BalanceCell label="Pendapatan" value={formatCurrency(profile.total_income || 0)} />
-      </section>
-
-      {/* Recharge / Withdraw quick actions */}
-      <section className="grid grid-cols-2 border-b border-border">
-        <button
-          onClick={() => setRechargeOpen(true)}
-          className="flex items-center justify-between px-5 py-4 border-r border-border hover:bg-muted transition-colors group"
-        >
-          <div className="text-left">
-            <p className="text-[9px] uppercase tracking-[0.18em] text-muted-foreground">Tambah Saldo</p>
-            <p className="text-sm font-heading font-semibold text-foreground mt-0.5">Isi Ulang</p>
-          </div>
-          <ArrowUpRight className="w-4 h-4 text-foreground group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-        </button>
-        <button
-          onClick={() => setWithdrawOpen(true)}
-          className="flex items-center justify-between px-5 py-4 hover:bg-muted transition-colors group"
-        >
-          <div className="text-left">
-            <p className="text-[9px] uppercase tracking-[0.18em] text-muted-foreground">Tarik Dana</p>
-            <p className="text-sm font-heading font-semibold text-foreground mt-0.5">Withdraw</p>
-          </div>
-          <ArrowDownRight className="w-4 h-4 text-foreground group-hover:translate-y-0.5 transition-transform" />
-        </button>
-      </section>
-
-      {/* Menu groups */}
-      {menuGroups.map((group) => (
-        <section key={group.title} className="border-b border-border">
-          <div className="px-5 pt-6 pb-2">
-            <p className="text-[9px] uppercase tracking-[0.28em] text-muted-foreground">{group.title}</p>
-          </div>
-          <div>
-            {group.items.map((item, i) => (
-              <button
-                key={item.label}
-                onClick={item.action}
-                className={`w-full flex items-center justify-between px-5 py-4 hover:bg-muted transition-colors ${
-                  i !== group.items.length - 1 ? "border-b border-border/60" : ""
-                }`}
-              >
-                <div className="flex items-center gap-4">
-                  <item.icon className="w-4 h-4 text-foreground" strokeWidth={1.75} />
-                  <span className="text-[13px] font-medium text-foreground">{item.label}</span>
+        {/* 2x2 grid */}
+        <div className="grid grid-cols-2 gap-3">
+          {gridItems.map((item) => (
+            <button
+              key={item.label}
+              onClick={item.action}
+              className="bg-white rounded-2xl border border-primary/10 shadow-sm p-3 text-left hover:border-primary/30 transition-colors"
+            >
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-[13px] font-heading font-bold text-primary">{item.label}</span>
+                <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                  <item.icon className="w-4 h-4 text-primary" strokeWidth={1.75} />
                 </div>
-                <ChevronRight className="w-4 h-4 text-muted-foreground" />
-              </button>
-            ))}
-          </div>
-        </section>
-      ))}
+              </div>
+              <p className="text-[10px] text-muted-foreground leading-tight">{item.desc}</p>
+            </button>
+          ))}
+        </div>
 
-      {isAdmin && (
-        <section className="border-b border-border">
+        {/* Share referral CTA */}
+        <button
+          onClick={() => setReferralOpen(true)}
+          className="w-full bg-white rounded-2xl border border-primary/10 shadow-sm p-3 flex items-center gap-3 hover:border-primary/30 transition-colors"
+        >
+          <div className="w-9 h-9 rounded-full bg-primary flex items-center justify-center shrink-0">
+            <Share2 className="w-4 h-4 text-primary-foreground" strokeWidth={2} />
+          </div>
+          <div className="flex-1 text-left">
+            <p className="text-xs font-heading font-bold text-foreground">Undang Teman</p>
+            <p className="text-[10px] text-muted-foreground">Dapatkan komisi hingga 10% dari deposit teman</p>
+          </div>
+          <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0" />
+        </button>
+
+        {/* Menu list */}
+        <div className="bg-white rounded-2xl border border-primary/10 shadow-sm overflow-hidden">
+          {listItems.map((item, i) => (
+            <button
+              key={item.label}
+              onClick={item.action}
+              className={`w-full flex items-center justify-between px-4 py-3 hover:bg-primary/5 transition-colors ${
+                i !== listItems.length - 1 ? "border-b border-primary/5" : ""
+              }`}
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-7 h-7 rounded-full bg-primary/10 flex items-center justify-center">
+                  <item.icon className="w-3.5 h-3.5 text-primary" strokeWidth={1.75} />
+                </div>
+                <span className="text-[12px] font-medium text-foreground">{item.label}</span>
+                {item.badge && (
+                  <span className="w-4 h-4 rounded-full bg-destructive text-destructive-foreground text-[9px] font-bold flex items-center justify-center">
+                    {item.badge}
+                  </span>
+                )}
+              </div>
+              <div className="flex items-center gap-1">
+                {item.value && <span className="text-[10px] text-muted-foreground">{item.value}</span>}
+                <ChevronRight className="w-3.5 h-3.5 text-muted-foreground" />
+              </div>
+            </button>
+          ))}
+        </div>
+
+        {isAdmin && (
           <button
             onClick={() => navigate("/admin")}
-            className="w-full flex items-center justify-between px-5 py-4 bg-foreground text-background hover:bg-primary transition-colors"
+            className="w-full bg-primary text-primary-foreground rounded-2xl shadow-sm py-3.5 flex items-center justify-center gap-2 hover:bg-primary/90 transition-colors"
           >
-            <div className="flex items-center gap-4">
-              <Shield className="w-4 h-4" strokeWidth={1.75} />
-              <span className="text-[13px] font-semibold uppercase tracking-wider">Admin Dashboard</span>
-            </div>
-            <ChevronRight className="w-4 h-4" />
+            <Shield className="w-4 h-4" />
+            <span className="text-xs font-heading font-bold uppercase tracking-wider">Admin Dashboard</span>
           </button>
-        </section>
-      )}
+        )}
 
-      <section className="px-5 py-8">
-        <Button variant="outline" className="w-full" onClick={handleLogout}>
+        <Button
+          variant="outline"
+          className="w-full h-11 rounded-2xl border-primary/20 text-primary hover:bg-primary/5"
+          onClick={handleLogout}
+        >
           <LogOut className="w-4 h-4" /> Keluar
         </Button>
-        <p className="mt-6 text-center text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
+
+        <p className="text-center text-[10px] text-muted-foreground pt-2">
           InvestPro · v2.0
         </p>
-      </section>
+      </div>
 
       {/* Dialogs */}
       <ProfileDialog open={profileDialogOpen} onOpenChange={setProfileDialogOpen} mode={dialogMode} onSuccess={refreshProfile} />
@@ -254,14 +282,5 @@ const Profile = () => {
     </div>
   );
 };
-
-const BalanceCell = ({ label, value, accent }: { label: string; value: string; accent?: boolean }) => (
-  <div className={`px-4 py-5 border-r last:border-r-0 border-border ${accent ? "bg-foreground text-background" : ""}`}>
-    <p className={`text-[9px] uppercase tracking-[0.18em] ${accent ? "text-background/60" : "text-muted-foreground"}`}>
-      {label}
-    </p>
-    <p className="text-[13px] font-heading font-semibold mt-2 break-all">{value}</p>
-  </div>
-);
 
 export default Profile;
