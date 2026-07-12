@@ -513,7 +513,7 @@ const AdminUsers = () => {
                   <div className="p-2 rounded bg-muted/50"><p className="text-[10px] text-muted-foreground">Total Recharge</p><p className="text-xs font-bold break-all">{formatCurrency(selectedUser?.total_recharge || 0)}</p></div>
                   <div className="p-2 rounded bg-muted/50"><p className="text-[10px] text-muted-foreground">Total Withdraw</p><p className="text-xs font-bold break-all">{formatCurrency(selectedUser?.total_withdraw || 0)}</p></div>
                   <div className="p-2 rounded bg-muted/50"><p className="text-[10px] text-muted-foreground">Team Income</p><p className="text-xs font-bold break-all">{formatCurrency(selectedUser?.team_income || 0)}</p></div>
-                  <div className="p-2 rounded bg-muted/50"><p className="text-[10px] text-muted-foreground">VIP Level</p><p className="text-xs font-bold">VIP {selectedUser?.vip_level}</p></div>
+                  <div className="p-2 rounded bg-muted/50"><p className="text-[10px] text-muted-foreground">VIP Level</p><p className="text-xs font-bold">{selectedUser ? `VIP ${selectedUser.vip_level} · ${titleFor(selectedUser.vip_level)}` : "-"}</p></div>
                 </div>
                 <div className="p-2 rounded bg-muted/50">
                   <p className="text-[10px] text-muted-foreground">Referrer</p>
