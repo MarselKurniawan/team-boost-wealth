@@ -492,7 +492,7 @@ const Admin = () => {
           <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => setVipDialogOpen(true)} title="VIP Setting">
             <Crown className="w-3.5 h-3.5" />
           </Button>
-          <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => setSpinDialogOpen(true)} title="Setting Roda Putar">
+          <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => setSpinDialogOpen(true)} title="Setting Kotak Kejutan">
             <Sparkles className="w-3.5 h-3.5" />
           </Button>
           <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => setLegalityDialogOpen(true)} title="Legalitas">
