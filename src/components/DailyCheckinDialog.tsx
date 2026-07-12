@@ -5,7 +5,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { formatCurrency } from "@/lib/database";
-import { CalendarCheck, Gift, Sparkles, PartyPopper, Coins, Lock } from "lucide-react";
+import { CalendarCheck, Gift, Sparkles, Coins, Lock, Check, Flame } from "lucide-react";
 
 interface CheckinRecord {
   day_number: number;
@@ -19,20 +19,17 @@ interface DailyCheckinDialogProps {
   onSuccess?: () => void;
 }
 
-// Hari dalam seminggu: 1=Senin, 2=Selasa, ..., 7=Minggu
 const DAY_LABELS = ["Sen", "Sel", "Rab", "Kam", "Jum", "Sab", "Min"];
 
-// Dapatkan nomor hari saat ini (1=Senin, ..., 7=Minggu)
 const getTodayDayNumber = (): number => {
-  const jsDay = new Date().getDay(); // 0=Minggu, 1=Sen, ..., 6=Sab
-  return jsDay === 0 ? 7 : jsDay; // konversi: Minggu jadi 7
+  const jsDay = new Date().getDay();
+  return jsDay === 0 ? 7 : jsDay;
 };
 
-// Dapatkan tanggal awal minggu ini (Senin)
 const getStartOfWeek = (): Date => {
   const now = new Date();
-  const dayOfWeek = now.getDay(); // 0=Minggu
-  const diff = dayOfWeek === 0 ? -6 : 1 - dayOfWeek; // mundur ke Senin
+  const dayOfWeek = now.getDay();
+  const diff = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
   const monday = new Date(now);
   monday.setDate(now.getDate() + diff);
   monday.setHours(0, 0, 0, 0);
@@ -56,10 +53,7 @@ const DailyCheckinDialog = ({ open, onOpenChange, onSuccess }: DailyCheckinDialo
 
   const loadCheckins = async () => {
     if (!user) return;
-
-    // Ambil checkin mulai dari Senin minggu ini
     const startOfWeek = getStartOfWeek();
-
     const { data } = await supabase
       .from("daily_checkins")
       .select("day_number, reward_amount, checked_in_at")
@@ -70,7 +64,6 @@ const DailyCheckinDialog = ({ open, onOpenChange, onSuccess }: DailyCheckinDialo
     const records = (data || []) as CheckinRecord[];
     setCheckins(records);
 
-    // Cek apakah sudah check-in hari ini
     const today = new Date().toDateString();
     const checkedToday = records.some(
       (r) => new Date(r.checked_in_at).toDateString() === today
@@ -84,7 +77,6 @@ const DailyCheckinDialog = ({ open, onOpenChange, onSuccess }: DailyCheckinDialo
     setIsChecking(true);
 
     try {
-      // Random reward 100-999
       const reward = Math.floor(Math.random() * 900) + 100;
       setRewardAmount(reward);
 
@@ -94,7 +86,6 @@ const DailyCheckinDialog = ({ open, onOpenChange, onSuccess }: DailyCheckinDialo
         reward_amount: reward,
       });
 
-      // Tambah reward ke saldo
       await supabase
         .from("profiles")
         .update({ balance: profile.balance + reward })
@@ -106,8 +97,8 @@ const DailyCheckinDialog = ({ open, onOpenChange, onSuccess }: DailyCheckinDialo
       onSuccess?.();
 
       toast({
-        title: "🎁 Check-in Berhasil!",
-        description: `Anda mendapat hadiah ${formatCurrency(reward)}`,
+        title: "🎁 Berhasil!",
+        description: `Anda mendapat ${formatCurrency(reward)}`,
       });
     } catch (error) {
       console.error("Checkin error:", error);
@@ -121,148 +112,145 @@ const DailyCheckinDialog = ({ open, onOpenChange, onSuccess }: DailyCheckinDialo
     }
   };
 
-  // Map checkin records berdasarkan day_number di minggu ini
   const checkedDaysMap = new Map<number, CheckinRecord>();
-  checkins.forEach((c) => {
-    checkedDaysMap.set(c.day_number, c);
-  });
+  checkins.forEach((c) => checkedDaysMap.set(c.day_number, c));
+  const streak = checkins.length;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-sm border-primary/30">
-        <DialogHeader>
-          <DialogTitle className="text-center text-xl font-heading flex items-center justify-center gap-2">
-            <CalendarCheck className="w-5 h-5 text-primary" />
-            Check-in Harian
-          </DialogTitle>
-        </DialogHeader>
+      <DialogContent className="max-w-sm p-0 overflow-hidden border-0">
+        {/* Gradient header */}
+        <div className="relative overflow-hidden pt-6 pb-14 px-5 bg-gradient-to-br from-[#1e3a8a] via-[#1e40af] to-[#3b82f6]">
+          <div className="absolute -top-8 -right-8 w-32 h-32 rounded-full bg-white/10 blur-2xl" />
+          <div className="absolute top-4 -left-8 w-24 h-24 rounded-full bg-cyan-300/20 blur-xl" />
+          <Sparkles className="absolute top-3 right-6 w-3.5 h-3.5 text-white/40" />
 
-        {/* Reward animation */}
-        {showReward ? (
-          <div className="relative py-6">
-            <div className="absolute inset-0 overflow-hidden pointer-events-none">
-              {[...Array(20)].map((_, i) => (
-                <div
-                  key={i}
-                  className="absolute animate-confetti"
-                  style={{
-                    left: `${Math.random() * 100}%`,
-                    animationDelay: `${Math.random() * 0.5}s`,
-                    animationDuration: `${1 + Math.random() * 1}s`,
-                  }}
-                >
+          <DialogHeader className="relative text-left space-y-0.5">
+            <p className="text-[9px] uppercase tracking-[0.3em] text-white/70 font-semibold">Absen Harian</p>
+            <DialogTitle className="text-white font-heading text-xl font-bold flex items-center gap-2">
+              <CalendarCheck className="w-5 h-5" />
+              Check-in Hari Ini
+            </DialogTitle>
+          </DialogHeader>
+
+          <div className="relative mt-3 inline-flex items-center gap-1.5 rounded-full bg-white/15 border border-white/25 px-3 py-1">
+            <Flame className="w-3 h-3 text-amber-200" />
+            <span className="text-[10px] font-semibold text-white">
+              Streak minggu ini: {streak} hari
+            </span>
+          </div>
+        </div>
+
+        <div className="px-5 -mt-8 pb-5 space-y-4">
+          {/* Reward card / calendar */}
+          {showReward ? (
+            <div className="relative rounded-2xl bg-white border border-primary/10 shadow-lg p-5 text-center overflow-hidden">
+              <div className="absolute inset-0 pointer-events-none">
+                {[...Array(14)].map((_, i) => (
                   <Sparkles
-                    className="w-4 h-4"
+                    key={i}
+                    className="absolute animate-confetti"
                     style={{
-                      color: ["#00F5FF", "#FF00E5", "#FFD700", "#00FF88"][
-                        Math.floor(Math.random() * 4)
-                      ],
+                      left: `${Math.random() * 100}%`,
+                      top: `${Math.random() * 100}%`,
+                      width: 10 + Math.random() * 8,
+                      height: 10 + Math.random() * 8,
+                      color: ["#3b82f6", "#06b6d4", "#f59e0b", "#22c55e"][i % 4],
+                      animationDelay: `${Math.random() * 0.4}s`,
                     }}
                   />
-                </div>
-              ))}
-            </div>
-            <div className="flex flex-col items-center gap-4 animate-scale-in">
-              <div className="relative animate-bounce">
-                <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-success via-primary to-accent flex items-center justify-center">
-                  <PartyPopper className="w-10 h-10 text-primary-foreground" />
-                </div>
-                <div className="absolute -top-2 -right-2 animate-ping">
-                  <Coins className="w-5 h-5 text-accent" />
-                </div>
+                ))}
               </div>
-              <div className="text-center space-y-1">
-                <p className="text-sm text-muted-foreground">Hadiah Hari Ini</p>
-                <p className="text-3xl font-bold text-success">
-                  +{formatCurrency(rewardAmount)}
-                </p>
-                <p className="text-sm text-success animate-fade-in">
-                  Berhasil ditambahkan ke saldo!
-                </p>
+              <div className="relative mx-auto w-16 h-16 rounded-2xl bg-gradient-to-br from-[#1e40af] to-[#3b82f6] flex items-center justify-center shadow-md">
+                <Coins className="w-8 h-8 text-white" />
               </div>
+              <p className="relative mt-3 text-[10px] uppercase tracking-widest text-muted-foreground font-semibold">
+                Hadiah Hari Ini
+              </p>
+              <p className="relative mt-1 font-heading text-3xl font-bold text-primary break-all">
+                +{formatCurrency(rewardAmount)}
+              </p>
+              <p className="relative mt-1 text-[10px] text-success font-semibold">
+                Ditambahkan ke saldo
+              </p>
             </div>
-          </div>
-        ) : (
-          <>
-            {/* Minggu ini label */}
-            <p className="text-center text-xs text-muted-foreground -mb-2">
-              Minggu ini — Hari terlewat tidak bisa diklaim
-            </p>
+          ) : (
+            <div className="rounded-2xl bg-white border border-primary/10 shadow-lg p-4">
+              <p className="text-center text-[10px] uppercase tracking-widest text-muted-foreground font-semibold">
+                Minggu Ini
+              </p>
+              <div className="mt-3 grid grid-cols-7 gap-1.5">
+                {DAY_LABELS.map((label, i) => {
+                  const dayNum = i + 1;
+                  const record = checkedDaysMap.get(dayNum);
+                  const isChecked = !!record;
+                  const isToday = dayNum === todayDayNumber;
+                  const isFuture = dayNum > todayDayNumber;
+                  const isMissed = !isChecked && !isToday && !isFuture;
 
-            {/* 7-day grid berbasis hari kalender */}
-            <div className="grid grid-cols-7 gap-1.5 py-4">
-              {DAY_LABELS.map((label, i) => {
-                const dayNum = i + 1; // 1=Sen, ..., 7=Min
-                const record = checkedDaysMap.get(dayNum);
-                const isChecked = !!record;
-                const isToday = dayNum === todayDayNumber;
-                const isFuture = dayNum > todayDayNumber;
-                const isMissed = !isChecked && !isToday && !isFuture; // hari lalu yg terlewat
-
-                return (
-                  <div key={dayNum} className="flex flex-col items-center gap-1">
-                    <div
-                      className={`w-10 h-10 rounded-xl flex items-center justify-center text-sm font-bold transition-all ${
-                        isChecked
-                          ? "bg-success text-success-foreground shadow-md shadow-success/30"
-                          : isToday && canCheckin
-                          ? "bg-primary/20 border-2 border-primary text-primary animate-pulse"
-                          : isToday && !canCheckin
-                          ? "bg-success/60 text-success-foreground"
-                          : isMissed
-                          ? "bg-destructive/10 text-destructive/40"
-                          : isFuture
-                          ? "bg-muted text-muted-foreground/40"
-                          : "bg-muted text-muted-foreground"
-                      }`}
-                    >
-                      {isChecked ? (
-                        <Gift className="w-4 h-4" />
-                      ) : isMissed ? (
-                        <Lock className="w-3 h-3" />
-                      ) : (
-                        dayNum
-                      )}
+                  return (
+                    <div key={dayNum} className="flex flex-col items-center gap-1">
+                      <div
+                        className={`w-9 h-10 rounded-xl flex items-center justify-center text-[11px] font-bold transition-all ${
+                          isChecked
+                            ? "bg-gradient-to-br from-[#1e40af] to-[#3b82f6] text-white shadow-md"
+                            : isToday && canCheckin
+                            ? "bg-primary/10 border-2 border-primary text-primary"
+                            : isToday && !canCheckin
+                            ? "bg-gradient-to-br from-[#1e40af] to-[#3b82f6] text-white"
+                            : isMissed
+                            ? "bg-destructive/5 text-destructive/40 border border-dashed border-destructive/20"
+                            : "bg-muted/60 text-muted-foreground/60"
+                        }`}
+                      >
+                        {isChecked ? (
+                          <Check className="w-3.5 h-3.5" />
+                        ) : isMissed ? (
+                          <Lock className="w-3 h-3" />
+                        ) : (
+                          <Gift className={`w-3.5 h-3.5 ${isToday ? "" : "opacity-50"}`} />
+                        )}
+                      </div>
+                      <span
+                        className={`text-[9px] font-semibold uppercase tracking-wider ${
+                          isToday
+                            ? "text-primary"
+                            : isChecked
+                            ? "text-primary/70"
+                            : isMissed
+                            ? "text-destructive/40"
+                            : "text-muted-foreground"
+                        }`}
+                      >
+                        {label}
+                      </span>
                     </div>
-                    <span
-                      className={`text-[10px] font-medium ${
-                        isToday
-                          ? "text-primary"
-                          : isMissed
-                          ? "text-destructive/40"
-                          : "text-muted-foreground"
-                      }`}
-                    >
-                      {label}
-                    </span>
-                    {isToday && (
-                      <span className="text-[8px] text-primary font-bold">Hari ini</span>
-                    )}
-                  </div>
-                );
-              })}
+                  );
+                })}
+              </div>
+              <p className="mt-3 text-center text-[10px] text-muted-foreground">
+                Hari terlewat tidak bisa diklaim mundur
+              </p>
             </div>
+          )}
 
-            <p className="text-center text-sm text-muted-foreground">
+          {!showReward && (
+            <p className="text-center text-[11px] text-foreground/80">
               {canCheckin
-                ? `Belum check-in hari ini (${DAY_LABELS[todayDayNumber - 1]}). Klaim hadiah acak!`
-                : "Anda sudah check-in hari ini. Kembali besok! 🎉"}
+                ? `Klaim hadiah acak hari ini (${DAY_LABELS[todayDayNumber - 1]})`
+                : "Anda sudah check-in — kembali besok 🎉"}
             </p>
+          )}
 
-            <Button
-              onClick={handleCheckin}
-              disabled={!canCheckin || isChecking}
-              className="w-full bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 text-primary-foreground font-semibold h-12"
-            >
-              <CalendarCheck className="w-5 h-5 mr-2" />
-              {isChecking
-                ? "Memproses..."
-                : canCheckin
-                ? "Check-in Sekarang"
-                : "Sudah Check-in ✓"}
-            </Button>
-          </>
-        )}
+          <Button
+            onClick={handleCheckin}
+            disabled={!canCheckin || isChecking}
+            className="w-full h-11 rounded-full bg-gradient-to-r from-[#1e40af] to-[#3b82f6] hover:opacity-95 text-white text-xs font-bold shadow-md"
+          >
+            <Gift className="w-4 h-4 mr-1.5" />
+            {isChecking ? "Memproses..." : canCheckin ? "Klaim Sekarang" : "Sudah Check-in ✓"}
+          </Button>
+        </div>
       </DialogContent>
     </Dialog>
   );

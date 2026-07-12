@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { formatCurrency, updateProfile, createTransaction } from "@/lib/database";
-import { Sparkles, Gift, Ticket } from "lucide-react";
+import { Sparkles, Gift, Ticket, PackageOpen } from "lucide-react";
 
 interface SpinWheelDialogProps {
   open: boolean;
@@ -14,7 +13,12 @@ interface SpinWheelDialogProps {
   onSuccess: () => void;
 }
 
-interface Reward { label: string; amount: number; fill: string; weight: number; }
+interface Reward {
+  label: string;
+  amount: number;
+  fill: string;
+  weight: number;
+}
 const FALLBACK_REWARDS: Reward[] = [
   { label: "1K", amount: 1000, fill: "hsl(217 90% 58%)", weight: 35 },
   { label: "2K", amount: 2000, fill: "hsl(199 89% 48%)", weight: 28 },
@@ -26,29 +30,14 @@ const FALLBACK_REWARDS: Reward[] = [
   { label: "50K", amount: 50000, fill: "hsl(45 96% 55%)", weight: 0.5 },
 ];
 
-// Helper: build SVG path untuk satu segmen pie
-const polarToCart = (cx: number, cy: number, r: number, deg: number) => {
-  const rad = ((deg - 90) * Math.PI) / 180;
-  return { x: cx + r * Math.cos(rad), y: cy + r * Math.sin(rad) };
-};
-
-const segmentPath = (cx: number, cy: number, r: number, startDeg: number, endDeg: number) => {
-  const start = polarToCart(cx, cy, r, endDeg);
-  const end = polarToCart(cx, cy, r, startDeg);
-  const largeArc = endDeg - startDeg <= 180 ? 0 : 1;
-  return `M ${cx} ${cy} L ${start.x} ${start.y} A ${r} ${r} 0 ${largeArc} 0 ${end.x} ${end.y} Z`;
-};
-
 const SpinWheelDialog = ({ open, onOpenChange, onSuccess }: SpinWheelDialogProps) => {
   const { user, profile } = useAuth();
   const { toast } = useToast();
   const [tickets, setTickets] = useState<{ id: string }[]>([]);
-  const [spinning, setSpinning] = useState(false);
-  const [rotation, setRotation] = useState(0);
-  const [resultIdx, setResultIdx] = useState<number | null>(null);
-  const [REWARDS, setRewards] = useState<Reward[]>(FALLBACK_REWARDS);
-  const N = REWARDS.length || 1;
-  const SEGMENT_DEG = 360 / N;
+  const [opening, setOpening] = useState(false);
+  const [rewards, setRewards] = useState<Reward[]>(FALLBACK_REWARDS);
+  const [pickedBox, setPickedBox] = useState<number | null>(null);
+  const [revealedIdx, setRevealedIdx] = useState<number | null>(null);
 
   const loadRewards = async () => {
     const { data } = await supabase
@@ -57,7 +46,14 @@ const SpinWheelDialog = ({ open, onOpenChange, onSuccess }: SpinWheelDialogProps
       .eq("is_active", true)
       .order("sort_order", { ascending: true });
     if (data && data.length > 0) {
-      setRewards(data.map((r: any) => ({ label: r.label, amount: Number(r.amount), fill: r.fill, weight: Number(r.weight) })));
+      setRewards(
+        data.map((r: any) => ({
+          label: r.label,
+          amount: Number(r.amount),
+          fill: r.fill,
+          weight: Number(r.weight),
+        }))
+      );
     }
   };
 
@@ -75,37 +71,31 @@ const SpinWheelDialog = ({ open, onOpenChange, onSuccess }: SpinWheelDialogProps
     if (open) {
       loadRewards();
       loadTickets();
-      setResultIdx(null);
+      setPickedBox(null);
+      setRevealedIdx(null);
     }
   }, [open, user]);
 
-  const handleSpin = async () => {
-    if (!user || !profile || tickets.length === 0 || spinning) return;
-    setSpinning(true);
-    setResultIdx(null);
+  const handlePickBox = async (boxIdx: number) => {
+    if (!user || !profile || tickets.length === 0 || opening) return;
+    setOpening(true);
+    setPickedBox(boxIdx);
 
     const ticket = tickets[0];
-    const totalW = REWARDS.reduce((a, b) => a + b.weight, 0);
+    const totalW = rewards.reduce((a, b) => a + b.weight, 0);
     let r = Math.random() * totalW;
     let idx = 0;
-    for (let i = 0; i < REWARDS.length; i++) {
-      r -= REWARDS[i].weight;
-      if (r <= 0) { idx = i; break; }
+    for (let i = 0; i < rewards.length; i++) {
+      r -= rewards[i].weight;
+      if (r <= 0) {
+        idx = i;
+        break;
+      }
     }
 
-    // Pointer di atas (12 o'clock). Pusat segmen idx ada di sudut idx*SEG + SEG/2 (searah jam dari atas).
-    // Wheel berputar berlawanan: untuk bawa segmen ke atas, perlu rotate -(idx*SEG + SEG/2).
-    const targetAngle = -(idx * SEGMENT_DEG + SEGMENT_DEG / 2);
-    const currentMod = ((rotation % 360) + 360) % 360;
-    const desiredMod = ((targetAngle % 360) + 360) % 360;
-    let delta = desiredMod - currentMod;
-    if (delta <= 0) delta += 360;
-    const finalRotation = rotation + 360 * 6 + delta;
-    setRotation(finalRotation);
-
     setTimeout(async () => {
-      const reward = REWARDS[idx].amount;
-      const rewardLabel = REWARDS[idx].label;
+      const reward = rewards[idx].amount;
+      const rewardLabel = rewards[idx].label;
       const isCash = reward > 0;
       try {
         await supabase
@@ -126,148 +116,151 @@ const SpinWheelDialog = ({ open, onOpenChange, onSuccess }: SpinWheelDialogProps
           amount: reward,
           status: "success",
           description: isCash
-            ? `Hadiah Roda Keberuntungan Rp ${rewardLabel}`
-            : `Hadiah Roda Keberuntungan: ${rewardLabel} (klaim ke admin)`,
+            ? `Hadiah Kotak Kejutan Rp ${rewardLabel}`
+            : `Hadiah Kotak Kejutan: ${rewardLabel} (klaim ke admin)`,
         });
 
-        setResultIdx(idx);
+        setRevealedIdx(idx);
         await loadTickets();
         onSuccess();
         toast({
           title: "🎉 Selamat!",
-          description: isCash ? `Anda mendapatkan ${formatCurrency(reward)}` : `Anda mendapatkan ${rewardLabel}! Hubungi admin untuk klaim.`,
+          description: isCash
+            ? `Anda mendapatkan ${formatCurrency(reward)}`
+            : `Anda mendapatkan ${rewardLabel}! Hubungi admin untuk klaim.`,
         });
       } catch (err) {
-        toast({ title: "Gagal", description: "Gagal memproses spin", variant: "destructive" });
+        toast({ title: "Gagal", description: "Gagal memproses hadiah", variant: "destructive" });
       } finally {
-        setSpinning(false);
+        setOpening(false);
       }
-    }, 3600);
+    }, 1600);
   };
 
-  const SIZE = 260;
-  const CENTER = SIZE / 2;
-  const RADIUS = SIZE / 2 - 6;
+  const reset = () => {
+    setPickedBox(null);
+    setRevealedIdx(null);
+  };
 
   return (
-    <Dialog open={open} onOpenChange={(o) => !spinning && onOpenChange(o)}>
-      <DialogContent className="sm:max-w-md p-0 overflow-hidden">
-        <DialogHeader className="px-5 pt-5 pb-2">
-          <DialogTitle className="flex items-center gap-2 text-sm">
-            <Sparkles className="w-4 h-4 text-primary" /> Roda Keberuntungan
-          </DialogTitle>
-          <DialogDescription className="text-[11px]">
-            Putar roda untuk dapat hadiah. 1 referral berhasil = 1 putaran.
-          </DialogDescription>
-        </DialogHeader>
+    <Dialog open={open} onOpenChange={(o) => !opening && onOpenChange(o)}>
+      <DialogContent className="sm:max-w-md p-0 overflow-hidden border-0">
+        {/* Gradient header */}
+        <div className="relative overflow-hidden pt-6 pb-14 px-5 bg-gradient-to-br from-[#1e3a8a] via-[#1e40af] to-[#3b82f6]">
+          <div className="absolute -top-8 -right-10 w-40 h-40 rounded-full bg-white/10 blur-2xl" />
+          <div className="absolute top-4 -left-8 w-28 h-28 rounded-full bg-cyan-300/20 blur-xl" />
+          <Sparkles className="absolute top-3 right-6 w-3.5 h-3.5 text-white/40" />
+          <Sparkles className="absolute top-14 left-8 w-3 h-3 text-white/30" />
 
-        <div className="px-5 space-y-3">
-          {/* Tickets */}
-          <div className="flex items-center justify-between bg-card/60 border border-border/60 rounded-lg px-3 py-2">
-            <div className="flex items-center gap-2">
-              <Ticket className="w-3.5 h-3.5 text-primary" />
-              <span className="text-[11px] text-muted-foreground">Tiket Tersedia</span>
-            </div>
-            <Badge className="bg-primary/15 text-primary border-primary/30 hover:bg-primary/15 text-[10px]">
-              {tickets.length} tiket
-            </Badge>
+          <DialogHeader className="relative text-left space-y-0.5">
+            <p className="text-[9px] uppercase tracking-[0.3em] text-white/70 font-semibold">
+              Reward Referral
+            </p>
+            <DialogTitle className="text-white font-heading text-xl font-bold flex items-center gap-2">
+              <Gift className="w-5 h-5" />
+              Kotak Kejutan
+            </DialogTitle>
+          </DialogHeader>
+
+          <div className="relative mt-3 inline-flex items-center gap-1.5 rounded-full bg-white/15 border border-white/25 px-3 py-1">
+            <Ticket className="w-3 h-3 text-white" />
+            <span className="text-[10px] font-semibold text-white">
+              {tickets.length} tiket tersedia
+            </span>
           </div>
-
-          {/* Wheel */}
-          <div className="relative mx-auto" style={{ width: SIZE, height: SIZE + 16 }}>
-            {/* Pointer */}
-            <div className="absolute left-1/2 -translate-x-1/2 top-0 z-20">
-              <svg width="22" height="22" viewBox="0 0 22 22">
-                <path d="M11 22 L2 4 Q11 0 20 4 Z" fill="hsl(var(--primary))" stroke="hsl(var(--background))" strokeWidth="1.5" />
-              </svg>
-            </div>
-
-            {/* Outer ring */}
-            <div
-              className="absolute top-3 left-0 rounded-full"
-              style={{
-                width: SIZE,
-                height: SIZE,
-                background: "hsl(var(--primary) / 0.25)",
-                padding: 4,
-              }}
-            >
-              <svg
-                width={SIZE - 8}
-                height={SIZE - 8}
-                viewBox={`0 0 ${SIZE} ${SIZE}`}
-                style={{
-                  transform: `rotate(${rotation}deg)`,
-                  transition: spinning ? "transform 3.5s cubic-bezier(0.17, 0.67, 0.16, 0.99)" : "none",
-                  willChange: "transform",
-                  display: "block",
-                }}
-              >
-                {REWARDS.map((rw, i) => {
-                  const startDeg = i * SEGMENT_DEG;
-                  const endDeg = (i + 1) * SEGMENT_DEG;
-                  const midDeg = startDeg + SEGMENT_DEG / 2;
-                  const labelPos = polarToCart(CENTER, CENTER, RADIUS * 0.65, midDeg);
-                  return (
-                    <g key={i}>
-                      <path
-                        d={segmentPath(CENTER, CENTER, RADIUS, startDeg, endDeg)}
-                        fill={rw.fill}
-                        stroke="hsl(var(--background))"
-                        strokeWidth="1.5"
-                      />
-                      <text
-                        x={labelPos.x}
-                        y={labelPos.y}
-                        textAnchor="middle"
-                        dominantBaseline="middle"
-                        fontSize="13"
-                        fontWeight="700"
-                        fill="white"
-                        transform={`rotate(${midDeg} ${labelPos.x} ${labelPos.y})`}
-                      >
-                        {rw.label}
-                      </text>
-                    </g>
-                  );
-                })}
-                {/* Center hub */}
-                <circle cx={CENTER} cy={CENTER} r="22" fill="hsl(var(--card))" stroke="hsl(var(--primary))" strokeWidth="2" />
-              </svg>
-
-              {/* Center icon overlay */}
-              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                <div className="w-10 h-10 rounded-full bg-card border-2 border-primary/40 flex items-center justify-center">
-                  <Gift className="w-4 h-4 text-primary" />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Result */}
-          {resultIdx !== null && !spinning && (
-            <div className="text-center py-1">
-              <p className="text-[10px] text-muted-foreground">Anda mendapatkan</p>
-              <p className="text-lg font-bold text-success break-all">
-                {REWARDS[resultIdx].amount > 0 ? formatCurrency(REWARDS[resultIdx].amount) : REWARDS[resultIdx].label}
-              </p>
-            </div>
-          )}
         </div>
 
-        {/* Footer */}
-        <div className="px-5 pb-5 pt-3 space-y-2">
-          <Button
-            className="w-full h-10 text-xs font-semibold"
-            onClick={handleSpin}
-            disabled={spinning || tickets.length === 0}
-          >
-            {spinning ? "Memutar..." : tickets.length === 0 ? "Tidak Ada Tiket" : "PUTAR SEKARANG"}
-          </Button>
-          {tickets.length === 0 && (
-            <p className="text-[10px] text-center text-muted-foreground">
-              Undang teman pakai kode referral untuk dapat tiket spin gratis!
+        {/* Content */}
+        <div className="px-5 -mt-8 pb-5 space-y-4">
+          <div className="rounded-2xl bg-white border border-primary/10 shadow-lg p-5">
+            <p className="text-center text-[11px] text-muted-foreground">
+              {revealedIdx !== null
+                ? "Kotak terbuka!"
+                : opening
+                ? "Membuka kotak..."
+                : "Pilih salah satu kotak — hadiah acak di dalam!"}
             </p>
+
+            <div className="mt-4 grid grid-cols-3 gap-3">
+              {[0, 1, 2].map((i) => {
+                const isPicked = pickedBox === i;
+                const isOpen = isPicked && revealedIdx !== null;
+                const isDim = pickedBox !== null && !isPicked;
+                return (
+                  <button
+                    key={i}
+                    disabled={opening || tickets.length === 0 || pickedBox !== null}
+                    onClick={() => handlePickBox(i)}
+                    className={`group relative aspect-square rounded-2xl border-2 transition-all overflow-hidden ${
+                      isOpen
+                        ? "border-primary bg-gradient-to-br from-primary/20 to-cyan-100 scale-105"
+                        : isPicked
+                        ? "border-primary bg-primary/10 animate-pulse"
+                        : isDim
+                        ? "border-border bg-muted/40 opacity-40"
+                        : "border-primary/30 bg-gradient-to-br from-[#1e40af] to-[#3b82f6] hover:scale-105 hover:border-primary shadow-md"
+                    } disabled:cursor-not-allowed`}
+                  >
+                    {/* Ribbon lines */}
+                    {!isOpen && (
+                      <>
+                        <div className={`absolute inset-x-0 top-1/2 h-[3px] -translate-y-1/2 ${isDim ? "bg-muted-foreground/30" : "bg-white/40"}`} />
+                        <div className={`absolute inset-y-0 left-1/2 w-[3px] -translate-x-1/2 ${isDim ? "bg-muted-foreground/30" : "bg-white/40"}`} />
+                      </>
+                    )}
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      {isOpen ? (
+                        <div className="text-center px-1">
+                          <PackageOpen className="w-6 h-6 text-primary mx-auto" />
+                          <p className="mt-1 text-[10px] font-bold text-primary break-all leading-tight">
+                            {rewards[revealedIdx!].amount > 0
+                              ? formatCurrency(rewards[revealedIdx!].amount)
+                              : rewards[revealedIdx!].label}
+                          </p>
+                        </div>
+                      ) : (
+                        <Gift className={`w-8 h-8 ${isDim ? "text-muted-foreground/50" : "text-white"} ${isPicked ? "animate-bounce" : ""}`} />
+                      )}
+                    </div>
+                    {!isOpen && !isDim && (
+                      <span className="absolute top-1 right-1.5 text-[9px] font-bold text-white/80">
+                        #{i + 1}
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+
+            {revealedIdx !== null && (
+              <div className="mt-4 text-center animate-fade-in">
+                <p className="text-[10px] uppercase tracking-widest text-muted-foreground font-semibold">
+                  Anda mendapatkan
+                </p>
+                <p className="mt-0.5 font-heading text-xl font-bold text-success break-all">
+                  {rewards[revealedIdx].amount > 0
+                    ? formatCurrency(rewards[revealedIdx].amount)
+                    : rewards[revealedIdx].label}
+                </p>
+              </div>
+            )}
+          </div>
+
+          {revealedIdx !== null ? (
+            <Button
+              onClick={reset}
+              disabled={tickets.length === 0}
+              className="w-full h-11 rounded-full bg-gradient-to-r from-[#1e40af] to-[#3b82f6] text-white text-xs font-bold shadow-md"
+            >
+              <Gift className="w-4 h-4 mr-1.5" />
+              {tickets.length === 0 ? "Tiket Habis" : "Buka Kotak Lagi"}
+            </Button>
+          ) : (
+            tickets.length === 0 && (
+              <p className="text-[10px] text-center text-muted-foreground">
+                Undang teman pakai kode referral untuk dapat tiket gratis!
+              </p>
+            )
           )}
         </div>
       </DialogContent>
