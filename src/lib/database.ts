@@ -704,7 +704,7 @@ export const getVipSettings = async (): Promise<VipSetting[]> => {
 
 export const updateVipSetting = async (
   vipLevel: number,
-  requiredMembers: number,
+  requiredMembers: number = 0,
   requiredDeposit: number = 0,
   title: string | null = null,
 ): Promise<boolean> => {
@@ -720,6 +720,18 @@ export const updateVipSetting = async (
 
   if (error) {
     console.error('Error upserting VIP setting:', error);
+    return false;
+  }
+  return true;
+};
+
+export const deleteVipSetting = async (vipLevel: number): Promise<boolean> => {
+  const { error } = await supabase
+    .from('vip_settings')
+    .delete()
+    .eq('vip_level', vipLevel);
+  if (error) {
+    console.error('Error deleting VIP setting:', error);
     return false;
   }
   return true;
