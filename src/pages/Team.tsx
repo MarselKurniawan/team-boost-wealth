@@ -1,22 +1,23 @@
 import { useState, useEffect, useMemo } from "react";
 import { Button } from "@/components/ui/button";
-import { Users, Copy, Link2, Gift, Image as ImageIcon, Info, ChevronRight } from "lucide-react";
+import { Users, Copy, Link2, Gift, Image as ImageIcon, Info, ChevronRight, Crown, Sparkles, TrendingUp } from "lucide-react";
 import { WhatsAppIcon } from "@/components/icons/WhatsAppIcon";
 import { useAuth } from "@/hooks/useAuth";
 import { formatCurrency, Profile } from "@/lib/database";
-import { getMultiLevelTeam, MultiLevelTeam, COMMISSION_RATES, RABAT_RATES, loadVipThresholds } from "@/lib/teamUtils";
+import { getMultiLevelTeam, MultiLevelTeam, COMMISSION_RATES, RABAT_RATES } from "@/lib/teamUtils";
+import { useVipTitles } from "@/hooks/useVipTitles";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
 const Team = () => {
   const { profile, refreshProfile } = useAuth();
   const { toast } = useToast();
+  const { titleFor } = useVipTitles();
   const [team, setTeam] = useState<MultiLevelTeam>({ levelA: [], levelB: [], levelC: [], total: 0 });
   const [longTermIds, setLongTermIds] = useState<Set<string>>(new Set());
   const [filter, setFilter] = useState<"all" | "A" | "B" | "C">("all");
 
   const loadData = async () => {
-    await loadVipThresholds();
     if (profile?.referral_code) {
       const teamData = await getMultiLevelTeam(profile.referral_code);
       setTeam(teamData);
@@ -36,7 +37,7 @@ const Team = () => {
   useEffect(() => { loadData(); }, [profile?.referral_code]);
 
   const currentVipLevel = profile?.vip_level ?? 0;
-  const nextVipLevel = Math.min(currentVipLevel + 1, 5);
+  const currentVipTitle = titleFor(currentVipLevel);
   const referralCode = profile?.referral_code || '';
   const referralLink = `${window.location.origin}/auth?ref=${referralCode}`;
 
