@@ -21,11 +21,14 @@ import {
   formatCurrency,
   getVipSettings,
   updateVipSetting,
+  deleteVipSetting,
+  defaultVipTitle,
   Profile,
   Transaction,
   Coupon,
   VipSetting,
 } from "@/lib/database";
+import { refreshVipTitles } from "@/hooks/useVipTitles";
 import {
   Users,
   ArrowUpRight,
@@ -75,7 +78,9 @@ const Admin = () => {
   const [legalityDialogOpen, setLegalityDialogOpen] = useState(false);
   const [coupons, setCoupons] = useState<Coupon[]>([]);
   const [vipSettings, setVipSettings] = useState<VipSetting[]>([]);
-  const [editingVip, setEditingVip] = useState<Record<number, { members: number; deposit: number; title: string }>>({});
+  const [editingVip, setEditingVip] = useState<Array<{ level: number; title: string; isNew?: boolean }>>([]);
+  const [newVipLevel, setNewVipLevel] = useState<string>("");
+  const [newVipTitle, setNewVipTitle] = useState<string>("");
 
   const [txFilter, setTxFilter] = useState<string>("all");
 
@@ -104,9 +109,12 @@ const Admin = () => {
     setAllTransactions(enrichTransactions(allTxData, profilesData));
     setCoupons(couponData);
     setVipSettings(vipData);
-    const vipMap: Record<number, { members: number; deposit: number; title: string }> = {};
-    vipData.forEach(v => { vipMap[v.vip_level] = { members: v.required_members, deposit: Number(v.required_deposit || 0), title: v.title ?? '' }; });
-    setEditingVip(vipMap);
+    setEditingVip(
+      vipData
+        .slice()
+        .sort((a, b) => a.vip_level - b.vip_level)
+        .map(v => ({ level: v.vip_level, title: v.title ?? '' }))
+    );
 
   };
 
@@ -146,19 +154,55 @@ const Admin = () => {
   const handleSaveVipSettings = async () => {
     setIsLoading('vip');
     let success = true;
-    for (const level of [0, 1, 2, 3, 4, 5]) {
-      const cfg = editingVip[level] ?? { members: 0, deposit: 0, title: '' };
-      const result = await updateVipSetting(level, cfg.members, cfg.deposit, cfg.title?.trim() || null);
+    for (const cfg of editingVip) {
+      const result = await updateVipSetting(cfg.level, 0, 0, cfg.title?.trim() || null);
       if (!result) success = false;
     }
-
     if (success) {
-      toast({ title: "VIP Setting Disimpan", description: "Threshold berhasil diupdate" });
+      toast({ title: "Tingkatan VIP disimpan", description: "Nama tingkatan berhasil diperbarui" });
     } else {
       toast({ title: "Gagal menyimpan", variant: "destructive" });
     }
+    await refreshVipTitles();
     setIsLoading(null);
     loadData();
+  };
+
+  const handleAddVipLevel = async () => {
+    const lvl = parseInt(newVipLevel);
+    if (isNaN(lvl) || lvl < 0) {
+      toast({ title: "Level tidak valid", variant: "destructive" });
+      return;
+    }
+    if (editingVip.some(v => v.level === lvl)) {
+      toast({ title: "Level sudah ada", variant: "destructive" });
+      return;
+    }
+    const title = newVipTitle.trim() || defaultVipTitle(lvl);
+    const ok = await updateVipSetting(lvl, 0, 0, title);
+    if (ok) {
+      toast({ title: "Tingkatan ditambahkan", description: `${title} (VIP ${lvl})` });
+      setNewVipLevel(""); setNewVipTitle("");
+      await refreshVipTitles();
+      loadData();
+    } else {
+      toast({ title: "Gagal menambah", variant: "destructive" });
+    }
+  };
+
+  const handleDeleteVipLevel = async (level: number) => {
+    if (level === 0) {
+      toast({ title: "VIP 0 tidak bisa dihapus", variant: "destructive" });
+      return;
+    }
+    const ok = await deleteVipSetting(level);
+    if (ok) {
+      toast({ title: "Tingkatan dihapus" });
+      await refreshVipTitles();
+      loadData();
+    } else {
+      toast({ title: "Gagal menghapus", variant: "destructive" });
+    }
   };
 
   const handleDeleteCoupon = async (id: string) => {
