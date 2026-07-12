@@ -33,8 +33,11 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { Link } from "react-router-dom";
 
+import { useVipTitles } from "@/hooks/useVipTitles";
+
 const AdminUsers = () => {
   const { toast } = useToast();
+  const { titleFor, levels: vipLevels } = useVipTitles();
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredUsers, setFilteredUsers] = useState<Profile[]>([]);
@@ -326,7 +329,7 @@ const AdminUsers = () => {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
                       <p className="font-semibold text-foreground">{user.name}</p>
-                      <Badge variant="outline" className="text-xs"><Crown className="w-3 h-3 mr-1" />VIP {user.vip_level}</Badge>
+                      <Badge variant="outline" className="text-xs"><Crown className="w-3 h-3 mr-1" />{titleFor(user.vip_level)}</Badge>
                       {adminUserIds.has(user.user_id) && <Badge className="text-xs bg-primary">Admin</Badge>}
                     </div>
                     <p className="text-xs text-muted-foreground">{user.email}</p>
@@ -388,11 +391,13 @@ const AdminUsers = () => {
                     <Trash2 className="w-3 h-3 sm:w-4 sm:h-4" />
                   </Button>
                   <select 
-                    className="px-2 sm:px-3 py-1.5 text-xs sm:text-sm rounded-md bg-muted border border-border" 
+                    className="px-2 sm:px-3 py-1.5 text-xs sm:text-sm rounded-md bg-muted border border-border max-w-[160px]" 
                     value={user.vip_level} 
                     onChange={(e) => handleUpdateVip(user.user_id, parseInt(e.target.value))}
                   >
-                    {[0, 1, 2, 3, 4, 5].map((level) => <option key={level} value={level}>VIP {level}</option>)}
+                    {(vipLevels.length ? vipLevels : [0,1,2,3,4,5]).map((level) => (
+                      <option key={level} value={level}>{`VIP ${level} · ${titleFor(level)}`}</option>
+                    ))}
                   </select>
                 </div>
               </CardContent>
