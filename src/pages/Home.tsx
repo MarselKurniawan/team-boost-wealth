@@ -286,7 +286,7 @@ const Home = () => {
             <div className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center">
               <Gift className="w-4 h-4 text-primary" />
             </div>
-            <p className="text-[10px] font-semibold text-foreground">Spin</p>
+            <p className="text-[10px] font-semibold text-foreground">Kotak Kejutan</p>
           </button>
           <button onClick={() => setCouponOpen(true)} className="rounded-2xl bg-card border border-border p-3 flex flex-col items-center gap-1.5 hover:border-primary/40 transition">
             <div className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center">
