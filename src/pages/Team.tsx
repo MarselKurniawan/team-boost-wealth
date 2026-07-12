@@ -65,59 +65,83 @@ const Team = () => {
   }, [team, filter]);
 
   return (
-    <div className="bg-[#f4f6fb] min-h-screen pb-8">
-      {/* Hero header */}
-      <div className="bg-primary pt-8 pb-16 px-4 text-center">
-        <h1 className="font-heading text-2xl font-bold text-primary-foreground">
-          Ajak & Menangkan
-        </h1>
-        <p className="mt-1.5 text-xs text-primary-foreground/80">
-          Reward pembelian pertama: <span className="font-bold text-primary-foreground">10%</span>
-        </p>
-        <div className="mt-4 flex items-center justify-center gap-2 text-[10px]">
-          <span className="px-3 py-1 rounded-full bg-primary-foreground/15 text-primary-foreground border border-primary-foreground/25">
-            Level VIP saya: <b>VIP{currentVipLevel}</b>
-          </span>
-          <span className="px-3 py-1 rounded-full bg-primary-foreground/15 text-primary-foreground border border-primary-foreground/25">
-            Reward pembelian ulang: <b>{RABAT_RATES.A}%</b>
-          </span>
+    <div className="bg-[#f0f4fb] min-h-screen pb-8">
+      {/* Decorative hero header */}
+      <div className="relative overflow-hidden pt-8 pb-24 px-4 bg-gradient-to-br from-[#1e3a8a] via-[#1e40af] to-[#3b82f6]">
+        <div className="absolute -top-16 -right-10 w-56 h-56 rounded-full bg-white/10 blur-2xl" />
+        <div className="absolute top-10 -left-16 w-48 h-48 rounded-full bg-cyan-300/20 blur-3xl" />
+        <Sparkles className="absolute top-6 right-8 w-4 h-4 text-white/40" />
+        <Sparkles className="absolute top-16 left-10 w-3 h-3 text-white/30" />
+
+        <div className="relative text-center">
+          <p className="text-[10px] uppercase tracking-[0.32em] text-white/70 font-semibold">Tim Referral</p>
+          <h1 className="mt-1 font-heading text-2xl font-bold text-white">Ajak & Menangkan</h1>
+          <p className="mt-1.5 text-[11px] text-white/80">
+            Reward pembelian pertama <span className="font-bold text-white">10%</span>
+          </p>
         </div>
       </div>
 
-      <div className="px-4 -mt-10 space-y-3">
-        {/* VIP tier compare card */}
-        <div className="bg-white rounded-2xl border border-primary/10 shadow-sm p-4">
-          <p className="text-center text-[11px] font-heading font-bold text-primary uppercase tracking-widest">
-            Presentasi Reward
-          </p>
-          <div className="mt-3 grid grid-cols-2 gap-3">
-            <div className="rounded-xl border border-primary/20 bg-primary/5 p-3 text-center">
-              <p className="text-[10px] font-semibold text-muted-foreground">VIP{currentVipLevel}</p>
-              <p className="mt-1 font-heading text-3xl font-bold text-primary">{RABAT_RATES.A}%</p>
-              <p className="mt-1 text-[9px] text-muted-foreground">Level saat ini</p>
+      <div className="px-4 -mt-16 space-y-3">
+        {/* VIP identity card — dynamic title, no auto-upgrade */}
+        <div className="relative overflow-hidden rounded-3xl bg-white shadow-xl border border-primary/10 p-5">
+          {/* decorative crown blob */}
+          <div className="absolute -top-8 -right-8 w-32 h-32 rounded-full bg-gradient-to-br from-primary/15 to-cyan-200/40 blur-2xl" />
+          <div className="relative flex items-center gap-4">
+            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#1e3a8a] via-[#1e40af] to-[#3b82f6] flex items-center justify-center shrink-0 shadow-md">
+              <Crown className="w-7 h-7 text-white" />
             </div>
-            <div className="rounded-xl bg-primary text-primary-foreground p-3 text-center">
-              <p className="text-[10px] font-semibold opacity-80">VIP{nextVipLevel}</p>
-              <p className="mt-1 font-heading text-3xl font-bold">{COMMISSION_RATES.A}%</p>
-              <p className="mt-1 text-[9px] opacity-80">Level berikutnya</p>
+            <div className="flex-1 min-w-0">
+              <p className="text-[10px] uppercase tracking-[0.28em] text-muted-foreground font-semibold">Tingkatan Saya</p>
+              <p className="mt-0.5 font-heading text-xl font-bold text-foreground truncate">{currentVipTitle}</p>
+              <div className="mt-1 inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-primary/10 text-primary">
+                <span className="text-[9px] font-bold uppercase tracking-wider">VIP {currentVipLevel}</span>
+              </div>
             </div>
           </div>
-          <p className="mt-3 text-center text-[10px] text-muted-foreground">
-            Naik VIP dengan ajak <b className="text-primary">2 orang</b> lagi
+
+          <div className="relative mt-4 grid grid-cols-3 gap-2">
+            <div className="rounded-xl bg-primary/5 border border-primary/10 p-2.5 text-center">
+              <p className="text-[9px] uppercase tracking-wider text-muted-foreground">Level A</p>
+              <p className="mt-0.5 font-heading text-base font-bold text-primary">{COMMISSION_RATES.A}%</p>
+              <p className="text-[8px] text-muted-foreground">Beli · {RABAT_RATES.A}% harian</p>
+            </div>
+            <div className="rounded-xl bg-primary/5 border border-primary/10 p-2.5 text-center">
+              <p className="text-[9px] uppercase tracking-wider text-muted-foreground">Level B</p>
+              <p className="mt-0.5 font-heading text-base font-bold text-primary">{COMMISSION_RATES.B}%</p>
+              <p className="text-[8px] text-muted-foreground">Beli · {RABAT_RATES.B}% harian</p>
+            </div>
+            <div className="rounded-xl bg-primary/5 border border-primary/10 p-2.5 text-center">
+              <p className="text-[9px] uppercase tracking-wider text-muted-foreground">Level C</p>
+              <p className="mt-0.5 font-heading text-base font-bold text-primary">{COMMISSION_RATES.C}%</p>
+              <p className="text-[8px] text-muted-foreground">Beli · {RABAT_RATES.C}% harian</p>
+            </div>
+          </div>
+
+          <p className="relative mt-3 text-center text-[10px] text-muted-foreground">
+            Tingkatan diatur manual oleh admin — hubungi CS untuk naik level.
           </p>
         </div>
 
         {/* Income summary */}
         <div className="grid grid-cols-2 gap-3">
-          <div className="bg-white rounded-2xl border border-primary/10 shadow-sm p-3">
-            <p className="text-[10px] text-muted-foreground">Total Komisi</p>
-            <p className="mt-1 font-heading text-lg font-bold text-primary break-all">
+          <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#1e40af] to-[#3b82f6] text-white p-3.5 shadow-md">
+            <div className="absolute -top-6 -right-6 w-20 h-20 rounded-full bg-white/10 blur-xl" />
+            <div className="relative flex items-center gap-1.5">
+              <TrendingUp className="w-3.5 h-3.5" />
+              <p className="text-[10px] uppercase tracking-wider opacity-80">Total Komisi</p>
+            </div>
+            <p className="relative mt-1.5 font-heading text-lg font-bold break-all">
               {formatCurrency(profile?.team_income || 0)}
             </p>
           </div>
-          <div className="bg-white rounded-2xl border border-primary/10 shadow-sm p-3">
-            <p className="text-[10px] text-muted-foreground">Rabat Harian</p>
-            <p className="mt-1 font-heading text-lg font-bold text-primary break-all">
+          <div className="relative overflow-hidden rounded-2xl bg-white border border-primary/10 p-3.5 shadow-sm">
+            <div className="absolute -top-6 -right-6 w-20 h-20 rounded-full bg-primary/10 blur-xl" />
+            <div className="relative flex items-center gap-1.5">
+              <Gift className="w-3.5 h-3.5 text-primary" />
+              <p className="text-[10px] uppercase tracking-wider text-muted-foreground">Rabat Harian</p>
+            </div>
+            <p className="relative mt-1.5 font-heading text-lg font-bold text-primary break-all">
               {formatCurrency(profile?.rabat_income || 0)}
             </p>
           </div>
@@ -177,7 +201,7 @@ const Team = () => {
         <div className="bg-primary/5 border border-primary/15 rounded-2xl p-3 flex items-start gap-2">
           <Info className="w-3.5 h-3.5 text-primary shrink-0 mt-0.5" />
           <p className="text-[10px] text-muted-foreground leading-relaxed flex-1">
-            Semakin tinggi VIP, semakin besar reward pembelian ulang.
+            Semakin tinggi VIP, semakin besar reward — naik level diatur admin.
           </p>
           <button className="text-[10px] text-primary font-semibold shrink-0 flex items-center gap-0.5">
             Detail <ChevronRight className="w-3 h-3" />
@@ -245,7 +269,7 @@ const Team = () => {
                         <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-primary/10 text-primary font-bold">{lvl}</span>
                       </div>
                       <p className="text-[10px] text-muted-foreground truncate">
-                        {displayPhone(m.phone)} · VIP {m.vip_level}
+                        {displayPhone(m.phone)} · {titleFor(m.vip_level)}
                       </p>
                     </div>
                     <div className="text-right shrink-0">
