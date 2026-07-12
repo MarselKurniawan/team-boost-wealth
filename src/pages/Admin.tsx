@@ -672,45 +672,64 @@ const Admin = () => {
             <DialogTitle className="flex items-center gap-2"><Crown className="w-5 h-5 text-secondary" />Setting VIP Level</DialogTitle>
           </DialogHeader>
           <div className="flex-1 min-h-0 overflow-y-auto px-6 py-3 space-y-3">
-            <p className="text-xs text-muted-foreground">Atur syarat naik VIP. Wajib penuhi <b>kedua syarat</b>: jumlah bawahan yang sudah beli produk <b>dan</b> akumulasi deposit pribadi user.</p>
-            {[0, 1, 2, 3, 4, 5].map((level) => (
-              <div key={level} className="p-3 rounded-lg bg-muted/50 space-y-2">
-                <Badge className="bg-secondary/20 text-secondary border-0 font-bold shrink-0">VIP {level}</Badge>
+            <p className="text-[11px] text-muted-foreground">
+              Naik VIP dilakukan <b>manual per user</b> dari menu Manage Users. Di sini Anda hanya mengatur <b>nama tingkatan</b> dan bisa menambah level baru sesuka hati.
+            </p>
+
+            {editingVip.map((cfg, idx) => (
+              <div key={cfg.level} className="p-3 rounded-lg bg-muted/50 space-y-2">
+                <div className="flex items-center justify-between gap-2">
+                  <Badge className="bg-secondary/20 text-secondary border-0 font-bold shrink-0">VIP {cfg.level}</Badge>
+                  {cfg.level !== 0 && (
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="h-7 px-2 text-[10px] text-destructive hover:text-destructive hover:bg-destructive/10"
+                      onClick={() => handleDeleteVipLevel(cfg.level)}
+                    >
+                      <Trash2 className="w-3 h-3 mr-1" /> Hapus
+                    </Button>
+                  )}
+                </div>
                 <div>
-                  <Label className="text-[10px] text-muted-foreground">Nama Tingkatan (mis. Asisten Magang)</Label>
+                  <Label className="text-[10px] text-muted-foreground">Nama Tingkatan</Label>
                   <Input
                     type="text"
-                    placeholder={`Nama untuk VIP ${level}`}
-                    value={editingVip[level]?.title ?? ''}
-                    onChange={(e) => setEditingVip(prev => ({ ...prev, [level]: { members: prev[level]?.members ?? 0, deposit: prev[level]?.deposit ?? 0, title: e.target.value } }))}
+                    placeholder={defaultVipTitle(cfg.level)}
+                    value={cfg.title}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      setEditingVip(prev => prev.map((v, i) => i === idx ? { ...v, title: val } : v));
+                    }}
                     className="h-8 text-sm"
                   />
-                </div>
-                <div className="grid grid-cols-2 gap-2">
-                  <div>
-                    <Label className="text-[10px] text-muted-foreground">Minimal Member</Label>
-                    <Input
-                      type="number"
-                      min={0}
-                      value={editingVip[level]?.members ?? 0}
-                      onChange={(e) => setEditingVip(prev => ({ ...prev, [level]: { members: parseInt(e.target.value) || 0, deposit: prev[level]?.deposit ?? 0, title: prev[level]?.title ?? '' } }))}
-                      className="h-8 text-sm"
-                    />
-                  </div>
-                  <div>
-                    <Label className="text-[10px] text-muted-foreground">Min Total Deposit (Rp)</Label>
-                    <Input
-                      type="number"
-                      min={0}
-                      value={editingVip[level]?.deposit ?? 0}
-                      onChange={(e) => setEditingVip(prev => ({ ...prev, [level]: { members: prev[level]?.members ?? 0, deposit: parseInt(e.target.value) || 0, title: prev[level]?.title ?? '' } }))}
-                      className="h-8 text-sm"
-                    />
-                  </div>
                 </div>
               </div>
             ))}
 
+            <div className="p-3 rounded-lg border-2 border-dashed border-primary/30 bg-primary/5 space-y-2">
+              <p className="text-[11px] font-semibold text-primary">Tambah Tingkatan Baru</p>
+              <div className="grid grid-cols-[80px_1fr] gap-2">
+                <Input
+                  type="number"
+                  min={0}
+                  placeholder="Lv"
+                  value={newVipLevel}
+                  onChange={(e) => setNewVipLevel(e.target.value)}
+                  className="h-8 text-sm"
+                />
+                <Input
+                  type="text"
+                  placeholder="Nama tingkatan"
+                  value={newVipTitle}
+                  onChange={(e) => setNewVipTitle(e.target.value)}
+                  className="h-8 text-sm"
+                />
+              </div>
+              <Button onClick={handleAddVipLevel} size="sm" className="w-full h-8 text-[11px]">
+                <UserPlus className="w-3.5 h-3.5 mr-1" /> Tambah Tingkatan
+              </Button>
+            </div>
           </div>
           <div className="px-6 pb-6 pt-2 border-t border-border/50">
             <Button onClick={handleSaveVipSettings} className="w-full" disabled={isLoading === 'vip'}>
