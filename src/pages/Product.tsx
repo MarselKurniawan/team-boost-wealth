@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Lock, ChevronDown, Filter, Check } from "lucide-react";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Lock, SlidersHorizontal, Check, Zap, Timer, Crown, ArrowDownWideNarrow, ArrowUpWideNarrow } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useAuth } from "@/hooks/useAuth";
@@ -14,6 +14,7 @@ import { getProducts, formatCurrency, Product } from "@/lib/database";
 import InvestDialog from "@/components/InvestDialog";
 import ProductDetailDialog from "@/components/ProductDetailDialog";
 import ProductCard from "@/components/ProductCard";
+import { cn } from "@/lib/utils";
 
 const ProductPage = () => {
   const { profile, refreshProfile } = useAuth();
@@ -33,18 +34,13 @@ const ProductPage = () => {
     await refreshProfile();
   };
 
-  useEffect(() => {
-    loadData();
-  }, []);
+  useEffect(() => { loadData(); }, []);
 
   const userVipLevel = profile?.vip_level || 0;
-
   const getPrice = (p: Product) => p.promo_price ?? p.price;
   const getValidity = (p: Product) => p.promo_validity ?? p.validity;
-
-  // 2 versi produk: "harian" (profit tiap hari) & "kontrak" (payout di akhir kontrak).
-  // Mapping dari data existing: kontrak = kategori 'vip' atau vip_level > 0, sisanya harian.
   const isKontrak = (p: Product) => p.category === "vip" || (p.vip_level ?? 0) > 0;
+
   let filteredProducts =
     activeCategory === "all"
       ? products
@@ -52,10 +48,7 @@ const ProductPage = () => {
       ? products.filter(isKontrak)
       : products.filter((p) => !isKontrak(p));
 
-
-  if (vipLevelFilter !== "all") {
-    filteredProducts = filteredProducts.filter(p => p.vip_level === vipLevelFilter);
-  }
+  if (vipLevelFilter !== "all") filteredProducts = filteredProducts.filter(p => p.vip_level === vipLevelFilter);
 
   if (priceSort !== "none") {
     filteredProducts = [...filteredProducts].sort((a, b) =>
@@ -70,159 +63,155 @@ const ProductPage = () => {
 
   let availableProducts = filteredProducts.filter(p => p.vip_level <= userVipLevel);
   let lockedProducts = filteredProducts.filter(p => p.vip_level > userVipLevel);
-
   if (vipFilter === "available") lockedProducts = [];
   if (vipFilter === "locked") availableProducts = [];
 
-  const handleViewDetail = (product: Product) => {
-    setSelectedProduct(product);
-    setDetailOpen(true);
-  };
-
-  const handleInvest = (product: Product) => {
-    setSelectedProduct(product);
-    setInvestOpen(true);
-  };
-
+  const handleViewDetail = (product: Product) => { setSelectedProduct(product); setDetailOpen(true); };
+  const handleInvest = (product: Product) => { setSelectedProduct(product); setInvestOpen(true); };
   const handleInvestFromDetail = () => {
-    if (selectedProduct) {
-      setDetailOpen(false);
-      setTimeout(() => setInvestOpen(true), 200);
-    }
+    if (selectedProduct) { setDetailOpen(false); setTimeout(() => setInvestOpen(true), 200); }
   };
+
+  const tabs = [
+    { id: "all", label: "Semua", icon: Crown },
+    { id: "harian", label: "Harian", icon: Zap },
+    { id: "kontrak", label: "Kontrak", icon: Lock },
+  ];
+
+  const activeFiltersCount =
+    (priceSort !== "none" ? 1 : 0) + (validitySort !== "none" ? 1 : 0) +
+    (vipFilter !== "all" ? 1 : 0) + (vipLevelFilter !== "all" ? 1 : 0);
 
   return (
-    <div className="space-y-3 p-4 pt-5">
-      {/* Filter bar */}
-      <div className="flex items-center justify-between text-xs">
-        <div className="flex items-center gap-3 text-foreground/80">
-          <span className="font-medium">Saring</span>
+    <div className="pb-8">
+      {/* HERO strip */}
+      <div className="px-4 pt-4">
+        <div className="rounded-2xl bg-gradient-to-r from-[#1e40af] to-[#3b82f6] p-3.5 text-white relative overflow-hidden">
+          <div className="absolute -right-6 -top-6 w-24 h-24 rounded-full bg-white/10" />
+          <p className="text-[10px] uppercase tracking-[0.2em] text-white/70 font-semibold">Katalog</p>
+          <h1 className="text-lg font-heading font-bold mt-0.5">Pilih Robot Investasi</h1>
+          <p className="text-[11px] text-white/80 mt-0.5">Harian untuk profit rutin, Kontrak untuk payout lebih besar</p>
+        </div>
+      </div>
+
+      {/* Sticky tabs + filter */}
+      <div className="sticky top-12 z-20 bg-[#f0f4fb]/95 backdrop-blur px-4 pt-3 pb-2">
+        <div className="flex items-center gap-2">
+          <div className="flex-1 grid grid-cols-3 rounded-full bg-white border border-blue-100 p-1">
+            {tabs.map(t => {
+              const active = activeCategory === t.id;
+              return (
+                <button
+                  key={t.id}
+                  onClick={() => setActiveCategory(t.id)}
+                  className={cn(
+                    "flex items-center justify-center gap-1 h-8 rounded-full text-[11px] font-semibold transition-all",
+                    active
+                      ? "bg-gradient-to-br from-[#3b82f6] to-[#1e3a8a] text-white shadow-md shadow-blue-500/30"
+                      : "text-foreground/70 hover:text-foreground"
+                  )}
+                >
+                  <t.icon className="w-3 h-3" /> {t.label}
+                </button>
+              );
+            })}
+          </div>
 
           <DropdownMenu>
-            <DropdownMenuTrigger className="flex items-center gap-0.5 text-foreground/70 hover:text-foreground outline-none">
-              Harga{priceSort !== "none" ? (priceSort === "asc" ? " ↑" : " ↓") : ""} <ChevronDown className="w-3 h-3" />
+            <DropdownMenuTrigger className="relative w-10 h-10 rounded-full bg-white border border-blue-100 flex items-center justify-center text-foreground hover:border-primary/40 outline-none">
+              <SlidersHorizontal className="w-4 h-4" />
+              {activeFiltersCount > 0 && (
+                <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-primary text-primary-foreground text-[9px] font-bold flex items-center justify-center">
+                  {activeFiltersCount}
+                </span>
+              )}
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="start" className="text-xs">
+            <DropdownMenuContent align="end" className="text-xs w-52">
+              <DropdownMenuLabel className="text-[10px] text-muted-foreground">Urutkan Harga</DropdownMenuLabel>
               <DropdownMenuItem onClick={() => setPriceSort("none")}>
                 {priceSort === "none" && <Check className="w-3 h-3 mr-1" />} Default
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => setPriceSort("asc")}>
-                {priceSort === "asc" && <Check className="w-3 h-3 mr-1" />} Termurah
+                <ArrowUpWideNarrow className="w-3 h-3 mr-1" /> Termurah
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => setPriceSort("desc")}>
-                {priceSort === "desc" && <Check className="w-3 h-3 mr-1" />} Termahal
+                <ArrowDownWideNarrow className="w-3 h-3 mr-1" /> Termahal
               </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-
-          <DropdownMenu>
-            <DropdownMenuTrigger className="flex items-center gap-0.5 text-foreground/70 hover:text-foreground outline-none">
-              Hari melayani{validitySort !== "none" ? (validitySort === "asc" ? " ↑" : " ↓") : ""} <ChevronDown className="w-3 h-3" />
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="start" className="text-xs">
-              <DropdownMenuItem onClick={() => setValiditySort("none")}>
-                {validitySort === "none" && <Check className="w-3 h-3 mr-1" />} Default
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setValiditySort("asc")}>
-                {validitySort === "asc" && <Check className="w-3 h-3 mr-1" />} Tersingkat
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setValiditySort("desc")}>
-                {validitySort === "desc" && <Check className="w-3 h-3 mr-1" />} Terlama
-              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuLabel className="text-[10px] text-muted-foreground">Urutkan Periode</DropdownMenuLabel>
+              <DropdownMenuItem onClick={() => setValiditySort("none")}>Default</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setValiditySort("asc")}>Tersingkat</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setValiditySort("desc")}>Terlama</DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuLabel className="text-[10px] text-muted-foreground">Status</DropdownMenuLabel>
+              <DropdownMenuItem onClick={() => setVipFilter("all")}>Semua</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setVipFilter("available")}>Tersedia</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setVipFilter("locked")}>Terkunci</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
 
-        <DropdownMenu>
-          <DropdownMenuTrigger className="flex items-center gap-1 text-foreground/70 hover:text-foreground outline-none">
-            Filter <Filter className="w-3 h-3" />
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="text-xs">
-            <DropdownMenuItem onClick={() => setVipFilter("all")}>
-              {vipFilter === "all" && <Check className="w-3 h-3 mr-1" />} Semua
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setVipFilter("available")}>
-              {vipFilter === "available" && <Check className="w-3 h-3 mr-1" />} Tersedia
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setVipFilter("locked")}>
-              {vipFilter === "locked" && <Check className="w-3 h-3 mr-1" />} Terkunci
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        {/* VIP chips */}
+        <div className="mt-2.5 flex gap-1.5 overflow-x-auto no-scrollbar -mx-4 px-4">
+          {[
+            { v: "all" as const, label: "Semua VIP" },
+            { v: 0, label: "Reguler" },
+            { v: 1, label: "VIP 1" },
+            { v: 2, label: "VIP 2" },
+            { v: 3, label: "VIP 3" },
+            { v: 4, label: "VIP 4" },
+            { v: 5, label: "VIP 5" },
+          ].map(c => {
+            const active = vipLevelFilter === c.v;
+            return (
+              <button
+                key={String(c.v)}
+                onClick={() => setVipLevelFilter(c.v as any)}
+                className={cn(
+                  "shrink-0 px-3 h-7 rounded-full text-[11px] font-semibold border transition",
+                  active
+                    ? "bg-primary text-primary-foreground border-primary"
+                    : "bg-white text-foreground/70 border-blue-100 hover:border-primary/40"
+                )}
+              >
+                {c.label}
+              </button>
+            );
+          })}
+        </div>
       </div>
 
-      {/* VIP Level filter */}
-      <DropdownMenu>
-        <DropdownMenuTrigger className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full border border-border/60 bg-card/60 text-[11px] text-foreground/80 outline-none hover:border-primary/40">
-          {vipLevelFilter === "all" ? "Semua VIP" : vipLevelFilter === 0 ? "Reguler" : `VIP ${vipLevelFilter}`}
-          <ChevronDown className="w-3 h-3" />
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="start" className="text-xs">
-          <DropdownMenuItem onClick={() => setVipLevelFilter("all")}>
-            {vipLevelFilter === "all" && <Check className="w-3 h-3 mr-1" />} Semua VIP
-          </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => setVipLevelFilter(0)}>
-            {vipLevelFilter === 0 && <Check className="w-3 h-3 mr-1" />} Reguler
-          </DropdownMenuItem>
-          {[1, 2, 3, 4, 5].map(lvl => (
-            <DropdownMenuItem key={lvl} onClick={() => setVipLevelFilter(lvl)}>
-              {vipLevelFilter === lvl && <Check className="w-3 h-3 mr-1" />} VIP {lvl}
-            </DropdownMenuItem>
-          ))}
-        </DropdownMenuContent>
-      </DropdownMenu>
-
-      {/* Category Tabs — 2 versi produk */}
-      <div className="sticky top-0 z-10 bg-background/80 backdrop-blur-sm -mx-4 px-4 py-2">
-        <Tabs value={activeCategory} onValueChange={setActiveCategory}>
-          <TabsList className="w-full grid grid-cols-3 h-10 bg-primary/5 border border-primary/15 rounded-full p-1">
-            <TabsTrigger value="all" className="text-[11px] rounded-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Semua</TabsTrigger>
-            <TabsTrigger value="harian" className="text-[11px] rounded-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Harian</TabsTrigger>
-            <TabsTrigger value="kontrak" className="text-[11px] rounded-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Kontrak</TabsTrigger>
-          </TabsList>
-        </Tabs>
-      </div>
-
-
-      {/* Available Products */}
-      <div className="space-y-2.5">
+      {/* Product list */}
+      <div className="px-4 mt-3 space-y-2.5">
         {availableProducts.map((product) => (
-          <ProductCard
-            key={product.id}
-            product={product}
-            onViewDetail={handleViewDetail}
-            onInvest={handleInvest}
-          />
+          <ProductCard key={product.id} product={product} onViewDetail={handleViewDetail} onInvest={handleInvest} />
         ))}
       </div>
 
       {availableProducts.length === 0 && lockedProducts.length === 0 && (
-        <div className="text-center py-12 text-muted-foreground text-xs">
-          Tidak ada produk dalam kategori ini
-        </div>
+        <div className="text-center py-12 text-muted-foreground text-xs">Tidak ada produk dalam kategori ini</div>
       )}
 
-      {/* Locked Products */}
       {lockedProducts.length > 0 && (
-        <div className="space-y-2.5 pt-2">
+        <div className="px-4 mt-3 space-y-2.5">
           {lockedProducts.map((product) => {
             const displayPrice = product.promo_price ?? product.price;
             return (
-              <Card key={product.id} className="opacity-60 relative overflow-hidden border-border/50">
-                <div className="absolute inset-0 bg-background/60 backdrop-blur-sm z-10 flex items-center justify-center">
+              <Card key={product.id} className="opacity-70 relative overflow-hidden border-blue-100">
+                <div className="absolute inset-0 bg-white/60 backdrop-blur-sm z-10 flex items-center justify-center">
                   <div className="text-center">
-                    <Lock className="w-5 h-5 text-vip-gold mx-auto mb-1" />
-                    <p className="text-[10px] text-vip-gold font-medium">Buka kunci VIP {product.vip_level}</p>
+                    <Lock className="w-5 h-5 text-primary mx-auto mb-1" />
+                    <p className="text-[10px] text-primary font-semibold">Buka kunci VIP {product.vip_level}</p>
                   </div>
                 </div>
                 <CardContent className="p-3">
                   <div className="flex gap-3">
-                    <div className="w-28 h-20 rounded-lg overflow-hidden bg-muted flex-shrink-0">
+                    <div className="w-24 h-24 rounded-xl overflow-hidden bg-muted flex-shrink-0">
                       <img src={product.image} alt={product.name} className="w-full h-full object-cover grayscale" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-xs font-semibold text-foreground truncate">{product.name}</p>
-                      <p className="text-xs text-primary/50 mt-1">{formatCurrency(displayPrice)}</p>
+                      <p className="text-xs text-primary/60 mt-1">{formatCurrency(displayPrice)}</p>
                     </div>
                   </div>
                 </CardContent>
