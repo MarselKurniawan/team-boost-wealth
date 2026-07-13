@@ -1,55 +1,92 @@
-import { Link, useLocation } from "react-router-dom";
-import { Home, Store, LayoutGrid, Users, User } from "lucide-react";
+import { useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Home, Store, Gift, Users, User, Menu, MessageSquare, Zap } from "lucide-react";
 import { cn } from "@/lib/utils";
+import SideMenu from "@/components/SideMenu";
 
 const Layout = ({ children, wide = false }: { children: React.ReactNode; wide?: boolean }) => {
   const { pathname } = useLocation();
+  const navigate = useNavigate();
+  const [menuOpen, setMenuOpen] = useState(false);
+
   const items = [
     { to: "/", icon: Home, label: "Beranda" },
     { to: "/product", icon: Store, label: "Produk" },
-    { to: "/account", icon: LayoutGrid, label: "Akun" },
+    { to: "/account", icon: Gift, label: "Hadiah", center: true },
     { to: "/team", icon: Users, label: "Tim" },
     { to: "/profile", icon: User, label: "Saya" },
   ];
 
   return (
-    <div className="min-h-screen bg-background pb-28">
-      <header className="border-b border-border bg-background">
-        <div className={`mx-auto ${wide ? "max-w-4xl" : "max-w-md"} px-5 h-12 flex items-center justify-between`}>
-          <span className="font-heading text-[13px] font-bold tracking-tight text-foreground">
-            INVESTPRO<span className="text-primary">.</span>
-          </span>
-          <span className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground">Mobile Edition</span>
+    <div className="min-h-screen bg-[#f0f4fb] pb-24">
+      <header className="sticky top-0 z-30 border-b border-blue-100 bg-white/90 backdrop-blur">
+        <div className={`mx-auto ${wide ? "max-w-4xl" : "max-w-md"} px-4 h-12 flex items-center justify-between`}>
+          <button
+            onClick={() => setMenuOpen(true)}
+            className="w-8 h-8 rounded-lg hover:bg-blue-50 flex items-center justify-center text-foreground"
+            aria-label="Menu"
+          >
+            <Menu className="w-4 h-4" />
+          </button>
+          <div className="flex items-center gap-1.5">
+            <div className="w-6 h-6 rounded-full bg-gradient-to-br from-[#3b82f6] to-[#1e3a8a] flex items-center justify-center">
+              <Zap className="w-3.5 h-3.5 text-white" strokeWidth={2.5} />
+            </div>
+            <span className="font-heading text-[13px] font-bold tracking-tight text-foreground">
+              INVEST<span className="text-primary">PRO</span>
+            </span>
+          </div>
+          <button
+            onClick={() => navigate("/notifications")}
+            className="relative w-8 h-8 rounded-lg hover:bg-blue-50 flex items-center justify-center text-foreground"
+            aria-label="Pesan"
+          >
+            <MessageSquare className="w-4 h-4" />
+            <span className="absolute top-1 right-1 w-1.5 h-1.5 rounded-full bg-destructive" />
+          </button>
         </div>
       </header>
 
-      <main className={`mx-auto ${wide ? "max-w-4xl" : "max-w-md"} relative z-10`}>
-        {children}
-      </main>
+      <main className={`mx-auto ${wide ? "max-w-4xl" : "max-w-md"} relative z-10`}>{children}</main>
 
-      {/* Floating pill bottom nav */}
-      <nav className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50">
-        <div className="flex items-center gap-1 bg-foreground text-background px-2 py-2 rounded-full shadow-[0_18px_40px_-15px_rgba(15,23,42,0.55)]">
-          {items.map((item) => {
-            const active = pathname === item.to;
-            return (
-              <Link
-                key={item.to}
-                to={item.to}
-                className={cn(
-                  "flex items-center justify-center gap-1.5 h-10 px-3 rounded-full transition-all duration-200",
-                  active ? "bg-background text-foreground px-4" : "hover:bg-background/10",
-                )}
-              >
-                <item.icon className="w-4 h-4" strokeWidth={2} />
-                {active && (
-                  <span className="text-[11px] font-semibold tracking-tight">{item.label}</span>
-                )}
-              </Link>
-            );
-          })}
+      {/* Bottom nav with prominent center */}
+      <nav className="fixed bottom-0 left-1/2 -translate-x-1/2 z-40 w-full max-w-md">
+        <div className="relative bg-white border-t border-blue-100 px-3 pt-2 pb-3">
+          <div className="grid grid-cols-5 items-end gap-1">
+            {items.map((item) => {
+              const active = pathname === item.to;
+              if (item.center) {
+                return (
+                  <Link key={item.to} to={item.to} className="flex flex-col items-center -mt-6">
+                    <div className={cn(
+                      "w-14 h-14 rounded-full flex items-center justify-center shadow-lg shadow-blue-500/40 ring-4 ring-white",
+                      "bg-gradient-to-br from-[#3b82f6] to-[#1e3a8a] text-white"
+                    )}>
+                      <item.icon className="w-6 h-6" strokeWidth={2.2} />
+                    </div>
+                    <span className="text-[10px] mt-1 font-semibold text-primary">{item.label}</span>
+                  </Link>
+                );
+              }
+              return (
+                <Link
+                  key={item.to}
+                  to={item.to}
+                  className={cn(
+                    "flex flex-col items-center gap-0.5 py-1 rounded-lg transition-colors",
+                    active ? "text-primary" : "text-muted-foreground hover:text-foreground"
+                  )}
+                >
+                  <item.icon className="w-5 h-5" strokeWidth={active ? 2.4 : 1.8} />
+                  <span className={cn("text-[10px]", active ? "font-bold" : "font-medium")}>{item.label}</span>
+                </Link>
+              );
+            })}
+          </div>
         </div>
       </nav>
+
+      <SideMenu open={menuOpen} onOpenChange={setMenuOpen} />
     </div>
   );
 };
