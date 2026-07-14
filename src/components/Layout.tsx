@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Home, Store, Gift, Users, User, Menu, MessageSquare, Zap } from "lucide-react";
+import { Home, Calendar, Gem, BarChart3, Briefcase, Menu, MessageSquare, Zap } from "lucide-react";
 import { cn } from "@/lib/utils";
 import SideMenu from "@/components/SideMenu";
 
@@ -11,11 +11,12 @@ const Layout = ({ children, wide = false }: { children: React.ReactNode; wide?: 
 
   const items = [
     { to: "/", icon: Home, label: "Beranda" },
-    { to: "/product", icon: Store, label: "Produk" },
-    { to: "/account", icon: Gift, label: "Hadiah", center: true },
-    { to: "/team", icon: Users, label: "Tim" },
-    { to: "/profile", icon: User, label: "Saya" },
+    { to: "/product", icon: Calendar, label: "Tugas" },
+    { to: "/account", icon: Gem, label: "VIP", center: true },
+    { to: "/team", icon: BarChart3, label: "Pendapatan" },
+    { to: "/profile", icon: Briefcase, label: "Pusat pribadi" },
   ];
+
 
   return (
     <div className="min-h-screen bg-[#f0f4fb] pb-24">
