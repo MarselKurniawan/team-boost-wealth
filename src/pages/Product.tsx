@@ -151,35 +151,8 @@ const ProductPage = () => {
           </DropdownMenu>
         </div>
 
-        {/* VIP chips */}
-        <div className="mt-2.5 flex gap-1.5 overflow-x-auto no-scrollbar -mx-4 px-4">
-          {[
-            { v: "all" as const, label: "Semua VIP" },
-            { v: 0, label: "Reguler" },
-            { v: 1, label: "VIP 1" },
-            { v: 2, label: "VIP 2" },
-            { v: 3, label: "VIP 3" },
-            { v: 4, label: "VIP 4" },
-            { v: 5, label: "VIP 5" },
-          ].map(c => {
-            const active = vipLevelFilter === c.v;
-            return (
-              <button
-                key={String(c.v)}
-                onClick={() => setVipLevelFilter(c.v as any)}
-                className={cn(
-                  "shrink-0 px-3 h-7 rounded-full text-[11px] font-semibold border transition",
-                  active
-                    ? "bg-primary text-primary-foreground border-primary"
-                    : "bg-white text-foreground/70 border-blue-100 hover:border-primary/40"
-                )}
-              >
-                {c.label}
-              </button>
-            );
-          })}
-        </div>
       </div>
+
 
       {/* Product list */}
       <div className="px-4 mt-3 space-y-2.5">

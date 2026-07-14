@@ -121,12 +121,13 @@ const SpinSettingsDialog = ({ open, onOpenChange }: Props) => {
       <DialogContent className="w-[95vw] max-w-lg mx-auto p-0 overflow-hidden flex flex-col max-h-[90vh]">
         <DialogHeader className="p-4 border-b">
           <DialogTitle className="flex items-center gap-2 text-sm">
-            <Sparkles className="w-4 h-4 text-primary" /> Setting Roda Putar
+            <Sparkles className="w-4 h-4 text-primary" /> Setting Hadiah Buka Kotak
           </DialogTitle>
           <DialogDescription className="text-[11px]">
-            Label = tampil di roda. Hadiah = nominal saldo (isi 0 untuk hadiah non-saldo seperti "Handphone"). Total persentase harus 100%.
+            Label = nama hadiah. Hadiah = nominal saldo (isi 0 untuk hadiah non-saldo). Total persentase harus 100%.
           </DialogDescription>
         </DialogHeader>
+
 
         <div className="flex-1 min-h-0 overflow-y-auto px-4 py-3">
           <div className="space-y-2">

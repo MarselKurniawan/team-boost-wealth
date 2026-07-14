@@ -1,13 +1,12 @@
 import { useState, useEffect } from "react";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
 import { createTransaction, updateProfile, getBankAccounts, formatCurrency, BankAccount } from "@/lib/database";
-import { ArrowDownRight, Building2, Clock, AlertCircle, Wallet, Check, Landmark } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { ArrowUpFromLine, Wallet, Landmark, Check, Clock, AlertCircle, Sparkles } from "lucide-react";
 
 interface WithdrawDialogProps {
   open: boolean;
@@ -29,9 +28,7 @@ const WithdrawDialog = ({ open, onOpenChange, balance, onSuccess }: WithdrawDial
       if (open && user) {
         const savedAccounts = await getBankAccounts(user.id);
         setAccounts(savedAccounts);
-        if (savedAccounts.length > 0 && !selectedAccount) {
-          setSelectedAccount(savedAccounts[0]);
-        }
+        if (savedAccounts.length > 0 && !selectedAccount) setSelectedAccount(savedAccounts[0]);
       }
     };
     loadAccounts();
@@ -40,60 +37,27 @@ const WithdrawDialog = ({ open, onOpenChange, balance, onSuccess }: WithdrawDial
   const amountNum = parseInt(amount) || 0;
   const taxFee = Math.floor(amountNum * 0.1);
   const netAmount = amountNum - taxFee;
+  const quickPct = [25, 50, 75, 100];
 
   const handleSubmit = async () => {
     if (!amountNum || amountNum < 50000) {
-      toast({
-        title: "Error",
-        description: "Minimum withdraw adalah Rp 50.000",
-        variant: "destructive",
-      });
+      toast({ title: "Jumlah kurang", description: "Minimum withdraw Rp 50.000", variant: "destructive" });
       return;
     }
-
     if (amountNum > balance) {
-      toast({
-        title: "Error",
-        description: "Saldo tidak mencukupi",
-        variant: "destructive",
-      });
+      toast({ title: "Saldo tidak cukup", variant: "destructive" });
       return;
     }
-
     if (!selectedAccount) {
-      toast({
-        title: "Error",
-        description: "Silakan pilih rekening tujuan",
-        variant: "destructive",
-      });
+      toast({ title: "Pilih rekening tujuan", variant: "destructive" });
       return;
     }
-
-    if (!user || !profile) {
-      toast({
-        title: "Error",
-        description: "Silakan login terlebih dahulu",
-        variant: "destructive",
-      });
-      return;
-    }
-
+    if (!user || !profile) return;
     setIsLoading(true);
-
     try {
-      // Deduct full gross amount from balance
-      await updateProfile(user.id, {
-        balance: profile.balance - amountNum,
-      });
-
-      // Add transaction with pending status - requires admin approval
-      // Extract bank code & display label from "kode|label" format (fallback ke nilai lama)
+      await updateProfile(user.id, { balance: profile.balance - amountNum });
       const providerRaw = selectedAccount.provider || "";
-      const [providerCode, providerLabel] = providerRaw.includes("|")
-        ? providerRaw.split("|")
-        : [providerRaw, providerRaw];
-
-      // Net amount (after 10% tax) is what gets paid out
+      const [providerCode, providerLabel] = providerRaw.includes("|") ? providerRaw.split("|") : [providerRaw, providerRaw];
       await createTransaction({
         user_id: user.id,
         type: "withdraw",
@@ -101,32 +65,18 @@ const WithdrawDialog = ({ open, onOpenChange, balance, onSuccess }: WithdrawDial
         status: "pending",
         description: `Withdraw ${formatCurrency(amountNum)} - pajak 10% ${formatCurrency(taxFee)} = diterima ${formatCurrency(netAmount)} ke ${providerLabel} - ${selectedAccount.account_number} (${selectedAccount.account_name})`,
         payment_metadata: {
-          bank_code: providerCode,
-          bank_label: providerLabel,
-          account_number: selectedAccount.account_number,
-          account_name: selectedAccount.account_name,
+          bank_code: providerCode, bank_label: providerLabel,
+          account_number: selectedAccount.account_number, account_name: selectedAccount.account_name,
           account_type: selectedAccount.account_type,
-          gross_amount: amountNum,
-          tax_fee: taxFee,
-          net_amount: netAmount,
+          gross_amount: amountNum, tax_fee: taxFee, net_amount: netAmount,
         },
       });
-
-      toast({
-        title: "Permintaan Withdraw Dikirim",
-        description: `Diterima ${formatCurrency(netAmount)} (setelah pajak 10%). Menunggu persetujuan admin.`,
-      });
-
+      toast({ title: "Permintaan Dikirim", description: `Diterima ${formatCurrency(netAmount)} setelah pajak 10%.` });
       setAmount("");
-      setSelectedAccount(null);
       onOpenChange(false);
       onSuccess();
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "Gagal memproses withdraw. Silakan coba lagi.",
-        variant: "destructive",
-      });
+    } catch {
+      toast({ title: "Gagal", variant: "destructive" });
     } finally {
       setIsLoading(false);
     }
@@ -134,144 +84,131 @@ const WithdrawDialog = ({ open, onOpenChange, balance, onSuccess }: WithdrawDial
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="w-[95vw] max-w-md mx-auto max-h-[85vh] overflow-hidden flex flex-col p-0">
-        <DialogHeader className="px-4 pt-4 pb-2">
-          <DialogTitle className="flex items-center gap-1.5 text-xs">
-            <ArrowDownRight className="w-3.5 h-3.5 text-accent" />
-            Withdraw Saldo
-          </DialogTitle>
-          <DialogDescription className="text-[10px]">
-            Tarik saldo ke rekening bank atau e-wallet Anda
-          </DialogDescription>
-        </DialogHeader>
+      <DialogContent className="w-[95vw] max-w-md mx-auto max-h-[90vh] p-0 overflow-hidden flex flex-col border-0 rounded-3xl">
+        {/* Hero */}
+        <div className="relative overflow-hidden pt-5 pb-16 px-5 bg-gradient-to-br from-[#0b1e5c] via-[#1e40af] to-[#3b82f6]">
+          <div className="absolute -top-12 -right-8 w-44 h-44 rounded-full bg-cyan-300/15 blur-2xl" />
+          <div className="absolute -bottom-6 -left-8 w-32 h-32 rounded-full bg-white/10 blur-2xl" />
+          <Sparkles className="absolute top-4 right-6 w-3.5 h-3.5 text-white/50" />
 
-        <ScrollArea className="flex-1 px-4">
-          <div className="flex flex-col gap-3 py-2 pb-2">
-            {/* Balance Info */}
-            <div className="bg-muted rounded-lg p-3 flex items-center justify-between">
-              <div className="min-w-0">
-                <p className="text-[10px] text-muted-foreground">Saldo Tersedia</p>
-                <p className="text-sm font-bold text-foreground break-all">{formatCurrency(balance)}</p>
+          <DialogHeader className="relative text-left space-y-1">
+            <p className="text-[9px] uppercase tracking-[0.3em] text-white/70 font-semibold">Tarik Dana</p>
+            <DialogTitle className="text-white font-heading text-xl font-bold flex items-center gap-2">
+              <ArrowUpFromLine className="w-5 h-5" /> Penarikan Saldo
+            </DialogTitle>
+            <p className="text-[11px] text-white/70">Proses 12–48 jam · pajak 10%</p>
+          </DialogHeader>
+
+          <div className="relative mt-3 flex items-end justify-between gap-3 rounded-2xl bg-white/10 border border-white/20 backdrop-blur px-3 py-2.5">
+            <div className="min-w-0 flex-1">
+              <p className="text-[10px] text-white/70">Saldo tersedia</p>
+              <p className="text-white text-lg font-heading font-bold break-all leading-tight">{formatCurrency(balance)}</p>
+            </div>
+            <button
+              onClick={() => setAmount(balance.toString())}
+              className="shrink-0 h-7 px-3 rounded-full bg-white text-primary text-[10px] font-bold"
+            >
+              Tarik semua
+            </button>
+          </div>
+        </div>
+
+        <ScrollArea className="flex-1 -mt-10 px-5">
+          <div className="rounded-2xl bg-white border border-blue-100 shadow-[0_10px_30px_-15px_rgba(30,64,175,0.35)] p-4 space-y-4">
+            {/* Amount */}
+            <div>
+              <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-2">Jumlah Penarikan</p>
+              <div className="flex items-baseline gap-1 border-b-2 border-primary/30 pb-1">
+                <span className="text-primary text-sm font-semibold">Rp</span>
+                <input
+                  type="number"
+                  value={amount}
+                  onChange={(e) => setAmount(e.target.value)}
+                  placeholder="0"
+                  className="flex-1 bg-transparent border-0 outline-none text-foreground text-2xl font-heading font-bold placeholder:text-muted-foreground/40 min-w-0"
+                />
               </div>
-              <Button
-                variant="outline"
-                size="sm"
-                className="h-7 text-[10px] px-2 shrink-0"
-                onClick={() => setAmount(balance.toString())}
-              >
-                Semua
-              </Button>
+              <div className="mt-2 grid grid-cols-4 gap-1.5">
+                {quickPct.map((p) => (
+                  <button
+                    key={p}
+                    onClick={() => setAmount(Math.floor(balance * p / 100).toString())}
+                    className="h-8 rounded-lg bg-blue-50 text-primary text-[10px] font-bold border border-blue-100 hover:border-primary/40"
+                  >
+                    {p}%
+                  </button>
+                ))}
+              </div>
             </div>
 
-            {/* Amount Input */}
-            <div className="space-y-1.5">
-              <Label className="text-[10px]">Jumlah Withdraw</Label>
-              <Input
-                type="number"
-                placeholder="Masukkan jumlah"
-                value={amount}
-                onChange={(e) => setAmount(e.target.value)}
-                className="h-9 text-sm font-semibold"
-              />
-            </div>
-
-            {/* Account Selection */}
-            <div className="space-y-2 border-t border-border pt-2">
-              <div className="flex items-center gap-1.5 text-[11px] font-medium">
-                <Building2 className="w-3.5 h-3.5" />
-                Pilih Rekening Tujuan
-              </div>
-
+            {/* Bank accounts */}
+            <div>
+              <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-2">Rekening Tujuan</p>
               {accounts.length > 0 ? (
                 <div className="space-y-1.5">
-                  {accounts.map((account) => (
-                    <button
-                      key={account.id}
-                      onClick={() => setSelectedAccount(account)}
-                      className={`w-full flex items-center justify-between p-2 rounded-lg border transition-all ${
-                        selectedAccount?.id === account.id
-                          ? "border-primary bg-primary/10"
-                          : "border-border/50 bg-muted/50 hover:border-primary/50"
-                      }`}
-                    >
-                      <div className="flex items-center gap-2 min-w-0">
-                        <div className={`w-7 h-7 rounded-md flex items-center justify-center shrink-0 ${
-                          account.account_type === "bank"
-                            ? "bg-primary/20 text-primary"
-                            : "bg-accent/20 text-accent"
-                        }`}>
-                          {account.account_type === "bank" ? (
-                            <Landmark className="w-3.5 h-3.5" />
-                          ) : (
-                            <Wallet className="w-3.5 h-3.5" />
-                          )}
+                  {accounts.map((acc) => {
+                    const active = selectedAccount?.id === acc.id;
+                    return (
+                      <button
+                        key={acc.id}
+                        onClick={() => setSelectedAccount(acc)}
+                        className={cn(
+                          "w-full flex items-center gap-3 rounded-xl border px-3 py-2.5 text-left transition",
+                          active
+                            ? "border-primary bg-gradient-to-r from-blue-50 to-cyan-50"
+                            : "border-blue-100 bg-white hover:border-primary/40"
+                        )}
+                      >
+                        <div className={cn(
+                          "w-9 h-9 rounded-xl flex items-center justify-center shrink-0",
+                          active ? "bg-gradient-to-br from-[#3b82f6] to-[#1e3a8a] text-white" : "bg-blue-50 text-primary"
+                        )}>
+                          {acc.account_type === "bank" ? <Landmark className="w-4 h-4" /> : <Wallet className="w-4 h-4" />}
                         </div>
-                        <div className="text-left min-w-0">
-                          <p className="font-medium text-[11px] text-foreground break-all">{account.provider}</p>
-                          <p className="text-[10px] text-muted-foreground break-all">{account.account_number}</p>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-[12px] font-heading font-bold text-foreground truncate">{acc.provider.split("|").pop()}</p>
+                          <p className="text-[10px] text-muted-foreground break-all">{acc.account_number} · {acc.account_name}</p>
                         </div>
-                      </div>
-                      {selectedAccount?.id === account.id && (
-                        <Check className="w-3.5 h-3.5 text-primary shrink-0" />
-                      )}
-                    </button>
-                  ))}
+                        {active && <Check className="w-4 h-4 text-primary shrink-0" />}
+                      </button>
+                    );
+                  })}
                 </div>
               ) : (
-                <div className="flex items-start gap-1.5 p-2 bg-destructive/10 rounded-lg">
+                <div className="flex items-start gap-2 rounded-xl bg-destructive/10 border border-destructive/20 p-2.5">
                   <AlertCircle className="w-3.5 h-3.5 text-destructive mt-0.5 shrink-0" />
                   <p className="text-[10px] text-muted-foreground">
-                    Belum ada rekening tersimpan. Tambahkan rekening di <span className="text-primary font-medium">Profil → Account Bank</span>.
+                    Belum ada rekening. Tambahkan di <span className="text-primary font-semibold">Pusat pribadi → Akun Bank</span>.
                   </p>
                 </div>
               )}
             </div>
 
-            {/* Selected Account Summary */}
-            {selectedAccount && (
-              <div className="bg-success/10 rounded-lg p-2 border border-success/30">
-                <p className="text-[10px] text-muted-foreground mb-0.5">Withdraw ke:</p>
-                <p className="font-medium text-[11px] text-foreground break-all">
-                  {selectedAccount.provider} - {selectedAccount.account_number}
-                </p>
-                <p className="text-[10px] text-muted-foreground break-all">{selectedAccount.account_name}</p>
-              </div>
-            )}
-
-            {/* Info */}
-            <div className="flex items-start gap-1.5 p-2 bg-accent/10 rounded-lg">
-              <Clock className="w-3.5 h-3.5 text-accent mt-0.5 shrink-0" />
-              <p className="text-[10px] text-muted-foreground">
-                Proses 12-48 jam, Senin-Sabtu. Pajak penarikan 10%.
+            <div className="flex items-start gap-2 rounded-xl bg-blue-50 border border-blue-100 p-2.5">
+              <Clock className="w-3.5 h-3.5 text-primary mt-0.5 shrink-0" />
+              <p className="text-[10px] text-muted-foreground leading-snug">
+                Proses 12–48 jam kerja (Senin–Sabtu). Dikenakan pajak penarikan 10%.
               </p>
             </div>
           </div>
+          <div className="h-4" />
         </ScrollArea>
 
-        {/* Fixed Button at Bottom */}
-        <div className="px-4 pb-4 pt-3 border-t border-border bg-background space-y-2">
+        {/* Footer */}
+        <div className="px-5 py-3 border-t border-blue-100 bg-white/95 backdrop-blur space-y-2">
           {amountNum > 0 && (
-            <div className="rounded-lg bg-muted/60 p-2 space-y-0.5 text-[10px]">
-              <div className="flex justify-between gap-2">
-                <span className="text-muted-foreground">Jumlah Withdraw</span>
-                <span className="font-medium break-all">{formatCurrency(amountNum)}</span>
-              </div>
-              <div className="flex justify-between gap-2">
-                <span className="text-muted-foreground">Pajak (10%)</span>
-                <span className="font-medium text-destructive break-all">- {formatCurrency(taxFee)}</span>
-              </div>
-              <div className="flex justify-between gap-2 border-t border-border pt-0.5">
-                <span className="font-semibold">Anda Terima</span>
-                <span className="font-bold text-success break-all">{formatCurrency(netAmount)}</span>
-              </div>
+            <div className="rounded-xl bg-gradient-to-r from-blue-50 to-cyan-50 border border-blue-100 p-2.5 space-y-1 text-[10px]">
+              <div className="flex justify-between"><span className="text-muted-foreground">Jumlah</span><span className="font-semibold break-all">{formatCurrency(amountNum)}</span></div>
+              <div className="flex justify-between"><span className="text-muted-foreground">Pajak 10%</span><span className="font-semibold text-destructive break-all">-{formatCurrency(taxFee)}</span></div>
+              <div className="flex justify-between border-t border-blue-100 pt-1"><span className="font-semibold">Anda Terima</span><span className="font-heading font-bold text-primary break-all">{formatCurrency(netAmount)}</span></div>
             </div>
           )}
           <Button
-            className="w-full h-9 text-xs"
             onClick={handleSubmit}
             disabled={isLoading || !amount || !selectedAccount}
+            className="w-full h-11 rounded-2xl bg-gradient-to-r from-[#3b82f6] to-[#1e3a8a] text-white text-xs font-bold shadow-md shadow-blue-500/30"
           >
-            {isLoading ? "Memproses..." : "Ajukan Withdraw"}
+            {isLoading ? "Memproses..." : "Ajukan Penarikan"}
           </Button>
         </div>
       </DialogContent>
