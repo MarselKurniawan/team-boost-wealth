@@ -7,9 +7,10 @@ import { useState, useEffect } from "react";
 import {
   User as UserIcon, Shield, LogOut, ChevronRight, Copy, Eye, EyeOff,
   ClipboardList, Receipt, Crown, Users, ArrowDownToLine, ArrowUpFromLine,
-  Bell, Settings, Lock, Globe, Landmark, Headphones, Share2, Gift,
-  CalendarCheck, FileText, Sparkles, TrendingUp, Wallet,
+  Lock, Landmark, Headphones, Share2,
+  FileText, Sparkles, TrendingUp, Wallet, Settings,
 } from "lucide-react";
+
 import ProfileDialog from "@/components/ProfileDialog";
 import CouponDialog from "@/components/CouponDialog";
 import BankAccountDialog from "@/components/BankAccountDialog";
