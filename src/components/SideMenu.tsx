@@ -1,12 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import {
-  Globe, ListChecks, Megaphone, Package, Receipt, Wallet, Banknote,
-  Settings, BookOpen, Headphones, UserCog, LogOut, ChevronRight, Crown, MessageCircle,
+  ArrowDownToLine, ArrowUpFromLine, Landmark, Lock, Headphones, FileText,
+  LogOut, ChevronRight, Crown, UserCog,
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useVipTitles } from "@/hooks/useVipTitles";
-import { useToast } from "@/hooks/use-toast";
 
 interface Props { open: boolean; onOpenChange: (o: boolean) => void; }
 
@@ -14,25 +13,21 @@ const SideMenu = ({ open, onOpenChange }: Props) => {
   const navigate = useNavigate();
   const { profile, signOut, isAdmin } = useAuth();
   const { titleFor } = useVipTitles();
-  const { toast } = useToast();
 
   const go = (path: string) => { onOpenChange(false); setTimeout(() => navigate(path), 60); };
   const uid = profile?.user_id?.slice(0, 6).toUpperCase() || "------";
   const vipTitle = titleFor(profile?.vip_level ?? 0);
 
   const items = [
-    { icon: Globe, label: "Bahasa", value: "Indonesia", action: () => toast({ title: "Bahasa", description: "Saat ini hanya Bahasa Indonesia" }) },
-    { icon: ListChecks, label: "Tugas", action: () => go("/?action=checkin") },
-    { icon: Megaphone, label: "Bagikan Poster", action: () => go("/profile?action=referral") },
-    { icon: Package, label: "Pesanan", action: () => go("/account") },
-    { icon: Receipt, label: "Riwayat", action: () => go("/profile?action=history") },
-    { icon: Wallet, label: "Deposit", action: () => go("/?action=recharge") },
-    { icon: Banknote, label: "Tarik Dana", action: () => go("/?action=withdraw") },
-    { icon: Settings, label: "Pengaturan", action: () => go("/profile?action=settings") },
-    { icon: BookOpen, label: "Tutorial", action: () => go("/profile?action=company") },
-    { icon: Headphones, label: "Hubungi Kami", action: () => go("/contact") },
+    { icon: ArrowDownToLine, label: "Riwayat Deposit", action: () => go("/profile?action=history&type=recharge") },
+    { icon: ArrowUpFromLine, label: "Riwayat Penarikan", action: () => go("/profile?action=history&type=withdraw") },
+    { icon: Landmark, label: "Akun Bank", action: () => go("/profile?action=bank") },
+    { icon: Lock, label: "Ganti Password", action: () => go("/profile?action=password") },
+    { icon: Headphones, label: "Layanan Pelanggan", action: () => go("/contact") },
+    { icon: FileText, label: "Legalitas Perusahaan", action: () => go("/profile?action=company") },
     ...(isAdmin ? [{ icon: UserCog, label: "Admin Panel", action: () => go("/admin") }] : []),
   ];
+
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>

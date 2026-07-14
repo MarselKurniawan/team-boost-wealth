@@ -94,15 +94,11 @@ const Profile = () => {
     { icon: ArrowDownToLine, label: "Riwayat Deposit", tint: "bg-blue-50 text-blue-600", action: () => setHistoryOpen(true) },
     { icon: ArrowUpFromLine, label: "Riwayat Penarikan", tint: "bg-sky-50 text-sky-600", action: () => setHistoryOpen(true) },
     { icon: Landmark, label: "Akun Bank", tint: "bg-indigo-50 text-indigo-600", action: () => setBankDialogOpen(true) },
-    { icon: Gift, label: "Kupon", tint: "bg-cyan-50 text-cyan-600", action: () => setCouponDialogOpen(true) },
-    { icon: CalendarCheck, label: "Check-in Harian", tint: "bg-blue-50 text-blue-600", action: () => setCheckinOpen(true) },
-    { icon: Bell, label: "Notifikasi", badge: 1, tint: "bg-sky-50 text-sky-600", action: () => navigate("/notifications") },
-    { icon: Globe, label: "Bahasa", value: "Indonesia", tint: "bg-indigo-50 text-indigo-600", action: () => toast({ title: "Bahasa", description: "Saat ini hanya Bahasa Indonesia" }) },
     { icon: Lock, label: "Ganti Password", tint: "bg-cyan-50 text-cyan-600", action: () => openProfileDialog("password") },
-    { icon: Settings, label: "Pengaturan", tint: "bg-blue-50 text-blue-600", action: () => openProfileDialog("profile") },
     { icon: Headphones, label: "Layanan Pelanggan", tint: "bg-sky-50 text-sky-600", action: () => toast({ title: "Hubungi Kami", description: "WhatsApp: +62 812-3456-7890" }) },
-    { icon: FileText, label: "Tentang & Legal", tint: "bg-indigo-50 text-indigo-600", action: () => setCompanyDialogOpen(true) },
+    { icon: FileText, label: "Legalitas Perusahaan", tint: "bg-indigo-50 text-indigo-600", action: () => setCompanyDialogOpen(true) },
   ];
+
 
   return (
     <div className="bg-[#f0f4fb] min-h-screen pb-10">
