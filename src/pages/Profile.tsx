@@ -244,16 +244,9 @@ const Profile = () => {
                   <item.icon className="w-3.5 h-3.5" strokeWidth={2} />
                 </div>
                 <span className="text-[12px] font-medium text-foreground">{item.label}</span>
-                {item.badge && (
-                  <span className="w-4 h-4 rounded-full bg-destructive text-destructive-foreground text-[9px] font-bold flex items-center justify-center">
-                    {item.badge}
-                  </span>
-                )}
               </div>
-              <div className="flex items-center gap-1">
-                {item.value && <span className="text-[10px] text-muted-foreground">{item.value}</span>}
-                <ChevronRight className="w-3.5 h-3.5 text-muted-foreground" />
-              </div>
+              <ChevronRight className="w-3.5 h-3.5 text-muted-foreground" />
+
             </button>
           ))}
         </div>
