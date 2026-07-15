@@ -171,53 +171,48 @@ const Account = () => {
         <p className="text-[11px] text-muted-foreground">Monitor aktivitas dan pendapatan Anda</p>
       </div>
 
-      {/* Monitoring Dashboard */}
-      <div>
-        <h2 className="text-xs font-heading font-bold text-foreground mb-2">Statistik</h2>
-        <div className="grid grid-cols-2 gap-2.5">
-          <Card className="bg-card/80 border-border/60">
-            <CardContent className="p-3">
-              <div className="flex items-center gap-1.5 mb-1.5">
-                <TrendingUp className="w-3.5 h-3.5 text-success" />
-                <p className="text-[10px] font-medium text-muted-foreground">Total Pendapatan</p>
-              </div>
-              <p className="text-sm font-bold text-success break-all">{formatCurrency(monitoringData.totalIncome)}</p>
-            </CardContent>
-          </Card>
+      {/* Statistik — Blue tone redesign */}
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#1e3a8a] via-[#1e40af] to-[#3b82f6] p-4 shadow-lg shadow-blue-500/30">
+        <div className="absolute -top-10 -right-10 w-40 h-40 rounded-full bg-cyan-300/20 blur-2xl" />
+        <div className="absolute -bottom-8 -left-8 w-32 h-32 rounded-full bg-white/10 blur-2xl" />
+        <Sparkles className="absolute top-3 right-4 w-3.5 h-3.5 text-white/40" />
 
-          <Card className="bg-card/80 border-border/60">
-            <CardContent className="p-3">
-              <div className="flex items-center gap-1.5 mb-1.5">
-                <ArrowUpRight className="w-3.5 h-3.5 text-success" />
-                <p className="text-[10px] font-medium text-muted-foreground">Total Isi Ulang</p>
+        <div className="relative flex items-center justify-between mb-3">
+          <div>
+            <p className="text-[9px] uppercase tracking-[0.3em] text-white/60 font-semibold">Ringkasan</p>
+            <h2 className="text-white font-heading text-sm font-bold">Statistik Akun</h2>
+          </div>
+          <div className="w-9 h-9 rounded-2xl bg-white/15 border border-white/20 flex items-center justify-center backdrop-blur">
+            <TrendingUp className="w-4 h-4 text-white" />
+          </div>
+        </div>
+
+        <div className="relative rounded-2xl bg-white/10 border border-white/20 backdrop-blur p-3 mb-2.5">
+          <p className="text-[10px] text-white/70">Total Pendapatan</p>
+          <p className="text-white text-xl font-heading font-bold break-all leading-tight mt-0.5">
+            {formatCurrency(monitoringData.totalIncome)}
+          </p>
+          <div className="mt-1 inline-flex items-center gap-1 text-[9px] font-semibold text-emerald-300">
+            <TrendingUp className="w-3 h-3" /> Akumulasi profit
+          </div>
+        </div>
+
+        <div className="relative grid grid-cols-3 gap-1.5">
+          {[
+            { icon: ArrowUpRight, label: "Isi Ulang", value: monitoringData.totalRecharge },
+            { icon: ArrowDownRight, label: "Tarik", value: monitoringData.totalWithdraw },
+            { icon: Users, label: "Komisi", value: monitoringData.teamIncome },
+          ].map((s) => (
+            <div key={s.label} className="rounded-xl bg-white/10 border border-white/15 backdrop-blur p-2">
+              <div className="flex items-center gap-1 text-white/70 mb-1">
+                <s.icon className="w-3 h-3" />
+                <p className="text-[9px] font-semibold uppercase tracking-wider">{s.label}</p>
               </div>
-              <p className="text-sm font-bold text-foreground break-all">
-                {formatCurrency(monitoringData.totalRecharge)}
+              <p className="text-white text-[11px] font-heading font-bold break-all leading-tight">
+                {formatCurrency(s.value)}
               </p>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-card/80 border-border/60">
-            <CardContent className="p-3">
-              <div className="flex items-center gap-1.5 mb-1.5">
-                <ArrowDownRight className="w-3.5 h-3.5 text-accent" />
-                <p className="text-[10px] font-medium text-muted-foreground">Total Tarik</p>
-              </div>
-              <p className="text-sm font-bold text-foreground break-all">
-                {formatCurrency(monitoringData.totalWithdraw)}
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-card/80 border-border/60">
-            <CardContent className="p-3">
-              <div className="flex items-center gap-1.5 mb-1.5">
-                <Users className="w-3.5 h-3.5 text-primary" />
-                <p className="text-[10px] font-medium text-muted-foreground">Komisi Tim</p>
-              </div>
-              <p className="text-sm font-bold text-primary break-all">{formatCurrency(monitoringData.teamIncome)}</p>
-            </CardContent>
-          </Card>
+            </div>
+          ))}
         </div>
       </div>
 
