@@ -12,7 +12,7 @@ const Layout = ({ children, wide = false }: { children: React.ReactNode; wide?: 
   const items = [
     { to: "/", icon: Home, label: "Beranda" },
     { to: "/product", icon: Calendar, label: "Tugas" },
-    { to: "/account", icon: Gem, label: "VIP", center: true },
+    { to: "/account", icon: Gem, label: "", center: true },
     { to: "/team", icon: BarChart3, label: "Pendapatan" },
     { to: "/profile", icon: Briefcase, label: "Pusat pribadi" },
   ];
@@ -65,7 +65,7 @@ const Layout = ({ children, wide = false }: { children: React.ReactNode; wide?: 
                     )}>
                       <item.icon className="w-6 h-6" strokeWidth={2.2} />
                     </div>
-                    <span className="text-[10px] mt-1 font-semibold text-primary">{item.label}</span>
+                    {item.label && <span className="text-[10px] mt-1 font-semibold text-primary">{item.label}</span>}
                   </Link>
                 );
               }

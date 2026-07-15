@@ -96,7 +96,7 @@ const WithdrawDialog = ({ open, onOpenChange, balance, onSuccess }: WithdrawDial
             <DialogTitle className="text-white font-heading text-xl font-bold flex items-center gap-2">
               <ArrowUpFromLine className="w-5 h-5" /> Penarikan Saldo
             </DialogTitle>
-            <p className="text-[11px] text-white/70">Proses 12–48 jam · pajak 10%</p>
+            <p className="text-[11px] text-white/70">Proses 1–24 jam · setiap hari · pajak 10%</p>
           </DialogHeader>
 
           <div className="relative mt-3 flex items-end justify-between gap-3 rounded-2xl bg-white/10 border border-white/20 backdrop-blur px-3 py-2.5">
@@ -187,7 +187,7 @@ const WithdrawDialog = ({ open, onOpenChange, balance, onSuccess }: WithdrawDial
             <div className="flex items-start gap-2 rounded-xl bg-blue-50 border border-blue-100 p-2.5">
               <Clock className="w-3.5 h-3.5 text-primary mt-0.5 shrink-0" />
               <p className="text-[10px] text-muted-foreground leading-snug">
-                Proses 12–48 jam kerja (Senin–Sabtu). Dikenakan pajak penarikan 10%.
+                Penarikan tersedia setiap hari tanpa libur. Proses 1–24 jam. Dikenakan pajak penarikan 10%.
               </p>
             </div>
           </div>

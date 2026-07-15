@@ -187,7 +187,7 @@ const RechargeDialog = ({ open, onOpenChange, onSuccess }: RechargeDialogProps) 
             disabled={isLoading || !amount || !method}
             className="w-full h-11 rounded-2xl bg-gradient-to-r from-[#3b82f6] to-[#1e3a8a] text-white text-xs font-bold shadow-md shadow-blue-500/30 hover:opacity-95"
           >
-            {isLoading ? "Memproses..." : <span className="flex items-center gap-1.5">Lanjut ke Pembayaran <ExternalLink className="w-3.5 h-3.5" /></span>}
+            {isLoading ? "Memproses..." : "Lanjut ke Pembayaran"}
           </Button>
         </div>
       </DialogContent>
