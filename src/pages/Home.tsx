@@ -157,9 +157,9 @@ const Home = () => {
         >
           <div className="flex-1 min-w-0">
             <p className="text-[13px] font-heading font-bold text-primary leading-tight">
-              Ajak 2 teman <ArrowUpFromLine className="inline w-3 h-3 rotate-90" /> DAPAT Rp10.000
+              Undang teman dan hasilkan lebih banyak uang
             </p>
-            <p className="text-[11px] text-primary/80 mt-0.5 font-semibold">+Rp120.000 jika mereka investasi</p>
+            <p className="text-[11px] text-primary/80 mt-0.5 font-semibold">Bonus setiap teman aktif berinvestasi</p>
           </div>
           <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#3b82f6] to-[#1e3a8a] flex items-center justify-center shrink-0 shadow-lg shadow-blue-500/30">
             <Gift className="w-7 h-7 text-white" strokeWidth={2} />

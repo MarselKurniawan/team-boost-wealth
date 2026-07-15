@@ -5,7 +5,8 @@ import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { formatCurrency } from "@/lib/database";
-import { CalendarCheck, Gift, Sparkles, Coins, Lock, Check, Flame } from "lucide-react";
+import { CalendarCheck, Coins, Lock, Check, Flame, Zap } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface CheckinRecord {
   day_number: number;
@@ -97,8 +98,8 @@ const DailyCheckinDialog = ({ open, onOpenChange, onSuccess }: DailyCheckinDialo
       onSuccess?.();
 
       toast({
-        title: "🎁 Berhasil!",
-        description: `Anda mendapat ${formatCurrency(reward)}`,
+        title: "Absen berhasil",
+        description: `+${formatCurrency(reward)} masuk ke saldo`,
       });
     } catch (error) {
       console.error("Checkin error:", error);
@@ -115,140 +116,153 @@ const DailyCheckinDialog = ({ open, onOpenChange, onSuccess }: DailyCheckinDialo
   const checkedDaysMap = new Map<number, CheckinRecord>();
   checkins.forEach((c) => checkedDaysMap.set(c.day_number, c));
   const streak = checkins.length;
+  const weekTotal = checkins.reduce((s, c) => s + Number(c.reward_amount || 0), 0);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-sm p-0 overflow-hidden border-0">
-        {/* Gradient header */}
-        <div className="relative overflow-hidden pt-6 pb-14 px-5 bg-gradient-to-br from-[#1e3a8a] via-[#1e40af] to-[#3b82f6]">
-          <div className="absolute -top-8 -right-8 w-32 h-32 rounded-full bg-white/10 blur-2xl" />
-          <div className="absolute top-4 -left-8 w-24 h-24 rounded-full bg-cyan-300/20 blur-xl" />
-          <Sparkles className="absolute top-3 right-6 w-3.5 h-3.5 text-white/40" />
-
-          <DialogHeader className="relative text-left space-y-0.5">
-            <p className="text-[9px] uppercase tracking-[0.3em] text-white/70 font-semibold">Absen Harian</p>
-            <DialogTitle className="text-white font-heading text-xl font-bold flex items-center gap-2">
-              <CalendarCheck className="w-5 h-5" />
-              Check-in Hari Ini
-            </DialogTitle>
+      <DialogContent className="max-w-sm p-0 overflow-hidden border-0 bg-[#f0f4fb]">
+        {/* Header */}
+        <div className="relative px-5 pt-5 pb-4 bg-white border-b border-blue-100">
+          <DialogHeader className="text-left space-y-0">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-[#3b82f6] to-[#1e3a8a] flex items-center justify-center shadow-md shadow-blue-500/30">
+                <CalendarCheck className="w-4 h-4 text-white" />
+              </div>
+              <div>
+                <DialogTitle className="text-foreground font-heading text-[15px] font-bold leading-tight">
+                  Absen Harian
+                </DialogTitle>
+                <p className="text-[10px] text-muted-foreground">Klaim bonus tiap hari</p>
+              </div>
+            </div>
           </DialogHeader>
 
-          <div className="relative mt-3 inline-flex items-center gap-1.5 rounded-full bg-white/15 border border-white/25 px-3 py-1">
-            <Flame className="w-3 h-3 text-amber-200" />
-            <span className="text-[10px] font-semibold text-white">
-              Streak minggu ini: {streak} hari
-            </span>
+          <div className="mt-3 grid grid-cols-2 gap-2">
+            <div className="rounded-xl bg-blue-50 border border-blue-100 px-3 py-2">
+              <div className="flex items-center gap-1 text-primary">
+                <Flame className="w-3 h-3" />
+                <p className="text-[9px] font-semibold uppercase tracking-wider">Streak</p>
+              </div>
+              <p className="text-foreground text-sm font-heading font-bold leading-tight mt-0.5">
+                {streak}<span className="text-[10px] font-medium text-muted-foreground ml-1">hari</span>
+              </p>
+            </div>
+            <div className="rounded-xl bg-cyan-50 border border-cyan-100 px-3 py-2">
+              <div className="flex items-center gap-1 text-cyan-700">
+                <Coins className="w-3 h-3" />
+                <p className="text-[9px] font-semibold uppercase tracking-wider">Minggu ini</p>
+              </div>
+              <p className="text-foreground text-sm font-heading font-bold leading-tight mt-0.5 break-all">
+                {formatCurrency(weekTotal)}
+              </p>
+            </div>
           </div>
         </div>
 
-        <div className="px-5 -mt-8 pb-5 space-y-4">
-          {/* Reward card / calendar */}
-          {showReward ? (
-            <div className="relative rounded-2xl bg-white border border-primary/10 shadow-lg p-5 text-center overflow-hidden">
-              <div className="absolute inset-0 pointer-events-none">
-                {[...Array(14)].map((_, i) => (
-                  <Sparkles
-                    key={i}
-                    className="absolute animate-confetti"
-                    style={{
-                      left: `${Math.random() * 100}%`,
-                      top: `${Math.random() * 100}%`,
-                      width: 10 + Math.random() * 8,
-                      height: 10 + Math.random() * 8,
-                      color: ["#3b82f6", "#06b6d4", "#f59e0b", "#22c55e"][i % 4],
-                      animationDelay: `${Math.random() * 0.4}s`,
-                    }}
-                  />
-                ))}
-              </div>
-              <div className="relative mx-auto w-16 h-16 rounded-2xl bg-gradient-to-br from-[#1e40af] to-[#3b82f6] flex items-center justify-center shadow-md">
-                <Coins className="w-8 h-8 text-white" />
-              </div>
-              <p className="relative mt-3 text-[10px] uppercase tracking-widest text-muted-foreground font-semibold">
-                Hadiah Hari Ini
-              </p>
-              <p className="relative mt-1 font-heading text-3xl font-bold text-primary break-all">
-                +{formatCurrency(rewardAmount)}
-              </p>
-              <p className="relative mt-1 text-[10px] text-success font-semibold">
-                Ditambahkan ke saldo
-              </p>
-            </div>
-          ) : (
-            <div className="rounded-2xl bg-white border border-primary/10 shadow-lg p-4">
-              <p className="text-center text-[10px] uppercase tracking-widest text-muted-foreground font-semibold">
+        {/* Body */}
+        <div className="px-5 py-4 space-y-4">
+          {/* Weekly grid */}
+          <div className="rounded-2xl bg-white border border-blue-100 p-3.5">
+            <div className="flex items-center justify-between mb-2.5">
+              <p className="text-[10px] font-heading font-bold uppercase tracking-wider text-foreground">
                 Minggu Ini
               </p>
-              <div className="mt-3 grid grid-cols-7 gap-1.5">
-                {DAY_LABELS.map((label, i) => {
-                  const dayNum = i + 1;
-                  const record = checkedDaysMap.get(dayNum);
-                  const isChecked = !!record;
-                  const isToday = dayNum === todayDayNumber;
-                  const isFuture = dayNum > todayDayNumber;
-                  const isMissed = !isChecked && !isToday && !isFuture;
-
-                  return (
-                    <div key={dayNum} className="flex flex-col items-center gap-1">
-                      <div
-                        className={`w-9 h-10 rounded-xl flex items-center justify-center text-[11px] font-bold transition-all ${
-                          isChecked
-                            ? "bg-gradient-to-br from-[#1e40af] to-[#3b82f6] text-white shadow-md"
-                            : isToday && canCheckin
-                            ? "bg-primary/10 border-2 border-primary text-primary"
-                            : isToday && !canCheckin
-                            ? "bg-gradient-to-br from-[#1e40af] to-[#3b82f6] text-white"
-                            : isMissed
-                            ? "bg-destructive/5 text-destructive/40 border border-dashed border-destructive/20"
-                            : "bg-muted/60 text-muted-foreground/60"
-                        }`}
-                      >
-                        {isChecked ? (
-                          <Check className="w-3.5 h-3.5" />
-                        ) : isMissed ? (
-                          <Lock className="w-3 h-3" />
-                        ) : (
-                          <Gift className={`w-3.5 h-3.5 ${isToday ? "" : "opacity-50"}`} />
-                        )}
-                      </div>
-                      <span
-                        className={`text-[9px] font-semibold uppercase tracking-wider ${
-                          isToday
-                            ? "text-primary"
-                            : isChecked
-                            ? "text-primary/70"
-                            : isMissed
-                            ? "text-destructive/40"
-                            : "text-muted-foreground"
-                        }`}
-                      >
-                        {label}
-                      </span>
-                    </div>
-                  );
-                })}
-              </div>
-              <p className="mt-3 text-center text-[10px] text-muted-foreground">
-                Hari terlewat tidak bisa diklaim mundur
-              </p>
+              <p className="text-[9px] text-muted-foreground">Sen — Min</p>
             </div>
-          )}
+            <div className="grid grid-cols-7 gap-1">
+              {DAY_LABELS.map((label, i) => {
+                const dayNum = i + 1;
+                const record = checkedDaysMap.get(dayNum);
+                const isChecked = !!record;
+                const isToday = dayNum === todayDayNumber;
+                const isFuture = dayNum > todayDayNumber;
+                const isMissed = !isChecked && !isToday && !isFuture;
 
-          {!showReward && (
-            <p className="text-center text-[11px] text-foreground/80">
-              {canCheckin
-                ? `Klaim hadiah acak hari ini (${DAY_LABELS[todayDayNumber - 1]})`
-                : "Anda sudah check-in — kembali besok 🎉"}
-            </p>
+                return (
+                  <div key={dayNum} className="flex flex-col items-center gap-1">
+                    <span
+                      className={cn(
+                        "text-[9px] font-semibold uppercase tracking-wider",
+                        isToday ? "text-primary" : "text-muted-foreground"
+                      )}
+                    >
+                      {label}
+                    </span>
+                    <div
+                      className={cn(
+                        "w-full aspect-square rounded-lg flex items-center justify-center text-[10px] font-heading font-bold transition-all",
+                        isChecked &&
+                          "bg-gradient-to-br from-[#3b82f6] to-[#1e3a8a] text-white shadow-md shadow-blue-500/30",
+                        isToday &&
+                          canCheckin &&
+                          "bg-white text-primary border-2 border-primary border-dashed animate-pulse",
+                        isToday &&
+                          !canCheckin &&
+                          !isChecked &&
+                          "bg-gradient-to-br from-[#3b82f6] to-[#1e3a8a] text-white",
+                        isMissed && "bg-red-50 text-red-300 border border-red-100",
+                        isFuture && "bg-blue-50/60 text-muted-foreground/50 border border-blue-100"
+                      )}
+                    >
+                      {isChecked ? (
+                        <Check className="w-3.5 h-3.5" strokeWidth={3} />
+                      ) : isMissed ? (
+                        <Lock className="w-3 h-3" />
+                      ) : isToday ? (
+                        <Zap className="w-3.5 h-3.5" strokeWidth={2.5} />
+                      ) : (
+                        <span>{dayNum}</span>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Reward card */}
+          {showReward ? (
+            <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#1e3a8a] via-[#1e40af] to-[#3b82f6] p-4 shadow-lg shadow-blue-500/30">
+              <div className="absolute -top-8 -right-8 w-32 h-32 rounded-full bg-cyan-300/20 blur-2xl" />
+              <div className="relative flex items-center gap-3">
+                <div className="w-12 h-12 rounded-2xl bg-white/15 border border-white/20 backdrop-blur flex items-center justify-center shrink-0">
+                  <Coins className="w-6 h-6 text-white" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="text-[9px] uppercase tracking-widest text-white/70 font-semibold">
+                    Hadiah hari ini
+                  </p>
+                  <p className="text-white text-xl font-heading font-bold break-all leading-tight">
+                    +{formatCurrency(rewardAmount)}
+                  </p>
+                  <p className="text-[10px] text-cyan-200 font-semibold mt-0.5">
+                    Sudah masuk saldo
+                  </p>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="rounded-2xl bg-white border border-blue-100 px-3.5 py-3 flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center shrink-0">
+                <Zap className="w-4 h-4 text-primary" />
+              </div>
+              <div className="min-w-0">
+                <p className="text-[11px] font-heading font-bold text-foreground leading-tight">
+                  {canCheckin ? "Klaim bonus acak Rp 100 – Rp 1.000" : "Absen hari ini sudah selesai"}
+                </p>
+                <p className="text-[9px] text-muted-foreground mt-0.5">
+                  {canCheckin ? "Konsisten setiap hari untuk streak" : "Kembali besok untuk klaim lagi"}
+                </p>
+              </div>
+            </div>
           )}
 
           <Button
             onClick={handleCheckin}
             disabled={!canCheckin || isChecking}
-            className="w-full h-11 rounded-full bg-gradient-to-r from-[#1e40af] to-[#3b82f6] hover:opacity-95 text-white text-xs font-bold shadow-md"
+            className="w-full h-11 rounded-2xl bg-gradient-to-r from-[#3b82f6] to-[#1e3a8a] hover:opacity-95 text-white text-xs font-bold shadow-md shadow-blue-500/30 disabled:opacity-60"
           >
-            <Gift className="w-4 h-4 mr-1.5" />
-            {isChecking ? "Memproses..." : canCheckin ? "Klaim Sekarang" : "Sudah Check-in ✓"}
+            {isChecking ? "Memproses..." : canCheckin ? "Absen Sekarang" : "Sudah Absen"}
           </Button>
         </div>
       </DialogContent>
