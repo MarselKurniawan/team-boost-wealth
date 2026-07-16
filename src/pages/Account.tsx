@@ -13,6 +13,9 @@ import {
   Package,
   Sparkles,
   Bell,
+  Diamond,
+  Lock,
+  Clock,
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
@@ -225,7 +228,7 @@ const Account = () => {
       {activeInvestments.length > 0 && (
         <div className="space-y-2.5">
           <div className="flex items-center gap-1.5 px-1">
-            <Package className="w-4 h-4 text-primary" />
+            <Diamond className="w-4 h-4 text-primary" />
             <h3 className="text-xs font-heading font-bold text-foreground">
               Alat milik saya ({activeInvestments.length}/{activeInvestments.length})
             </h3>
@@ -277,28 +280,41 @@ const Account = () => {
                   </div>
                 </div>
 
-                <div className="relative">
+                <div className="relative rounded-xl bg-gradient-to-r from-blue-50 to-cyan-50 border border-blue-100 p-2 flex items-center gap-2">
+                  <div className="flex-1 min-w-0 pl-1">
+                    <p className="text-[9px] font-semibold text-muted-foreground uppercase tracking-wider">
+                      {isLocked ? "Payout otomatis" : "Profit hari ini"}
+                    </p>
+                    <p className="text-[14px] font-heading font-bold text-primary break-all leading-tight">
+                      {formatCurrency(isLocked ? finalPayout : inv.daily_income)}
+                    </p>
+                  </div>
                   {isLocked ? (
                     <button
                       disabled
-                      className="w-full h-9 rounded-full bg-white/15 border border-white/25 text-[10px] font-semibold text-white/80 flex items-center justify-center gap-1 px-3"
+                      className="h-8 px-3 rounded-xl bg-slate-200 text-slate-500 text-[11px] font-bold shrink-0 cursor-not-allowed flex items-center gap-1"
                     >
-                      <span className="opacity-80">🔒 Payout otomatis:</span>
-                      <span className="font-bold break-all">{formatCurrency(finalPayout)}</span>
+                      <Lock className="w-3.5 h-3.5" /> Locked
                     </button>
                   ) : canClaim ? (
                     <button
                       onClick={() => handleOpenClaimDialog(inv)}
-                      className="w-full h-9 rounded-full bg-white text-primary text-xs font-bold flex items-center justify-center gap-1.5 hover:bg-white/90 transition"
+                      className="h-8 px-3.5 rounded-xl bg-gradient-to-br from-[#3b82f6] to-[#1e3a8a] text-white hover:opacity-95 text-[11px] font-bold shrink-0 shadow-md shadow-blue-500/30 flex items-center gap-1.5 transition"
                     >
                       <Gift className="w-3.5 h-3.5" />
-                      Klaim {formatCurrency(inv.daily_income)}
+                      Klaim
                     </button>
                   ) : (
-                    <ProfitCountdown
-                      lastClaimedAt={inv.last_claimed_at}
-                      createdAt={inv.created_at}
-                    />
+                    <button
+                      disabled
+                      className="h-8 px-3 rounded-xl bg-white border border-blue-100 text-[10px] font-semibold text-foreground flex items-center gap-1.5 shrink-0"
+                    >
+                      <Clock className="w-3.5 h-3.5 text-primary" />
+                      <ProfitCountdown
+                        lastClaimedAt={inv.last_claimed_at}
+                        createdAt={inv.created_at}
+                      />
+                    </button>
                   )}
                 </div>
               </div>
@@ -370,13 +386,7 @@ const ProfitCountdown = ({
   }, [lastClaimedAt, createdAt]);
 
   return (
-    <button
-      disabled
-      className="w-full h-9 rounded-full bg-white/15 border border-white/25 text-[10px] font-semibold text-white flex items-center justify-center gap-1.5 px-3"
-    >
-      <span className="opacity-80">Profit berikutnya</span>
-      <span className="font-mono font-bold">{formatCountdown(remaining)}</span>
-    </button>
+    <span className="font-mono font-bold">{formatCountdown(remaining)}</span>
   );
 };
 
