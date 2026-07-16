@@ -145,31 +145,36 @@ const Account = () => {
   const totalClaimable = claimableInvestments.reduce((sum, inv) => sum + inv.daily_income, 0);
 
   return (
-    <div className="space-y-4 p-4 pt-5">
+    <div className="space-y-3.5 p-4 pt-4">
+      {/* Header banner — matches home wallet aesthetic */}
+      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-[#1e40af] to-[#3b82f6] p-3.5 text-white shadow-md shadow-blue-500/30">
+        <div className="absolute -right-6 -top-6 w-24 h-24 rounded-full bg-white/10" />
+        <div className="absolute right-4 bottom-1">
+          <Package className="w-12 h-12 text-white/10" strokeWidth={1} />
+        </div>
+        <div className="relative">
+          <p className="text-[9px] uppercase tracking-[0.28em] text-white/60 font-semibold">Dashboard</p>
+          <h1 className="text-white text-[15px] font-heading font-bold leading-tight mt-0.5">Produk Saya</h1>
+          <p className="text-[10px] text-white/75 mt-0.5">Monitor aktivitas dan pendapatan Anda</p>
+        </div>
+      </div>
+
       {/* Claimable Notification Banner */}
       {claimableInvestments.length > 0 && (
-        <div className="modal-card p-3.5">
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 bg-muted rounded-lg flex items-center justify-center shrink-0">
-              <Bell className="w-4 h-4 text-primary" />
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-xs font-semibold text-foreground">
-                {claimableInvestments.length} Robot Siap Diklaim
-              </p>
-              <p className="text-[10px] text-muted-foreground break-all">
-                Total: <span className="font-bold text-primary">{formatCurrency(totalClaimable)}</span>
-              </p>
-            </div>
+        <div className="rounded-2xl bg-gradient-to-r from-emerald-50 to-cyan-50 border border-emerald-200 p-3 flex items-center gap-3">
+          <div className="w-9 h-9 rounded-full bg-emerald-500 text-white flex items-center justify-center shrink-0">
+            <Bell className="w-4 h-4" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-[12px] font-bold text-emerald-900">{claimableInvestments.length} Robot Siap Diklaim</p>
+            <p className="text-[10px] text-emerald-700 break-all">
+              Total: <span className="font-bold">{formatCurrency(totalClaimable)}</span>
+            </p>
           </div>
         </div>
       )}
 
-      {/* Header */}
-      <div>
-        <h1 className="text-base font-heading font-bold text-foreground mb-0.5">Produk Saya</h1>
-        <p className="text-[11px] text-muted-foreground">Monitor aktivitas dan pendapatan Anda</p>
-      </div>
+
 
       {/* Statistik — Blue tone redesign */}
       <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#1e3a8a] via-[#1e40af] to-[#3b82f6] p-4 shadow-lg shadow-blue-500/30">
