@@ -365,10 +365,13 @@ const ProfitCountdown = ({
   }, [lastClaimedAt, createdAt]);
 
   return (
-    <Button disabled variant="outline" className="w-full h-9 text-[10px]">
-      <span className="opacity-70 mr-1">Profit berikutnya</span>
-      <span className="font-mono font-semibold">{formatCountdown(remaining)}</span>
-    </Button>
+    <button
+      disabled
+      className="w-full h-9 rounded-full bg-white/15 border border-white/25 text-[10px] font-semibold text-white flex items-center justify-center gap-1.5 px-3"
+    >
+      <span className="opacity-80">Profit berikutnya</span>
+      <span className="font-mono font-bold">{formatCountdown(remaining)}</span>
+    </button>
   );
 };
 
