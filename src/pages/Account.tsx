@@ -396,11 +396,19 @@ const TransactionLog = ({
   getStatusVariant: (s: string) => string;
 }) => {
   const [page, setPage] = useState(1);
-  const totalPages = Math.max(1, Math.ceil(transactions.length / PAGE_SIZE));
+  const [filter, setFilter] = useState<'all' | 'in' | 'out'>('all');
+
+  const filtered = useMemo(() => {
+    if (filter === 'all') return transactions;
+    if (filter === 'in') return transactions.filter(t => POSITIVE_TYPES.has(t.type));
+    return transactions.filter(t => !POSITIVE_TYPES.has(t.type));
+  }, [transactions, filter]);
+
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const currentPage = Math.min(page, totalPages);
   const pageItems = useMemo(
-    () => transactions.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE),
-    [transactions, currentPage],
+    () => filtered.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE),
+    [filtered, currentPage],
   );
 
   const formatDateTime = (d: string) => {
@@ -410,90 +418,117 @@ const TransactionLog = ({
     return { datePart, timePart };
   };
 
+  const statusPill = (status: string) => {
+    const map: Record<string, string> = {
+      success: 'bg-emerald-100 text-emerald-700 border-emerald-200',
+      pending: 'bg-amber-100 text-amber-700 border-amber-200',
+      rejected: 'bg-rose-100 text-rose-700 border-rose-200',
+    };
+    return map[status] || 'bg-slate-100 text-slate-700 border-slate-200';
+  };
+
+  const filters: { key: typeof filter; label: string }[] = [
+    { key: 'all', label: 'Semua' },
+    { key: 'in', label: 'Masuk' },
+    { key: 'out', label: 'Keluar' },
+  ];
+
   return (
-    <Card className="bg-card/80 border-border/60">
-      <CardHeader className="pb-2">
-        <CardTitle className="text-xs">Catatan Transaksi</CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-2">
-        {transactions.length === 0 ? (
-          <div className="text-center py-8">
-            <p className="text-xs text-muted-foreground">Belum ada transaksi</p>
+    <div className="rounded-2xl bg-white border border-blue-100 shadow-sm overflow-hidden">
+      <div className="flex items-center justify-between p-3.5 border-b border-blue-50">
+        <div className="flex items-center gap-1.5">
+          <div className="w-1 h-4 rounded-full bg-primary" />
+          <h3 className="text-[13px] font-heading font-bold text-foreground">Catatan Transaksi</h3>
+        </div>
+        <div className="flex bg-blue-50 rounded-full p-0.5">
+          {filters.map(f => (
+            <button
+              key={f.key}
+              onClick={() => { setFilter(f.key); setPage(1); }}
+              className={`px-2.5 h-6 text-[10px] font-bold rounded-full transition ${
+                filter === f.key
+                  ? 'bg-gradient-to-r from-[#1e40af] to-[#3b82f6] text-white shadow-sm'
+                  : 'text-primary/70 hover:text-primary'
+              }`}
+            >
+              {f.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="p-2">
+        {filtered.length === 0 ? (
+          <div className="text-center py-10">
+            <div className="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center mx-auto mb-2">
+              <Wallet className="w-5 h-5 text-primary/50" />
+            </div>
+            <p className="text-[11px] font-semibold text-foreground">Belum ada transaksi</p>
+            <p className="text-[10px] text-muted-foreground mt-0.5">Mulai deposit atau sewa robot</p>
           </div>
         ) : (
-          <>
+          <div className="space-y-1.5">
             {pageItems.map((transaction) => {
               const isPositive = POSITIVE_TYPES.has(transaction.type);
               const { datePart, timePart } = formatDateTime(transaction.created_at);
               return (
                 <div
                   key={transaction.id}
-                  className="flex items-center justify-between p-3 bg-muted rounded-lg"
+                  className="relative flex items-center justify-between gap-2 p-2.5 rounded-xl bg-gradient-to-r from-blue-50/40 to-transparent border border-blue-50 hover:border-blue-200 transition"
                 >
-                  <div className="flex items-center gap-3 min-w-0">
-                    <div className="w-9 h-9 bg-background rounded-full flex items-center justify-center shrink-0">
+                  <div className={`absolute left-0 top-2 bottom-2 w-1 rounded-r-full ${isPositive ? 'bg-emerald-400' : 'bg-rose-300'}`} />
+                  <div className="flex items-center gap-2.5 min-w-0 pl-1.5">
+                    <div className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 ${isPositive ? 'bg-emerald-50 border border-emerald-100' : 'bg-rose-50 border border-rose-100'}`}>
                       {getIcon(transaction.type)}
                     </div>
                     <div className="min-w-0">
-                      <p className="font-semibold text-xs text-foreground truncate">
+                      <p className="font-bold text-[11px] text-foreground truncate">
                         {getLabel(transaction.type)}
                       </p>
-                      <p className="text-[10px] text-muted-foreground">
+                      <p className="text-[9px] text-muted-foreground">
                         {datePart} <span className="opacity-70">• {timePart}</span>
                       </p>
                     </div>
                   </div>
-                  <div className="text-right shrink-0">
-                    <p
-                      className={`text-xs font-bold break-all ${
-                        isPositive ? "text-success" : "text-foreground"
-                      }`}
-                    >
-                      {isPositive ? "+" : "-"}
-                      {formatCurrency(transaction.amount)}
+                  <div className="text-right shrink-0 flex flex-col items-end gap-1">
+                    <p className={`text-[12px] font-heading font-bold break-all leading-tight ${isPositive ? 'text-emerald-600' : 'text-rose-500'}`}>
+                      {isPositive ? '+' : '-'}{formatCurrency(transaction.amount)}
                     </p>
-                    <Badge
-                      variant={getStatusVariant(transaction.status) as any}
-                      className="text-[9px] h-4 px-1.5 capitalize"
-                    >
+                    <span className={`text-[9px] font-bold px-1.5 h-4 flex items-center rounded-full border capitalize ${statusPill(transaction.status)}`}>
                       {transaction.status}
-                    </Badge>
+                    </span>
                   </div>
                 </div>
               );
             })}
 
             {totalPages > 1 && (
-              <div className="flex items-center justify-between pt-2">
+              <div className="flex items-center justify-between pt-2 px-1">
                 <p className="text-[10px] text-muted-foreground">
                   Hal {currentPage} dari {totalPages}
                 </p>
                 <div className="flex items-center gap-1">
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    className="h-7 w-7"
+                  <button
+                    className="h-7 w-7 rounded-full bg-blue-50 text-primary flex items-center justify-center disabled:opacity-40"
                     disabled={currentPage <= 1}
                     onClick={() => setPage(currentPage - 1)}
                   >
                     <ChevronLeft className="w-3.5 h-3.5" />
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    className="h-7 w-7"
+                  </button>
+                  <button
+                    className="h-7 w-7 rounded-full bg-blue-50 text-primary flex items-center justify-center disabled:opacity-40"
                     disabled={currentPage >= totalPages}
                     onClick={() => setPage(currentPage + 1)}
                   >
                     <ChevronRight className="w-3.5 h-3.5" />
-                  </Button>
+                  </button>
                 </div>
               </div>
             )}
-          </>
+          </div>
         )}
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 };
 
