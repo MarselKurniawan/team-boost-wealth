@@ -228,7 +228,7 @@ const Account = () => {
       {activeInvestments.length > 0 && (
         <div className="space-y-2.5">
           <div className="flex items-center gap-1.5 px-1">
-            <Package className="w-4 h-4 text-primary" />
+            <Diamond className="w-4 h-4 text-primary" />
             <h3 className="text-xs font-heading font-bold text-foreground">
               Alat milik saya ({activeInvestments.length}/{activeInvestments.length})
             </h3>
