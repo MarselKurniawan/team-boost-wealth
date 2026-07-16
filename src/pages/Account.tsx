@@ -216,83 +216,90 @@ const Account = () => {
         </div>
       </div>
 
-      {/* Active Robots */}
+      {/* Active Robots — Blue gradient wallet style */}
       {activeInvestments.length > 0 && (
-        <Card className="bg-card/80 border-border/60">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-xs flex items-center gap-1.5">
-              <Package className="w-4 h-4 text-primary" />
+        <div className="space-y-2.5">
+          <div className="flex items-center gap-1.5 px-1">
+            <Package className="w-4 h-4 text-primary" />
+            <h3 className="text-xs font-heading font-bold text-foreground">
               Alat milik saya ({activeInvestments.length}/{activeInvestments.length})
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-2.5">
-            {activeInvestments.map((inv) => {
-              const isLocked = (inv as any).profit_mode === 'locked';
-              const canClaim = !isLocked && canClaimToday(inv.last_claimed_at, inv.created_at);
-              const accruedTotal = inv.daily_income * (inv.validity - inv.days_remaining);
-              const finalPayout = inv.total_income;
-              return (
-                <div key={inv.id} className="modal-card p-3">
-                  <div className="flex items-start justify-between mb-2">
-                    <div className="min-w-0">
-                      <p className="text-xs font-semibold text-foreground">{inv.product_name}</p>
-                      <p className="text-[10px] text-muted-foreground">
-                        Melayani {inv.days_remaining} hari lagi
-                      </p>
-                    </div>
-                    <div className="flex flex-col items-end gap-1">
-                      <Badge variant="success" className="text-[9px] h-4 px-1.5">Aktif</Badge>
-                      {isLocked && (
-                        <Badge className="text-[9px] h-4 px-1.5 bg-primary/15 text-primary border border-primary/40">
-                          🔒 Locked
-                        </Badge>
-                      )}
-                    </div>
+            </h3>
+          </div>
+          {activeInvestments.map((inv) => {
+            const isLocked = (inv as any).profit_mode === 'locked';
+            const canClaim = !isLocked && canClaimToday(inv.last_claimed_at, inv.created_at);
+            const accruedTotal = inv.daily_income * (inv.validity - inv.days_remaining);
+            const finalPayout = inv.total_income;
+            return (
+              <div
+                key={inv.id}
+                className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-[#1e40af] to-[#3b82f6] p-3.5 text-white shadow-md shadow-blue-500/30"
+              >
+                <div className="absolute -right-6 -top-6 w-24 h-24 rounded-full bg-white/10" />
+                <div className="absolute right-6 bottom-2">
+                  <Package className="w-10 h-10 text-white/10" strokeWidth={1} />
+                </div>
+
+                <div className="relative flex items-start justify-between gap-2 mb-2.5">
+                  <div className="min-w-0">
+                    <p className="text-[13px] font-heading font-bold leading-tight truncate">{inv.product_name}</p>
+                    <p className="text-[10px] text-white/70 mt-0.5">Melayani {inv.days_remaining} hari lagi</p>
                   </div>
-                  <div className="grid grid-cols-3 gap-2 text-center pt-2 border-t border-border">
-                    <div>
-                      <p className="text-[9px] text-muted-foreground">Sewa</p>
-                      <p className="text-[11px] font-semibold break-all">{formatCurrency(inv.amount)}</p>
-                    </div>
-                    <div>
-                      <p className="text-[9px] text-muted-foreground">{isLocked ? "Akrual" : "Harian"}</p>
-                      <p className="text-[11px] font-semibold text-primary break-all">
-                        {formatCurrency(isLocked ? accruedTotal : inv.daily_income)}
-                      </p>
-                    </div>
-                    <div>
-                      <p className="text-[9px] text-muted-foreground">{isLocked ? "Payout Akhir" : "Diperoleh"}</p>
-                      <p className="text-[11px] font-semibold text-primary break-all">
-                        {formatCurrency(isLocked ? finalPayout : inv.total_earned)}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="mt-2.5 pt-2.5 border-t border-border">
-                    {isLocked ? (
-                      <Button disabled variant="outline" className="w-full h-9 text-[10px]">
-                        <span className="opacity-70 mr-1">🔒 Payout otomatis saat kontrak selesai:</span>
-                        <span className="font-semibold">{formatCurrency(finalPayout)}</span>
-                      </Button>
-                    ) : canClaim ? (
-                      <Button
-                        onClick={() => handleOpenClaimDialog(inv)}
-                        className="w-full h-9 text-xs font-semibold"
-                      >
-                        <Gift className="w-3.5 h-3.5 mr-1.5" />
-                        Klaim {formatCurrency(inv.daily_income)}
-                      </Button>
-                    ) : (
-                      <ProfitCountdown
-                        lastClaimedAt={inv.last_claimed_at}
-                        createdAt={inv.created_at}
-                      />
+                  <div className="flex flex-col items-end gap-1 shrink-0">
+                    <span className="text-[9px] font-bold px-1.5 h-4 flex items-center rounded-full bg-emerald-400/90 text-emerald-950">Aktif</span>
+                    {isLocked && (
+                      <span className="text-[9px] font-bold px-1.5 h-4 flex items-center rounded-full bg-white/20 border border-white/30 text-white">🔒 Locked</span>
                     )}
                   </div>
                 </div>
-              );
-            })}
-          </CardContent>
-        </Card>
+
+                <div className="relative grid grid-cols-3 gap-1.5 mb-2.5">
+                  <div className="rounded-xl bg-white/10 border border-white/15 backdrop-blur p-2">
+                    <p className="text-[9px] text-white/70">Sewa</p>
+                    <p className="text-[11px] font-heading font-bold break-all leading-tight">{formatCurrency(inv.amount)}</p>
+                  </div>
+                  <div className="rounded-xl bg-white/10 border border-white/15 backdrop-blur p-2">
+                    <p className="text-[9px] text-white/70">{isLocked ? "Akrual" : "Harian"}</p>
+                    <p className="text-[11px] font-heading font-bold break-all leading-tight">
+                      {formatCurrency(isLocked ? accruedTotal : inv.daily_income)}
+                    </p>
+                  </div>
+                  <div className="rounded-xl bg-white/10 border border-white/15 backdrop-blur p-2">
+                    <p className="text-[9px] text-white/70">{isLocked ? "Payout" : "Diperoleh"}</p>
+                    <p className="text-[11px] font-heading font-bold break-all leading-tight">
+                      {formatCurrency(isLocked ? finalPayout : inv.total_earned)}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="relative">
+                  {isLocked ? (
+                    <button
+                      disabled
+                      className="w-full h-9 rounded-full bg-white/15 border border-white/25 text-[10px] font-semibold text-white/80 flex items-center justify-center gap-1 px-3"
+                    >
+                      <span className="opacity-80">🔒 Payout otomatis:</span>
+                      <span className="font-bold break-all">{formatCurrency(finalPayout)}</span>
+                    </button>
+                  ) : canClaim ? (
+                    <button
+                      onClick={() => handleOpenClaimDialog(inv)}
+                      className="w-full h-9 rounded-full bg-white text-primary text-xs font-bold flex items-center justify-center gap-1.5 hover:bg-white/90 transition"
+                    >
+                      <Gift className="w-3.5 h-3.5" />
+                      Klaim {formatCurrency(inv.daily_income)}
+                    </button>
+                  ) : (
+                    <ProfitCountdown
+                      lastClaimedAt={inv.last_claimed_at}
+                      createdAt={inv.created_at}
+                    />
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
       )}
 
       {/* Empty state */}
