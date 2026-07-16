@@ -14,12 +14,25 @@ import {
   Sparkles,
   Bell,
   Diamond,
+  Gem,
   Lock,
   Clock,
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
-import { getTransactions, getInvestments, updateInvestment, updateProfile, createTransaction, formatCurrency, canClaimToday, processReferralRabat, getNextClaimDelayMs, Transaction, Investment } from "@/lib/database";
+import {
+  getTransactions,
+  getInvestments,
+  updateInvestment,
+  updateProfile,
+  createTransaction,
+  formatCurrency,
+  canClaimToday,
+  processReferralRabat,
+  getNextClaimDelayMs,
+  Transaction,
+  Investment,
+} from "@/lib/database";
 import ClaimRewardDialog from "@/components/ClaimRewardDialog";
 
 const Account = () => {
@@ -32,10 +45,7 @@ const Account = () => {
 
   const refreshData = async () => {
     if (user) {
-      const [txData, invData] = await Promise.all([
-        getTransactions(user.id),
-        getInvestments(user.id)
-      ]);
+      const [txData, invData] = await Promise.all([getTransactions(user.id), getInvestments(user.id)]);
       setTransactions(txData);
       setInvestments(invData);
       await refreshProfile();
@@ -97,7 +107,7 @@ const Account = () => {
     }
   };
 
-  const activeInvestments = investments.filter(i => i.status === 'active');
+  const activeInvestments = investments.filter((i) => i.status === "active");
 
   const handleOpenClaimDialog = (investment: Investment) => {
     setSelectedInvestment(investment);
@@ -108,8 +118,10 @@ const Account = () => {
     if (!selectedInvestment || !user || !profile) return;
 
     try {
-      const { supabase } = await import('@/integrations/supabase/client');
-      const { data, error } = await supabase.rpc('claim_investment_atomic' as any, { _investment_id: selectedInvestment.id });
+      const { supabase } = await import("@/integrations/supabase/client");
+      const { data, error } = await supabase.rpc("claim_investment_atomic" as any, {
+        _investment_id: selectedInvestment.id,
+      });
       if (error) throw error;
       const res = data as any;
       if (!res?.claimed) {
@@ -132,7 +144,7 @@ const Account = () => {
         description: `Anda mendapatkan ${formatCurrency(result.amount)} dari ${selectedInvestment.product_name}`,
       });
     } catch (error) {
-      console.error('Error claiming income:', error);
+      console.error("Error claiming income:", error);
       toast({
         title: "Gagal Klaim",
         description: "Terjadi kesalahan saat mengklaim penghasilan. Silakan coba lagi.",
@@ -142,8 +154,8 @@ const Account = () => {
   };
 
   // Count claimable investments (exclude locked mode — those pay at contract end)
-  const claimableInvestments = activeInvestments.filter(inv =>
-    (inv as any).profit_mode !== 'locked' && canClaimToday(inv.last_claimed_at, inv.created_at)
+  const claimableInvestments = activeInvestments.filter(
+    (inv) => (inv as any).profit_mode !== "locked" && canClaimToday(inv.last_claimed_at, inv.created_at),
   );
   const totalClaimable = claimableInvestments.reduce((sum, inv) => sum + inv.daily_income, 0);
 
@@ -176,8 +188,6 @@ const Account = () => {
           </div>
         </div>
       )}
-
-
 
       {/* Statistik — Blue tone redesign */}
       <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#1e3a8a] via-[#1e40af] to-[#3b82f6] p-4 shadow-lg shadow-blue-500/30">
@@ -228,13 +238,13 @@ const Account = () => {
       {activeInvestments.length > 0 && (
         <div className="space-y-2.5">
           <div className="flex items-center gap-1.5 px-1">
-            <Diamond className="w-4 h-4 text-primary" />
+            <Gem className="w-4 h-4 text-primary" />
             <h3 className="text-xs font-heading font-bold text-foreground">
               Alat milik saya ({activeInvestments.length}/{activeInvestments.length})
             </h3>
           </div>
           {activeInvestments.map((inv) => {
-            const isLocked = (inv as any).profit_mode === 'locked';
+            const isLocked = (inv as any).profit_mode === "locked";
             const canClaim = !isLocked && canClaimToday(inv.last_claimed_at, inv.created_at);
             const accruedTotal = inv.daily_income * (inv.validity - inv.days_remaining);
             const finalPayout = inv.total_income;
@@ -254,9 +264,13 @@ const Account = () => {
                     <p className="text-[10px] text-white/70 mt-0.5">Melayani {inv.days_remaining} hari lagi</p>
                   </div>
                   <div className="flex flex-col items-end gap-1 shrink-0">
-                    <span className="text-[9px] font-bold px-1.5 h-4 flex items-center rounded-full bg-emerald-400/90 text-emerald-950">Aktif</span>
+                    <span className="text-[9px] font-bold px-1.5 h-4 flex items-center rounded-full bg-emerald-400/90 text-emerald-950">
+                      Aktif
+                    </span>
                     {isLocked && (
-                      <span className="text-[9px] font-bold px-1.5 h-4 flex items-center rounded-full bg-white/20 border border-white/30 text-white">🔒 Locked</span>
+                      <span className="text-[9px] font-bold px-1.5 h-4 flex items-center rounded-full bg-white/20 border border-white/30 text-white">
+                        🔒 Locked
+                      </span>
                     )}
                   </div>
                 </div>
@@ -264,7 +278,9 @@ const Account = () => {
                 <div className="relative grid grid-cols-3 gap-1.5 mb-2.5">
                   <div className="rounded-xl bg-white/10 border border-white/15 backdrop-blur p-2">
                     <p className="text-[9px] text-white/70">Sewa</p>
-                    <p className="text-[11px] font-heading font-bold break-all leading-tight">{formatCurrency(inv.amount)}</p>
+                    <p className="text-[11px] font-heading font-bold break-all leading-tight">
+                      {formatCurrency(inv.amount)}
+                    </p>
                   </div>
                   <div className="rounded-xl bg-white/10 border border-white/15 backdrop-blur p-2">
                     <p className="text-[9px] text-white/70">{isLocked ? "Akrual" : "Harian"}</p>
@@ -310,10 +326,7 @@ const Account = () => {
                       className="h-8 px-3 rounded-xl bg-white border border-blue-100 text-[10px] font-semibold text-foreground flex items-center gap-1.5 shrink-0"
                     >
                       <Clock className="w-3.5 h-3.5 text-primary" />
-                      <ProfitCountdown
-                        lastClaimedAt={inv.last_claimed_at}
-                        createdAt={inv.created_at}
-                      />
+                      <ProfitCountdown lastClaimedAt={inv.last_claimed_at} createdAt={inv.created_at} />
                     </button>
                   )}
                 </div>
@@ -344,8 +357,6 @@ const Account = () => {
         getStatusVariant={getStatusVariant}
       />
 
-
-
       {/* Claim Reward Dialog */}
       <ClaimRewardDialog
         open={claimDialogOpen}
@@ -367,16 +378,8 @@ const formatCountdown = (ms: number) => {
   return `${pad(h)}:${pad(m)}:${pad(s)}`;
 };
 
-const ProfitCountdown = ({
-  lastClaimedAt,
-  createdAt,
-}: {
-  lastClaimedAt: string | null;
-  createdAt: string;
-}) => {
-  const [remaining, setRemaining] = useState(() =>
-    getNextClaimDelayMs(lastClaimedAt, createdAt)
-  );
+const ProfitCountdown = ({ lastClaimedAt, createdAt }: { lastClaimedAt: string | null; createdAt: string }) => {
+  const [remaining, setRemaining] = useState(() => getNextClaimDelayMs(lastClaimedAt, createdAt));
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -385,9 +388,7 @@ const ProfitCountdown = ({
     return () => clearInterval(interval);
   }, [lastClaimedAt, createdAt]);
 
-  return (
-    <span className="font-mono font-bold">{formatCountdown(remaining)}</span>
-  );
+  return <span className="font-mono font-bold">{formatCountdown(remaining)}</span>;
 };
 
 const PAGE_SIZE = 8;
@@ -406,12 +407,12 @@ const TransactionLog = ({
   getStatusVariant: (s: string) => string;
 }) => {
   const [page, setPage] = useState(1);
-  const [filter, setFilter] = useState<'all' | 'in' | 'out'>('all');
+  const [filter, setFilter] = useState<"all" | "in" | "out">("all");
 
   const filtered = useMemo(() => {
-    if (filter === 'all') return transactions;
-    if (filter === 'in') return transactions.filter(t => POSITIVE_TYPES.has(t.type));
-    return transactions.filter(t => !POSITIVE_TYPES.has(t.type));
+    if (filter === "all") return transactions;
+    if (filter === "in") return transactions.filter((t) => POSITIVE_TYPES.has(t.type));
+    return transactions.filter((t) => !POSITIVE_TYPES.has(t.type));
   }, [transactions, filter]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
@@ -430,17 +431,17 @@ const TransactionLog = ({
 
   const statusPill = (status: string) => {
     const map: Record<string, string> = {
-      success: 'bg-emerald-100 text-emerald-700 border-emerald-200',
-      pending: 'bg-amber-100 text-amber-700 border-amber-200',
-      rejected: 'bg-rose-100 text-rose-700 border-rose-200',
+      success: "bg-emerald-100 text-emerald-700 border-emerald-200",
+      pending: "bg-amber-100 text-amber-700 border-amber-200",
+      rejected: "bg-rose-100 text-rose-700 border-rose-200",
     };
-    return map[status] || 'bg-slate-100 text-slate-700 border-slate-200';
+    return map[status] || "bg-slate-100 text-slate-700 border-slate-200";
   };
 
   const filters: { key: typeof filter; label: string }[] = [
-    { key: 'all', label: 'Semua' },
-    { key: 'in', label: 'Masuk' },
-    { key: 'out', label: 'Keluar' },
+    { key: "all", label: "Semua" },
+    { key: "in", label: "Masuk" },
+    { key: "out", label: "Keluar" },
   ];
 
   return (
@@ -451,14 +452,17 @@ const TransactionLog = ({
           <h3 className="text-[13px] font-heading font-bold text-foreground">Catatan Transaksi</h3>
         </div>
         <div className="flex bg-blue-50 rounded-full p-0.5">
-          {filters.map(f => (
+          {filters.map((f) => (
             <button
               key={f.key}
-              onClick={() => { setFilter(f.key); setPage(1); }}
+              onClick={() => {
+                setFilter(f.key);
+                setPage(1);
+              }}
               className={`px-2.5 h-6 text-[10px] font-bold rounded-full transition ${
                 filter === f.key
-                  ? 'bg-gradient-to-r from-[#1e40af] to-[#3b82f6] text-white shadow-sm'
-                  : 'text-primary/70 hover:text-primary'
+                  ? "bg-gradient-to-r from-[#1e40af] to-[#3b82f6] text-white shadow-sm"
+                  : "text-primary/70 hover:text-primary"
               }`}
             >
               {f.label}
@@ -486,25 +490,32 @@ const TransactionLog = ({
                   key={transaction.id}
                   className="relative flex items-center justify-between gap-2 p-2.5 rounded-xl bg-gradient-to-r from-blue-50/40 to-transparent border border-blue-50 hover:border-blue-200 transition"
                 >
-                  <div className={`absolute left-0 top-2 bottom-2 w-1 rounded-r-full ${isPositive ? 'bg-emerald-400' : 'bg-rose-300'}`} />
+                  <div
+                    className={`absolute left-0 top-2 bottom-2 w-1 rounded-r-full ${isPositive ? "bg-emerald-400" : "bg-rose-300"}`}
+                  />
                   <div className="flex items-center gap-2.5 min-w-0 pl-1.5">
-                    <div className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 ${isPositive ? 'bg-emerald-50 border border-emerald-100' : 'bg-rose-50 border border-rose-100'}`}>
+                    <div
+                      className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 ${isPositive ? "bg-emerald-50 border border-emerald-100" : "bg-rose-50 border border-rose-100"}`}
+                    >
                       {getIcon(transaction.type)}
                     </div>
                     <div className="min-w-0">
-                      <p className="font-bold text-[11px] text-foreground truncate">
-                        {getLabel(transaction.type)}
-                      </p>
+                      <p className="font-bold text-[11px] text-foreground truncate">{getLabel(transaction.type)}</p>
                       <p className="text-[9px] text-muted-foreground">
                         {datePart} <span className="opacity-70">• {timePart}</span>
                       </p>
                     </div>
                   </div>
                   <div className="text-right shrink-0 flex flex-col items-end gap-1">
-                    <p className={`text-[12px] font-heading font-bold break-all leading-tight ${isPositive ? 'text-emerald-600' : 'text-rose-500'}`}>
-                      {isPositive ? '+' : '-'}{formatCurrency(transaction.amount)}
+                    <p
+                      className={`text-[12px] font-heading font-bold break-all leading-tight ${isPositive ? "text-emerald-600" : "text-rose-500"}`}
+                    >
+                      {isPositive ? "+" : "-"}
+                      {formatCurrency(transaction.amount)}
                     </p>
-                    <span className={`text-[9px] font-bold px-1.5 h-4 flex items-center rounded-full border capitalize ${statusPill(transaction.status)}`}>
+                    <span
+                      className={`text-[9px] font-bold px-1.5 h-4 flex items-center rounded-full border capitalize ${statusPill(transaction.status)}`}
+                    >
                       {transaction.status}
                     </span>
                   </div>
@@ -543,4 +554,3 @@ const TransactionLog = ({
 };
 
 export default Account;
-
