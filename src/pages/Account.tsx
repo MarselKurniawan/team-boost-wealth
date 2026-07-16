@@ -13,6 +13,9 @@ import {
   Package,
   Sparkles,
   Bell,
+  Diamond,
+  Lock,
+  Clock,
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
