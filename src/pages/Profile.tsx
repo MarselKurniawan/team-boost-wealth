@@ -38,6 +38,7 @@ const Profile = () => {
   const [couponDialogOpen, setCouponDialogOpen] = useState(false);
   const [bankDialogOpen, setBankDialogOpen] = useState(false);
   const [companyDialogOpen, setCompanyDialogOpen] = useState(false);
+  const [legalityDialogOpen, setLegalityDialogOpen] = useState(false);
   const [rechargeOpen, setRechargeOpen] = useState(false);
   const [withdrawOpen, setWithdrawOpen] = useState(false);
   const [referralOpen, setReferralOpen] = useState(false);
