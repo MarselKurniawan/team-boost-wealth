@@ -8,7 +8,7 @@ import {
   User as UserIcon, Shield, LogOut, ChevronRight, Copy, Eye, EyeOff,
   ClipboardList, Receipt, Crown, Users, ArrowDownToLine, ArrowUpFromLine,
   Lock, Landmark, Headphones, Share2,
-  FileText, Sparkles, TrendingUp, Wallet, Settings,
+  FileText, Sparkles, TrendingUp, Wallet, Settings, Building2,
 } from "lucide-react";
 
 import ProfileDialog from "@/components/ProfileDialog";
@@ -97,6 +97,7 @@ const Profile = () => {
     { icon: Landmark, label: "Akun Bank", tint: "bg-indigo-50 text-indigo-600", action: () => setBankDialogOpen(true) },
     { icon: Lock, label: "Ganti Password", tint: "bg-cyan-50 text-cyan-600", action: () => openProfileDialog("password") },
     { icon: Headphones, label: "Layanan Pelanggan", tint: "bg-sky-50 text-sky-600", action: () => toast({ title: "Hubungi Kami", description: "WhatsApp: +62 812-3456-7890" }) },
+    { icon: Building2, label: "Profil Perusahaan", tint: "bg-blue-50 text-blue-600", action: () => setCompanyDialogOpen(true) },
     { icon: FileText, label: "Legalitas Perusahaan", tint: "bg-indigo-50 text-indigo-600", action: () => setCompanyDialogOpen(true) },
   ];
 
