@@ -74,37 +74,7 @@ const Home = () => {
 
   useEffect(() => { loadData(); }, [user]);
 
-  const autoClaimLock = useMemo(() => ({ running: false }), []);
-  useEffect(() => {
-    if (!user || !profile || investments.length === 0) return;
-    const runAutoClaim = async () => {
-      if (autoClaimLock.running) return;
-      autoClaimLock.running = true;
-      try {
-        const { getInvestments } = await import('@/lib/database');
-        const { supabase } = await import('@/integrations/supabase/client');
-        const fresh = await getInvestments(user.id);
-        const claimable = fresh.filter(inv => inv.status === 'active' && canClaimToday(inv.last_claimed_at, inv.created_at));
-        if (claimable.length === 0) return;
-        let total = 0, count = 0;
-        for (const inv of claimable) {
-          const { data, error } = await supabase.rpc('claim_investment_atomic' as any, { _investment_id: inv.id });
-          if (error) { console.error('claim rpc error', error); continue; }
-          const res = data as any;
-          if (!res?.claimed) continue;
-          await processReferralRabat(user.id, Number(res.amount));
-          total += Number(res.amount); count += 1;
-        }
-        if (total > 0) {
-          await loadData();
-          toast({ title: '💰 Profit Otomatis Masuk', description: `+${formatCurrency(total)} dari ${count} robot` });
-        }
-      } finally { autoClaimLock.running = false; }
-    };
-    runAutoClaim();
-    const id = setInterval(runAutoClaim, 60_000);
-    return () => clearInterval(id);
-  }, [user, profile, investments, autoClaimLock]);
+  // Profit claiming is manual — user must tap "Klaim Sekarang" to receive daily profit.
 
   const balance = profile?.balance || 0;
   const activeInvestments = investments.filter(i => i.status === 'active');
