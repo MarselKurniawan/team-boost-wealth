@@ -284,6 +284,7 @@ const Profile = () => {
       <CouponDialog open={couponDialogOpen} onOpenChange={setCouponDialogOpen} onSuccess={refreshProfile} />
       <BankAccountDialog open={bankDialogOpen} onOpenChange={setBankDialogOpen} onSuccess={refreshProfile} />
       <CompanyProfileDialog open={companyDialogOpen} onOpenChange={setCompanyDialogOpen} />
+      <LegalityDialog open={legalityDialogOpen} onOpenChange={setLegalityDialogOpen} />
       <RechargeDialog open={rechargeOpen} onOpenChange={setRechargeOpen} onSuccess={refreshProfile} />
       <WithdrawDialog open={withdrawOpen} onOpenChange={setWithdrawOpen} balance={profile.balance} onSuccess={refreshProfile} />
       <ReferralDialog open={referralOpen} onOpenChange={setReferralOpen} referralCode={profile.referral_code || ""} />
