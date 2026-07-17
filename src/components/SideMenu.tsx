@@ -24,7 +24,7 @@ const SideMenu = ({ open, onOpenChange }: Props) => {
     { icon: Landmark, label: "Akun Bank", action: () => go("/profile?action=bank") },
     { icon: Lock, label: "Ganti Password", action: () => go("/profile?action=password") },
     { icon: Headphones, label: "Layanan Pelanggan", action: () => go("/contact") },
-    { icon: FileText, label: "Legalitas Perusahaan", action: () => go("/profile?action=company") },
+    { icon: FileText, label: "Legalitas Perusahaan", action: () => go("/profile?action=legality") },
     ...(isAdmin ? [{ icon: UserCog, label: "Admin Panel", action: () => go("/admin") }] : []),
   ];
 
