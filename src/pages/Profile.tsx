@@ -58,6 +58,7 @@ const Profile = () => {
     if (action === "bank") setBankDialogOpen(true);
     else if (action === "coupon") setCouponDialogOpen(true);
     else if (action === "company") setCompanyDialogOpen(true);
+    else if (action === "legality") setLegalityDialogOpen(true);
     else if (action === "recharge") setRechargeOpen(true);
     else if (action === "withdraw") setWithdrawOpen(true);
     else if (action === "referral") setReferralOpen(true);
