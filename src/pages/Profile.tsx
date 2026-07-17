@@ -15,6 +15,7 @@ import ProfileDialog from "@/components/ProfileDialog";
 import CouponDialog from "@/components/CouponDialog";
 import BankAccountDialog from "@/components/BankAccountDialog";
 import CompanyProfileDialog from "@/components/CompanyProfileDialog";
+import LegalityDialog from "@/components/LegalityDialog";
 import RechargeDialog from "@/components/RechargeDialog";
 import WithdrawDialog from "@/components/WithdrawDialog";
 import ReferralDialog from "@/components/ReferralDialog";
@@ -37,6 +38,7 @@ const Profile = () => {
   const [couponDialogOpen, setCouponDialogOpen] = useState(false);
   const [bankDialogOpen, setBankDialogOpen] = useState(false);
   const [companyDialogOpen, setCompanyDialogOpen] = useState(false);
+  const [legalityDialogOpen, setLegalityDialogOpen] = useState(false);
   const [rechargeOpen, setRechargeOpen] = useState(false);
   const [withdrawOpen, setWithdrawOpen] = useState(false);
   const [referralOpen, setReferralOpen] = useState(false);
@@ -56,6 +58,7 @@ const Profile = () => {
     if (action === "bank") setBankDialogOpen(true);
     else if (action === "coupon") setCouponDialogOpen(true);
     else if (action === "company") setCompanyDialogOpen(true);
+    else if (action === "legality") setLegalityDialogOpen(true);
     else if (action === "recharge") setRechargeOpen(true);
     else if (action === "withdraw") setWithdrawOpen(true);
     else if (action === "referral") setReferralOpen(true);
@@ -98,7 +101,7 @@ const Profile = () => {
     { icon: Lock, label: "Ganti Password", tint: "bg-cyan-50 text-cyan-600", action: () => openProfileDialog("password") },
     { icon: Headphones, label: "Layanan Pelanggan", tint: "bg-sky-50 text-sky-600", action: () => toast({ title: "Hubungi Kami", description: "WhatsApp: +62 812-3456-7890" }) },
     { icon: Building2, label: "Profil Perusahaan", tint: "bg-blue-50 text-blue-600", action: () => setCompanyDialogOpen(true) },
-    { icon: FileText, label: "Legalitas Perusahaan", tint: "bg-indigo-50 text-indigo-600", action: () => setCompanyDialogOpen(true) },
+    { icon: FileText, label: "Legalitas Perusahaan", tint: "bg-indigo-50 text-indigo-600", action: () => setLegalityDialogOpen(true) },
   ];
 
 
@@ -281,6 +284,7 @@ const Profile = () => {
       <CouponDialog open={couponDialogOpen} onOpenChange={setCouponDialogOpen} onSuccess={refreshProfile} />
       <BankAccountDialog open={bankDialogOpen} onOpenChange={setBankDialogOpen} onSuccess={refreshProfile} />
       <CompanyProfileDialog open={companyDialogOpen} onOpenChange={setCompanyDialogOpen} />
+      <LegalityDialog open={legalityDialogOpen} onOpenChange={setLegalityDialogOpen} />
       <RechargeDialog open={rechargeOpen} onOpenChange={setRechargeOpen} onSuccess={refreshProfile} />
       <WithdrawDialog open={withdrawOpen} onOpenChange={setWithdrawOpen} balance={profile.balance} onSuccess={refreshProfile} />
       <ReferralDialog open={referralOpen} onOpenChange={setReferralOpen} referralCode={profile.referral_code || ""} />
