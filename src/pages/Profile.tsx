@@ -15,6 +15,7 @@ import ProfileDialog from "@/components/ProfileDialog";
 import CouponDialog from "@/components/CouponDialog";
 import BankAccountDialog from "@/components/BankAccountDialog";
 import CompanyProfileDialog from "@/components/CompanyProfileDialog";
+import LegalityDialog from "@/components/LegalityDialog";
 import RechargeDialog from "@/components/RechargeDialog";
 import WithdrawDialog from "@/components/WithdrawDialog";
 import ReferralDialog from "@/components/ReferralDialog";
