@@ -101,7 +101,7 @@ const SideMenu = ({ open, onOpenChange }: Props) => {
             </button>
           </div>
 
-          <div className="p-4 text-center text-[10px] text-muted-foreground">InvestPro · v2.0</div>
+          <div className="p-4 text-center text-[10px] text-muted-foreground">Terracycle · v2.0</div>
         </div>
       </SheetContent>
     </Sheet>

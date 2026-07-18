@@ -1,5 +1,6 @@
 import { Dialog, DialogContent } from "@/components/ui/dialog";
-import { Building2, Eye, Rocket, Mail, Phone, MapPin, Users, TrendingUp, Clock } from "lucide-react";
+import { Recycle, Eye, Rocket, Mail, Phone, MapPin, Leaf, Globe2, Factory } from "lucide-react";
+import brandLogo from "@/assets/logo.png";
 
 interface CompanyProfileDialogProps {
   open: boolean;
@@ -13,13 +14,14 @@ const CompanyProfileDialog = ({ open, onOpenChange }: CompanyProfileDialogProps)
         {/* Hero Header */}
         <div className="bg-gradient-to-br from-[#1e3a8a] to-[#3b82f6] p-6 text-white">
           <div className="flex justify-between items-start mb-4">
-            <div className="w-9 h-9 bg-white/20 rounded-lg flex items-center justify-center">
-              <Building2 className="w-4 h-4 text-white" strokeWidth={2} />
+            <div className="w-11 h-11 bg-white rounded-xl flex items-center justify-center p-1.5">
+              <img src={brandLogo} alt="Terracycle" className="w-full h-full object-contain" />
             </div>
+            <Recycle className="w-5 h-5 text-white/60" />
           </div>
           <h1 className="text-lg font-bold leading-tight">Profil Perusahaan</h1>
           <p className="text-[10px] text-blue-100 mt-1 uppercase tracking-widest font-medium">
-            InvestPro · Robotika & Otomasi Humanoid
+            Terracycle · Daur Ulang Sampah Global
           </p>
         </div>
 
@@ -29,7 +31,7 @@ const CompanyProfileDialog = ({ open, onOpenChange }: CompanyProfileDialogProps)
           <section>
             <h2 className="text-[#1e3a8a] text-[11px] font-bold uppercase tracking-wider mb-2">Tentang Kami</h2>
             <p className="text-slate-600 text-[11px] leading-relaxed">
-              <strong className="text-slate-800">InvestPro</strong> adalah perusahaan spin-off dari Human Centered Robotics Lab, Universitas Texas di Austin. Didirikan tahun 2016 dengan misi menghadirkan generasi robot humanoid berikutnya — mulai dari eksoskeleton, torso humanoid, hingga <strong className="text-slate-800">Apollo</strong>, robot humanoid paling canggih di dunia.
+              <strong className="text-slate-800">Terracycle</strong> adalah perusahaan sosial global yang bergerak di bidang <strong className="text-slate-800">daur ulang sampah sulit terurai</strong>. Kami mengubah kemasan bekas, plastik, dan limbah rumah tangga menjadi bahan baku baru — menjadikan sirkular ekonomi sebagai peluang investasi berkelanjutan bagi setiap orang.
             </p>
           </section>
 
@@ -41,7 +43,7 @@ const CompanyProfileDialog = ({ open, onOpenChange }: CompanyProfileDialogProps)
               </div>
               <h3 className="text-[#1e3a8a] text-[10px] font-bold mb-1">Visi</h3>
               <p className="text-slate-500 text-[9px] leading-snug">
-                Menjadi platform investasi digital #1 untuk revolusi otomasi humanoid.
+                Menghilangkan konsep "sampah" — semua bisa didaur ulang.
               </p>
             </div>
             <div className="bg-white p-3 rounded-xl border border-blue-50">
@@ -50,7 +52,7 @@ const CompanyProfileDialog = ({ open, onOpenChange }: CompanyProfileDialogProps)
               </div>
               <h3 className="text-[#1e3a8a] text-[10px] font-bold mb-1">Misi</h3>
               <p className="text-slate-500 text-[9px] leading-snug">
-                Menyediakan produk investasi aman, transparan, dan menguntungkan setiap hari.
+                Mengolah limbah menjadi produk & profit harian bagi mitra investor.
               </p>
             </div>
           </div>
@@ -59,21 +61,21 @@ const CompanyProfileDialog = ({ open, onOpenChange }: CompanyProfileDialogProps)
           <div className="bg-white rounded-xl border border-blue-50 p-3">
             <div className="flex items-center justify-between">
               <div className="flex-1 text-center">
-                <Users className="w-3.5 h-3.5 mx-auto text-blue-600 mb-1" />
-                <p className="text-[12px] font-bold text-[#1e3a8a]">100K+</p>
-                <p className="text-[8px] text-slate-400 uppercase tracking-wide">Investor</p>
+                <Globe2 className="w-3.5 h-3.5 mx-auto text-blue-600 mb-1" />
+                <p className="text-[12px] font-bold text-[#1e3a8a]">21+</p>
+                <p className="text-[8px] text-slate-400 uppercase tracking-wide">Negara</p>
               </div>
               <div className="w-px h-8 bg-blue-100" />
               <div className="flex-1 text-center">
-                <TrendingUp className="w-3.5 h-3.5 mx-auto text-blue-600 mb-1" />
-                <p className="text-[12px] font-bold text-[#1e3a8a]">15%</p>
-                <p className="text-[8px] text-slate-400 uppercase tracking-wide">Rata ROI</p>
+                <Leaf className="w-3.5 h-3.5 mx-auto text-blue-600 mb-1" />
+                <p className="text-[12px] font-bold text-[#1e3a8a]">10JT+</p>
+                <p className="text-[8px] text-slate-400 uppercase tracking-wide">Kg Terolah</p>
               </div>
               <div className="w-px h-8 bg-blue-100" />
               <div className="flex-1 text-center">
-                <Clock className="w-3.5 h-3.5 mx-auto text-blue-600 mb-1" />
-                <p className="text-[12px] font-bold text-[#1e3a8a]">10+</p>
-                <p className="text-[8px] text-slate-400 uppercase tracking-wide">Tahun</p>
+                <Factory className="w-3.5 h-3.5 mx-auto text-blue-600 mb-1" />
+                <p className="text-[12px] font-bold text-[#1e3a8a]">200+</p>
+                <p className="text-[8px] text-slate-400 uppercase tracking-wide">Pabrik Mitra</p>
               </div>
             </div>
           </div>
@@ -85,25 +87,25 @@ const CompanyProfileDialog = ({ open, onOpenChange }: CompanyProfileDialogProps)
               <div className="w-7 h-7 bg-white/10 rounded-full flex items-center justify-center shrink-0">
                 <Mail className="w-3.5 h-3.5" />
               </div>
-              <span className="text-[11px] font-medium break-all">info@investpro.com</span>
+              <span className="text-[11px] font-medium break-all">info@terracycle.com</span>
             </div>
             <div className="flex items-center gap-2.5">
               <div className="w-7 h-7 bg-white/10 rounded-full flex items-center justify-center shrink-0">
                 <Phone className="w-3.5 h-3.5" />
               </div>
-              <span className="text-[11px] font-medium">+44 7529 467172</span>
+              <span className="text-[11px] font-medium">+1 609 393 4252</span>
             </div>
             <div className="flex items-center gap-2.5">
               <div className="w-7 h-7 bg-white/10 rounded-full flex items-center justify-center shrink-0">
                 <MapPin className="w-3.5 h-3.5" />
               </div>
-              <span className="text-[10px] font-medium leading-tight">11701 Stonehollow Dr STE 100, Austin, TX 78758</span>
+              <span className="text-[10px] font-medium leading-tight">121 New York Ave, Trenton, NJ 08638, USA</span>
             </div>
           </div>
 
           {/* Disclaimer */}
           <p className="text-[9px] text-slate-400 leading-relaxed text-center px-2">
-            Investasi mengandung risiko. Pastikan Anda memahami produk dan profil risiko sebelum berinvestasi.
+            Setiap investasi mendukung program daur ulang sampah global. Pahami risiko sebelum berinvestasi.
           </p>
         </div>
       </DialogContent>

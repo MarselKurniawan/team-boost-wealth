@@ -218,7 +218,7 @@ const Admin = () => {
 
   const shareCouponLink = async (code: string) => {
     const url = `${window.location.origin}/?coupon=${encodeURIComponent(code)}`;
-    const text = `🎁 Klaim kupon ${code} di InvestPro!\n${url}`;
+    const text = `🎁 Klaim kupon ${code} di Terracycle!\n${url}`;
     try {
       if (navigator.share) {
         await navigator.share({ title: `Kupon ${code}`, text, url });

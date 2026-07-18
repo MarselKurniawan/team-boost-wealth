@@ -275,7 +275,7 @@ const Profile = () => {
         </Button>
 
         <p className="text-center text-[10px] text-muted-foreground pt-2">
-          InvestPro · v2.0
+          Terracycle · v2.0
         </p>
       </div>
 
