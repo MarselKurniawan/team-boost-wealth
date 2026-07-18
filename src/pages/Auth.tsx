@@ -117,7 +117,7 @@ const Auth = () => {
 
     toast({
       title: "Login Berhasil!",
-      description: "Selamat datang kembali di InvestPro",
+      description: "Selamat datang kembali di Terracycle",
     });
     navigate("/");
   };
@@ -264,7 +264,7 @@ const Auth = () => {
             <div className="w-10 h-10 bg-white/15 backdrop-blur border border-white/30 flex items-center justify-center">
               <span className="font-bold text-lg tracking-tight">I</span>
             </div>
-            <span className="font-heading font-bold text-xl tracking-tight">InvestPro</span>
+            <span className="font-heading font-bold text-xl tracking-tight">Terracycle</span>
           </div>
 
           {/* Center illustration */}
@@ -310,7 +310,7 @@ const Auth = () => {
             <div className="w-10 h-10 bg-[#2557D6] flex items-center justify-center text-white">
               <span className="font-bold text-lg">I</span>
             </div>
-            <span className="font-heading font-bold text-xl text-slate-900">InvestPro</span>
+            <span className="font-heading font-bold text-xl text-slate-900">Terracycle</span>
           </div>
 
 

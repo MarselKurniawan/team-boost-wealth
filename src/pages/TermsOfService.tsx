@@ -3,7 +3,7 @@ import LegalLayout from "@/components/LegalLayout";
 const TermsOfService = () => (
   <LegalLayout title="Syarat & Ketentuan Layanan">
     <p>
-      Dengan mendaftar dan menggunakan layanan InvestPro, Anda menyatakan telah membaca,
+      Dengan mendaftar dan menggunakan layanan Terracycle, Anda menyatakan telah membaca,
       memahami, dan menyetujui seluruh syarat dan ketentuan berikut.
     </p>
 
@@ -17,8 +17,8 @@ const TermsOfService = () => (
     <h2>2. Akun & Keamanan</h2>
     <ul>
       <li>Pengguna bertanggung jawab penuh atas keamanan password & PIN penarikan.</li>
-      <li>InvestPro tidak bertanggung jawab atas kerugian akibat akun yang diretas karena kelalaian pengguna.</li>
-      <li>Dilarang membagikan kode OTP kepada siapapun, termasuk staf InvestPro.</li>
+      <li>Terracycle tidak bertanggung jawab atas kerugian akibat akun yang diretas karena kelalaian pengguna.</li>
+      <li>Dilarang membagikan kode OTP kepada siapapun, termasuk staf Terracycle.</li>
     </ul>
 
     <h2>3. Deposit & Penarikan</h2>
@@ -49,7 +49,7 @@ const TermsOfService = () => (
     <ul>
       <li>Menggunakan platform untuk pencucian uang atau aktivitas ilegal.</li>
       <li>Memanipulasi sistem, melakukan eksploitasi bug, atau serangan teknis.</li>
-      <li>Menyebarkan informasi palsu mengatasnamakan InvestPro.</li>
+      <li>Menyebarkan informasi palsu mengatasnamakan Terracycle.</li>
       <li>Membuat lebih dari satu akun untuk satu individu.</li>
     </ul>
 
@@ -61,7 +61,7 @@ const TermsOfService = () => (
 
     <h2>8. Penutupan Akun</h2>
     <p>
-      InvestPro berhak menutup akun yang melanggar syarat ini tanpa pemberitahuan sebelumnya.
+      Terracycle berhak menutup akun yang melanggar syarat ini tanpa pemberitahuan sebelumnya.
       Saldo dari aktivitas yang sah akan dikembalikan setelah verifikasi.
     </p>
 

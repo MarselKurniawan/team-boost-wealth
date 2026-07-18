@@ -25,12 +25,12 @@ const ReferralDialog = ({ open, onOpenChange, referralCode }: ReferralDialogProp
   };
 
   const shareWhatsApp = () => {
-    const message = `🚀 Bergabung dengan INVESTPRO Robot AI Humanoid!\n\nGunakan kode undangan: ${referralCode}\n\nDaftar: ${referralLink}`;
+    const message = `🚀 Bergabung dengan TERRACYCLE Robot AI Humanoid!\n\nGunakan kode undangan: ${referralCode}\n\nDaftar: ${referralLink}`;
     window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank');
   };
 
   const shareTelegram = () => {
-    const message = `🚀 Bergabung dengan INVESTPRO Robot!\n\nKode undangan: ${referralCode}\n\nDaftar: ${referralLink}`;
+    const message = `🚀 Bergabung dengan TERRACYCLE Robot!\n\nKode undangan: ${referralCode}\n\nDaftar: ${referralLink}`;
     window.open(`https://t.me/share/url?url=${encodeURIComponent(referralLink)}&text=${encodeURIComponent(message)}`, '_blank');
   };
 

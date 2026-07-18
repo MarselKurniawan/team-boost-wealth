@@ -19,7 +19,7 @@ const CompanyProfileDialog = ({ open, onOpenChange }: CompanyProfileDialogProps)
           </div>
           <h1 className="text-lg font-bold leading-tight">Profil Perusahaan</h1>
           <p className="text-[10px] text-blue-100 mt-1 uppercase tracking-widest font-medium">
-            InvestPro · Robotika & Otomasi Humanoid
+            Terracycle · Robotika & Otomasi Humanoid
           </p>
         </div>
 
@@ -29,7 +29,7 @@ const CompanyProfileDialog = ({ open, onOpenChange }: CompanyProfileDialogProps)
           <section>
             <h2 className="text-[#1e3a8a] text-[11px] font-bold uppercase tracking-wider mb-2">Tentang Kami</h2>
             <p className="text-slate-600 text-[11px] leading-relaxed">
-              <strong className="text-slate-800">InvestPro</strong> adalah perusahaan spin-off dari Human Centered Robotics Lab, Universitas Texas di Austin. Didirikan tahun 2016 dengan misi menghadirkan generasi robot humanoid berikutnya — mulai dari eksoskeleton, torso humanoid, hingga <strong className="text-slate-800">Apollo</strong>, robot humanoid paling canggih di dunia.
+              <strong className="text-slate-800">Terracycle</strong> adalah perusahaan spin-off dari Human Centered Robotics Lab, Universitas Texas di Austin. Didirikan tahun 2016 dengan misi menghadirkan generasi robot humanoid berikutnya — mulai dari eksoskeleton, torso humanoid, hingga <strong className="text-slate-800">Apollo</strong>, robot humanoid paling canggih di dunia.
             </p>
           </section>
 
@@ -85,7 +85,7 @@ const CompanyProfileDialog = ({ open, onOpenChange }: CompanyProfileDialogProps)
               <div className="w-7 h-7 bg-white/10 rounded-full flex items-center justify-center shrink-0">
                 <Mail className="w-3.5 h-3.5" />
               </div>
-              <span className="text-[11px] font-medium break-all">info@investpro.com</span>
+              <span className="text-[11px] font-medium break-all">info@terracycle.com</span>
             </div>
             <div className="flex items-center gap-2.5">
               <div className="w-7 h-7 bg-white/10 rounded-full flex items-center justify-center shrink-0">

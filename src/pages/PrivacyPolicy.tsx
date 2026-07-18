@@ -3,7 +3,7 @@ import LegalLayout from "@/components/LegalLayout";
 const PrivacyPolicy = () => (
   <LegalLayout title="Kebijakan Privasi">
     <p>
-      Kebijakan Privasi ini menjelaskan bagaimana InvestPro mengumpulkan, menggunakan, dan
+      Kebijakan Privasi ini menjelaskan bagaimana Terracycle mengumpulkan, menggunakan, dan
       melindungi informasi pribadi Anda saat menggunakan layanan kami.
     </p>
 
@@ -28,7 +28,7 @@ const PrivacyPolicy = () => (
     <p>
       Seluruh data pribadi dienkripsi dan disimpan di server yang aman. Akses dibatasi hanya
       untuk staf yang berwenang dengan otentikasi berlapis. Password disimpan dalam bentuk
-      hash dan tidak dapat dibaca oleh siapapun, termasuk tim internal InvestPro.
+      hash dan tidak dapat dibaca oleh siapapun, termasuk tim internal Terracycle.
     </p>
 
     <h2>4. Pembagian Data dengan Pihak Ketiga</h2>
@@ -54,13 +54,13 @@ const PrivacyPolicy = () => (
 
     <h2>7. Perubahan Kebijakan</h2>
     <p>
-      InvestPro dapat memperbarui kebijakan ini sewaktu-waktu. Perubahan signifikan akan
+      Terracycle dapat memperbarui kebijakan ini sewaktu-waktu. Perubahan signifikan akan
       diinformasikan melalui notifikasi di aplikasi.
     </p>
 
     <h2>8. Kontak</h2>
     <p>
-      Pertanyaan terkait privasi dapat dikirim ke <strong>support@investpro.id</strong> atau
+      Pertanyaan terkait privasi dapat dikirim ke <strong>support@terracycle.id</strong> atau
       WhatsApp CS resmi kami.
     </p>
   </LegalLayout>

@@ -47,7 +47,7 @@ const Team = () => {
   };
 
   const shareWhatsApp = () => {
-    const message = `Bergabung dengan InvestPro!\n\nKode undangan: ${referralCode}\nDaftar: ${referralLink}`;
+    const message = `Bergabung dengan Terracycle!\n\nKode undangan: ${referralCode}\nDaftar: ${referralLink}`;
     window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank');
   };
 
