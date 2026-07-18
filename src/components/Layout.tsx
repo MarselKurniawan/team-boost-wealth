@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Home, Calendar, Gem, BarChart3, Briefcase, Menu, MessageSquare, Zap } from "lucide-react";
+import { Home, Calendar, Gem, BarChart3, Briefcase, Menu, MessageSquare } from "lucide-react";
+import brandLogo from "@/assets/logo.png";
 import { cn } from "@/lib/utils";
 import SideMenu from "@/components/SideMenu";
 
@@ -30,11 +31,11 @@ const Layout = ({ children, wide = false }: { children: React.ReactNode; wide?: 
             <Menu className="w-4 h-4" />
           </button>
           <div className="flex items-center gap-1.5">
-            <div className="w-6 h-6 rounded-full bg-gradient-to-br from-[#3b82f6] to-[#1e3a8a] flex items-center justify-center">
-              <Zap className="w-3.5 h-3.5 text-white" strokeWidth={2.5} />
+            <div className="w-7 h-7 rounded-md bg-[#2557D6] flex items-center justify-center overflow-hidden">
+              <img src={brandLogo} alt="Terracycle" className="w-6 h-6 object-contain" />
             </div>
             <span className="font-heading text-[13px] font-bold tracking-tight text-foreground">
-              INVEST<span className="text-primary">PRO</span>
+              TERRA<span className="text-primary">CYCLE</span>
             </span>
           </div>
           <button

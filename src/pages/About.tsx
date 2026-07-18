@@ -3,27 +3,28 @@ import LegalLayout from "@/components/LegalLayout";
 const About = () => (
   <LegalLayout title="Tentang Terracycle">
     <p>
-      <strong>Terracycle</strong> adalah platform investasi digital berbasis kecerdasan buatan
-      yang fokus pada sektor robotika dan otomasi humanoid. Kami menghubungkan pengguna individu
-      dengan peluang penghasilan harian melalui produk sewa robot AI yang dikelola secara transparan.
+      <strong>Terracycle</strong> adalah perusahaan daur ulang sampah global yang mengubah
+      limbah sulit terurai — kemasan, plastik, dan sisa rumah tangga — menjadi bahan baku baru.
+      Melalui platform ini, kami membuka peluang investasi berkelanjutan bagi masyarakat untuk
+      ikut mendanai program daur ulang dan memperoleh imbal hasil harian.
     </p>
 
     <h2>Visi</h2>
-    <p>Menjadi gerbang utama bagi masyarakat Indonesia untuk berpartisipasi dalam revolusi otomasi humanoid.</p>
+    <p>Menghilangkan konsep "sampah" — semua material bisa didaur ulang dan bernilai kembali.</p>
 
     <h2>Misi</h2>
     <ul>
-      <li>Menyediakan produk investasi digital yang sederhana, aman, dan transparan.</li>
-      <li>Memberikan penghasilan harian yang konsisten kepada pengguna.</li>
-      <li>Membangun komunitas mitra (tim) yang saling menguntungkan melalui sistem referral berjenjang.</li>
+      <li>Mengolah limbah rumah tangga & industri menjadi bahan baku sirkular.</li>
+      <li>Memberikan penghasilan harian konsisten kepada mitra investor.</li>
+      <li>Membangun komunitas peduli lingkungan lewat sistem referral berjenjang.</li>
     </ul>
 
     <h2>Profil Perusahaan</h2>
     <ul>
       <li><strong>Nama Brand:</strong> Terracycle</li>
-      <li><strong>Bidang Usaha:</strong> Platform Investasi Digital & Robotika AI</li>
-      <li><strong>Tahun Berdiri:</strong> 2026</li>
-      <li><strong>Alamat Operasional:</strong> Jakarta, Indonesia</li>
+      <li><strong>Bidang Usaha:</strong> Daur Ulang Sampah & Investasi Hijau</li>
+      <li><strong>Tahun Berdiri:</strong> 2001</li>
+      <li><strong>Alamat Operasional:</strong> Jakarta, Indonesia (Kantor Regional)</li>
       <li><strong>Email Resmi:</strong> support@terracycle.id</li>
       <li><strong>Layanan Pelanggan:</strong> 24 Jam via WhatsApp</li>
     </ul>
@@ -31,8 +32,8 @@ const About = () => (
     <h2>Komitmen Kami</h2>
     <p>
       Terracycle berkomitmen menjaga keamanan data pengguna, kelancaran proses deposit dan penarikan,
-      serta memberikan dukungan pelanggan yang responsif. Kami tidak akan pernah meminta password,
-      OTP, atau PIN bank Anda melalui saluran apapun.
+      serta transparansi program daur ulang. Kami tidak akan pernah meminta password, OTP, atau PIN
+      bank Anda melalui saluran apapun.
     </p>
   </LegalLayout>
 );
