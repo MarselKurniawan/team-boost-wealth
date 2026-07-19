@@ -265,9 +265,6 @@ const AdminProducts = () => {
                     <Badge className={`text-[10px] ml-1 ${(product as any).profit_mode === 'locked' ? 'bg-primary/15 text-primary border border-primary/40' : 'bg-emerald-500/20 text-emerald-600 border border-emerald-500/40'}`}>
                       {(product as any).profit_mode === 'locked' ? '🔒 Terkunci' : '💰 Harian'}
                      </Badge>
-                     <Badge className={`text-[10px] ml-1 ${(product as any).profit_mode === 'locked' ? 'bg-primary/15 text-primary border border-primary/40' : 'bg-muted text-muted-foreground border border-border'}`}>
-                       {(product as any).profit_mode === 'locked' ? '🔒 Locked Payout' : '💰 Profit Harian'}
-                     </Badge>
                      <Badge className={`text-[10px] ml-1 ${product.is_active ? 'bg-emerald-500/15 text-emerald-600 border border-emerald-500/40' : 'bg-destructive/15 text-destructive border border-destructive/40'}`}>
                        {product.is_active ? '🟢 Dibuka' : '🔴 Tertutup'}
                      </Badge>
