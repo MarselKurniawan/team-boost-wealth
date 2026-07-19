@@ -11,6 +11,7 @@ import {
   Users,
   Gift,
   Package,
+  Recycle
     Bell,
   Diamond,
   Gem,
@@ -75,7 +76,7 @@ const Account = () => {
       case "rabat":
         return <Users className="w-4 h-4 text-vip-gold" />;
       case "invest":
-        return <Package className="w-4 h-4 text-primary" />;
+        return <Recycle className="w-4 h-4 text-primary" />;
       default:
         return <Wallet className="w-4 h-4 text-muted-foreground" />;
     }
@@ -254,7 +255,7 @@ const Account = () => {
               >
                 <div className="absolute -right-6 -top-6 w-24 h-24 rounded-full bg-white/10" />
                 <div className="absolute right-6 bottom-2">
-                  <Package className="w-10 h-10 text-white/10" strokeWidth={1} />
+                  <Recycle className="w-10 h-10 text-white/10" strokeWidth={1} />
                 </div>
 
                 <div className="relative flex items-start justify-between gap-2 mb-2.5">

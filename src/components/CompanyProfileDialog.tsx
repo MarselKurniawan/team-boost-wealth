@@ -42,10 +42,17 @@ const CompanyProfileDialog = ({ open, onOpenChange }: CompanyProfileDialogProps)
           <section>
             <h2 className="text-[#1e3a8a] text-[11px] font-bold uppercase tracking-wider mb-2">Tentang Kami</h2>
             <p className="text-slate-600 text-[11px] leading-relaxed">
-              <strong className="text-slate-800">TerraCycle</strong> adalah perusahaan daur ulang global yang berfokus untuk mengelola sampah yang sulit didaur ulang dan biasanya berakhir di tempat pembuangan akhir (TPA). Kami bermitra dengan berbagai merek untuk menjalankan program daur ulang gratis dan menawarkan sistem berbayar seperti <em>zero waste box</em> untuk penggunaan komersial maupun pribadi.
+              <strong className="text-slate-800">TerraCycle</strong> adalah perusahaan daur ulang global yang berfokus
+              untuk mengelola sampah yang sulit didaur ulang dan biasanya berakhir di tempat pembuangan akhir (TPA).
+              Kami bermitra dengan berbagai merek untuk menjalankan program daur ulang gratis dan menawarkan sistem
+              berbayar seperti <em>zero waste box</em> untuk penggunaan komersial maupun pribadi.
             </p>
             <p className="text-slate-600 text-[11px] leading-relaxed mt-2">
-              TerraCycle US mendaur ulang ratusan jenis limbah yang sulit didaur ulang, termasuk kapsul kopi, mainan, limbah kosmetik, jok mobil, dan banyak lagi. Kami telah tumbuh <strong className="text-slate-800">75% dalam empat tahun terakhir (2020–2024)</strong>, dan sedang menggalang modal untuk mendukung pertumbuhan lebih lanjut melalui akuisisi strategis. Berinvestasilah hari ini untuk memberikan dampak positif demi lingkungan yang sehat.
+              TerraCycle US mendaur ulang ratusan jenis limbah yang sulit didaur ulang, termasuk kapsul kopi, mainan,
+              limbah kosmetik, jok mobil, dan banyak lagi. Kami telah tumbuh{" "}
+              <strong className="text-slate-800">75% dalam empat tahun terakhir (2020–2024)</strong>, dan sedang
+              menggalang modal untuk mendukung pertumbuhan lebih lanjut melalui akuisisi strategis. Berinvestasilah hari
+              ini untuk memberikan dampak positif demi lingkungan yang sehat.
             </p>
           </section>
 
