@@ -59,8 +59,8 @@ const CouponDialog = ({ open, onOpenChange, onSuccess, prefillCode }: CouponDial
     <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle className="flex items-center gap-2"><Ticket className="w-5 h-5 text-accent" />Kode Kupon</DialogTitle>
-          <DialogDescription>Masukkan kode kupon untuk mendapatkan hadiah</DialogDescription>
+          <DialogTitle className="flex items-center gap-2"><Ticket className="w-5 h-5 text-accent" />Redeem Code</DialogTitle>
+          <DialogDescription>Masukkan redeem code untuk mendapatkan hadiah</DialogDescription>
         </DialogHeader>
         <div className="space-y-4 py-4">
           {showReward && reward ? (
@@ -80,15 +80,22 @@ const CouponDialog = ({ open, onOpenChange, onSuccess, prefillCode }: CouponDial
           ) : (
             <>
               <div className="space-y-2">
-                <Label>Kode Kupon</Label>
-                <Input placeholder="Masukkan kode kupon" value={couponCode} onChange={(e) => setCouponCode(e.target.value.toUpperCase())} className="text-center text-lg font-mono tracking-wider" />
+                <Label>Redeem Code</Label>
+                <Input
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  placeholder="Masukkan kode angka"
+                  value={couponCode}
+                  onChange={(e) => setCouponCode(e.target.value.replace(/\D/g, ""))}
+                  className="text-center text-lg font-mono tracking-wider"
+                />
               </div>
               <div className="flex items-start gap-2 p-3 bg-accent/10 rounded-lg">
                 <Gift className="w-4 h-4 text-accent mt-0.5" />
-                <p className="text-xs text-muted-foreground">Dapatkan kode kupon dari admin untuk mendapatkan hadiah bonus!</p>
+                <p className="text-xs text-muted-foreground">Dapatkan redeem code dari admin untuk mendapatkan hadiah bonus!</p>
               </div>
               <Button className="w-full" size="lg" onClick={handleSubmit} disabled={isLoading || !couponCode.trim()}>
-                {isLoading ? "Memproses..." : "Klaim Kupon"}
+                {isLoading ? "Memproses..." : "Klaim Redeem"}
               </Button>
             </>
           )}
