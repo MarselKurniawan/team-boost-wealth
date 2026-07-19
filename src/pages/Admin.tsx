@@ -492,7 +492,7 @@ const Admin = () => {
             <Crown className="w-3.5 h-3.5" />
           </Button>
           <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => setSpinDialogOpen(true)} title="Setting Hadiah Buka Kotak">
-            
+            <PackageOpen className="w-3.5 h-3.5" />
           </Button>
 
           <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => setLegalityDialogOpen(true)} title="Legalitas">
@@ -501,7 +501,7 @@ const Admin = () => {
           <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => setBackupDialogOpen(true)} title="Backup">
             <Database className="w-3.5 h-3.5" />
           </Button>
-          <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => setCouponDialogOpen(true)} title="Kupon">
+          <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => setCouponDialogOpen(true)} title="Redeem Code">
             <Ticket className="w-3.5 h-3.5" />
           </Button>
           <Link to="/admin/products">
