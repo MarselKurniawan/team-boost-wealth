@@ -149,8 +149,8 @@ const SpinWheelDialog = ({ open, onOpenChange, onSuccess }: SpinWheelDialogProps
         <div className="relative overflow-hidden pt-6 pb-14 px-5 bg-gradient-to-br from-[#1e3a8a] via-[#1e40af] to-[#3b82f6]">
           <div className="absolute -top-8 -right-10 w-40 h-40 rounded-full bg-white/10 blur-2xl" />
           <div className="absolute top-4 -left-8 w-28 h-28 rounded-full bg-cyan-300/20 blur-xl" />
-          <Sparkles className="absolute top-3 right-6 w-3.5 h-3.5 text-white/40" />
-          <Sparkles className="absolute top-14 left-8 w-3 h-3 text-white/30" />
+          
+          
 
           <DialogHeader className="relative text-left space-y-0.5">
             <p className="text-[9px] uppercase tracking-[0.3em] text-white/70 font-semibold">

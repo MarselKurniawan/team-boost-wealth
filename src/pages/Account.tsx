@@ -192,7 +192,7 @@ const Account = () => {
       <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#1e3a8a] via-[#1e40af] to-[#3b82f6] p-4 shadow-lg shadow-blue-500/30">
         <div className="absolute -top-10 -right-10 w-40 h-40 rounded-full bg-cyan-300/20 blur-2xl" />
         <div className="absolute -bottom-8 -left-8 w-32 h-32 rounded-full bg-white/10 blur-2xl" />
-        <Sparkles className="absolute top-3 right-4 w-3.5 h-3.5 text-white/40" />
+        
 
         <div className="relative flex items-center justify-between mb-3">
           <div>

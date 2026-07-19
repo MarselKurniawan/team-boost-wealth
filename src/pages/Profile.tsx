@@ -114,8 +114,8 @@ const Profile = () => {
         <div className="absolute top-10 -left-16 w-48 h-48 rounded-full bg-cyan-300/20 blur-3xl" />
         <div className="absolute bottom-0 right-1/3 w-32 h-32 rounded-full bg-indigo-300/20 blur-2xl" />
         {/* Sparkle */}
-        <Sparkles className="absolute top-6 right-6 w-5 h-5 text-white/40" />
-        <Sparkles className="absolute top-16 left-8 w-3 h-3 text-white/30" />
+        
+        
 
         <div className="relative flex items-center justify-between">
           <p className="text-[10px] uppercase tracking-[0.32em] text-white/70 font-semibold">Akun Saya</p>

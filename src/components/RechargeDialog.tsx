@@ -76,7 +76,7 @@ const RechargeDialog = ({ open, onOpenChange, onSuccess }: RechargeDialogProps) 
         <div className="relative overflow-hidden pt-5 pb-14 px-5 bg-gradient-to-br from-[#0b1e5c] via-[#1e40af] to-[#3b82f6]">
           <div className="absolute -top-10 -right-8 w-40 h-40 rounded-full bg-cyan-300/15 blur-2xl" />
           <div className="absolute bottom-0 -left-10 w-32 h-32 rounded-full bg-white/10 blur-2xl" />
-          <Sparkles className="absolute top-4 right-6 w-3.5 h-3.5 text-white/50" />
+          
 
           <DialogHeader className="relative text-left space-y-1">
             <p className="text-[9px] uppercase tracking-[0.3em] text-white/70 font-semibold">Isi Saldo</p>
