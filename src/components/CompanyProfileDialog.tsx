@@ -1,6 +1,7 @@
 import { Dialog, DialogContent } from "@/components/ui/dialog";
-import { Recycle, Eye, Rocket, Mail, Phone, MapPin, Leaf, Globe2, Factory } from "lucide-react";
+import { Recycle, Eye, Rocket, Mail, Phone, MapPin, Leaf, Globe2, Factory, TrendingUp } from "lucide-react";
 import brandLogo from "@/assets/logo.png";
+import hqPhoto from "@/assets/terracycle-hq.jpeg";
 
 interface CompanyProfileDialogProps {
   open: boolean;
@@ -15,14 +16,24 @@ const CompanyProfileDialog = ({ open, onOpenChange }: CompanyProfileDialogProps)
         <div className="bg-gradient-to-br from-[#1e3a8a] to-[#3b82f6] p-6 text-white">
           <div className="flex justify-between items-start mb-4">
             <div className="w-11 h-11 bg-white rounded-xl flex items-center justify-center p-1.5">
-              <img src={brandLogo} alt="Terracycle" className="w-full h-full object-contain" />
+              <img src={brandLogo} alt="TerraCycle" className="w-full h-full object-contain" />
             </div>
             <Recycle className="w-5 h-5 text-white/60" />
           </div>
           <h1 className="text-lg font-bold leading-tight">Profil Perusahaan</h1>
           <p className="text-[10px] text-blue-100 mt-1 uppercase tracking-widest font-medium">
-            Terracycle · Daur Ulang Sampah Global
+            TerraCycle · Daur Ulang Sampah Global
           </p>
+        </div>
+
+        {/* HQ Photo */}
+        <div className="px-5 pt-5">
+          <div className="relative overflow-hidden rounded-2xl border border-blue-100 shadow-sm">
+            <img src={hqPhoto} alt="Kantor TerraCycle" className="w-full h-40 object-cover" />
+            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-2">
+              <p className="text-white text-[10px] font-semibold">Kantor TerraCycle · New Jersey, USA</p>
+            </div>
+          </div>
         </div>
 
         {/* Content */}
@@ -31,7 +42,10 @@ const CompanyProfileDialog = ({ open, onOpenChange }: CompanyProfileDialogProps)
           <section>
             <h2 className="text-[#1e3a8a] text-[11px] font-bold uppercase tracking-wider mb-2">Tentang Kami</h2>
             <p className="text-slate-600 text-[11px] leading-relaxed">
-              <strong className="text-slate-800">Terracycle</strong> adalah perusahaan sosial global yang bergerak di bidang <strong className="text-slate-800">daur ulang sampah sulit terurai</strong>. Kami mengubah kemasan bekas, plastik, dan limbah rumah tangga menjadi bahan baku baru — menjadikan sirkular ekonomi sebagai peluang investasi berkelanjutan bagi setiap orang.
+              <strong className="text-slate-800">TerraCycle</strong> adalah perusahaan daur ulang global yang berfokus untuk mengelola sampah yang sulit didaur ulang dan biasanya berakhir di tempat pembuangan akhir (TPA). Kami bermitra dengan berbagai merek untuk menjalankan program daur ulang gratis dan menawarkan sistem berbayar seperti <em>zero waste box</em> untuk penggunaan komersial maupun pribadi.
+            </p>
+            <p className="text-slate-600 text-[11px] leading-relaxed mt-2">
+              TerraCycle US mendaur ulang ratusan jenis limbah yang sulit didaur ulang, termasuk kapsul kopi, mainan, limbah kosmetik, jok mobil, dan banyak lagi. Kami telah tumbuh <strong className="text-slate-800">75% dalam empat tahun terakhir (2020–2024)</strong>, dan sedang menggalang modal untuk mendukung pertumbuhan lebih lanjut melalui akuisisi strategis. Berinvestasilah hari ini untuk memberikan dampak positif demi lingkungan yang sehat.
             </p>
           </section>
 
@@ -67,9 +81,9 @@ const CompanyProfileDialog = ({ open, onOpenChange }: CompanyProfileDialogProps)
               </div>
               <div className="w-px h-8 bg-blue-100" />
               <div className="flex-1 text-center">
-                <Leaf className="w-3.5 h-3.5 mx-auto text-blue-600 mb-1" />
-                <p className="text-[12px] font-bold text-[#1e3a8a]">10JT+</p>
-                <p className="text-[8px] text-slate-400 uppercase tracking-wide">Kg Terolah</p>
+                <TrendingUp className="w-3.5 h-3.5 mx-auto text-blue-600 mb-1" />
+                <p className="text-[12px] font-bold text-[#1e3a8a]">75%</p>
+                <p className="text-[8px] text-slate-400 uppercase tracking-wide">Growth '20–'24</p>
               </div>
               <div className="w-px h-8 bg-blue-100" />
               <div className="flex-1 text-center">
