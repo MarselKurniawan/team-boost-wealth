@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Gift, PartyPopper, Coins, CalendarCheck, Ticket, Download, Share2, BookOpen,
-  ChevronRight, Sparkles, TrendingUp, ShoppingBag, Wallet, ArrowUpFromLine, Zap,
+  ChevronRight, TrendingUp, ShoppingBag, Wallet, ArrowUpFromLine, Zap, PackageOpen,
 } from "lucide-react";
 import { WhatsAppIcon } from "@/components/icons/WhatsAppIcon";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
@@ -155,40 +155,47 @@ const Home = () => {
         </div>
       </div>
 
-      {/* TWO INFO CARDS */}
-      <div className="px-4 mt-4 grid grid-cols-2 gap-3">
-        <div className="rounded-2xl bg-white border border-blue-100 p-3 shadow-sm">
-          <div className="flex items-center gap-1.5 mb-1">
-            <div className="w-6 h-6 rounded-lg bg-blue-50 text-primary flex items-center justify-center">
-              <Sparkles className="w-3 h-3" />
-            </div>
-            <p className="text-[11px] font-heading font-bold text-foreground">Bonus Member</p>
+      {/* THREE INFO CARDS */}
+      <div className="px-4 mt-4 grid grid-cols-3 gap-2">
+        <div className="rounded-2xl bg-white border border-blue-100 p-2.5 shadow-sm">
+          <div className="w-7 h-7 rounded-lg bg-blue-50 text-primary flex items-center justify-center mb-1.5">
+            <CalendarCheck className="w-3.5 h-3.5" />
           </div>
-          <p className="text-[10px] text-muted-foreground leading-snug">
-            Penawaran terbatas 1.030 slot. Klaim reward hingga Rp10.000 gratis.
-          </p>
+          <p className="text-[11px] font-heading font-bold text-foreground leading-tight">Check-in Harian</p>
+          <p className="text-[9px] text-muted-foreground leading-snug mt-0.5">Hadiah setiap hari</p>
           <button
             onClick={() => setCheckinOpen(true)}
-            className="mt-2 inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-gradient-to-r from-[#fde68a] to-[#fbbf24] text-[10px] font-bold text-amber-900"
-          >
-            Klaim
-          </button>
-        </div>
-        <div className="rounded-2xl bg-white border border-blue-100 p-3 shadow-sm">
-          <div className="flex items-center gap-1.5 mb-1">
-            <div className="w-6 h-6 rounded-lg bg-cyan-50 text-cyan-600 flex items-center justify-center">
-              <CalendarCheck className="w-3 h-3" />
-            </div>
-            <p className="text-[11px] font-heading font-bold text-foreground">Check-in Harian</p>
-          </div>
-          <p className="text-[10px] text-muted-foreground leading-snug">
-            30 hari · hingga Rp65.000 · mulai dari Rp150 setiap hari.
-          </p>
-          <button
-            onClick={() => setCheckinOpen(true)}
-            className="mt-2 inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-gradient-to-r from-[#3b82f6] to-[#1e3a8a] text-white text-[10px] font-bold"
+            className="mt-1.5 w-full h-6 rounded-full bg-gradient-to-r from-[#3b82f6] to-[#1e3a8a] text-white text-[10px] font-bold"
           >
             Check-in
+          </button>
+        </div>
+
+        <div className="rounded-2xl bg-white border border-blue-100 p-2.5 shadow-sm">
+          <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-amber-100 to-orange-100 text-orange-600 flex items-center justify-center mb-1.5">
+            <PackageOpen className="w-3.5 h-3.5" />
+          </div>
+          <p className="text-[11px] font-heading font-bold text-foreground leading-tight">Kotak Hadiah</p>
+          <p className="text-[9px] text-muted-foreground leading-snug mt-0.5">Pilih 1 dari 3 kotak</p>
+          <button
+            onClick={() => setSpinOpen(true)}
+            className="mt-1.5 w-full h-6 rounded-full bg-gradient-to-r from-[#f59e0b] to-[#d97706] text-white text-[10px] font-bold"
+          >
+            Buka
+          </button>
+        </div>
+
+        <div className="rounded-2xl bg-white border border-blue-100 p-2.5 shadow-sm">
+          <div className="w-7 h-7 rounded-lg bg-cyan-50 text-cyan-600 flex items-center justify-center mb-1.5">
+            <Ticket className="w-3.5 h-3.5" />
+          </div>
+          <p className="text-[11px] font-heading font-bold text-foreground leading-tight">Redeem Code</p>
+          <p className="text-[9px] text-muted-foreground leading-snug mt-0.5">Klaim bonus kode</p>
+          <button
+            onClick={() => setCouponOpen(true)}
+            className="mt-1.5 w-full h-6 rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 text-white text-[10px] font-bold"
+          >
+            Klaim
           </button>
         </div>
       </div>

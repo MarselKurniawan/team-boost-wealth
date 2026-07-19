@@ -29,7 +29,7 @@ const labelOf = (type: string) => {
     deposit: "Deposit",
     withdraw: "Penarikan",
     withdrawal: "Penarikan",
-    invest: "Sewa Robot",
+    invest: "Pembelian Produk",
     income: "Profit Harian",
     commission: "Komisi Tim",
     rabat: "Rabat Referral",

@@ -86,7 +86,7 @@ const Account = () => {
     const labels: Record<string, string> = {
       recharge: "Isi Ulang",
       withdraw: "Tarik",
-      invest: "Sewa Robot",
+      invest: "Pembelian Produk",
       income: "Pendapatan Harian",
       commission: "Komisi Tim",
       rabat: "Rabat Harian",
