@@ -262,8 +262,8 @@ const AdminProducts = () => {
                          {product.category === 'promo' ? '🔥 Promo' : '👑 VIP'}
                        </Badge>
                      )}
-                     <Badge className={`text-[10px] ml-1 ${(product as any).term_type === 'short' ? 'bg-amber-500/20 text-amber-600 border border-amber-500/40' : 'bg-emerald-500/20 text-emerald-600 border border-emerald-500/40'}`}>
-                       {(product as any).term_type === 'short' ? '⚡ Jangka Pendek' : '📈 Jangka Panjang'}
+                    <Badge className={`text-[10px] ml-1 ${(product as any).profit_mode === 'locked' ? 'bg-primary/15 text-primary border border-primary/40' : 'bg-emerald-500/20 text-emerald-600 border border-emerald-500/40'}`}>
+                      {(product as any).profit_mode === 'locked' ? '🔒 Terkunci' : '💰 Harian'}
                      </Badge>
                      <Badge className={`text-[10px] ml-1 ${(product as any).profit_mode === 'locked' ? 'bg-primary/15 text-primary border border-primary/40' : 'bg-muted text-muted-foreground border border-border'}`}>
                        {(product as any).profit_mode === 'locked' ? '🔒 Locked Payout' : '💰 Profit Harian'}
@@ -319,19 +319,6 @@ const AdminProducts = () => {
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-2"><Label>Level VIP</Label><Select value={formData.vip_level} onValueChange={(value) => setFormData({ ...formData, vip_level: value })}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent>{[0, 1, 2, 3, 4, 5].map((level) => <SelectItem key={level} value={level.toString()}>VIP {level}</SelectItem>)}</SelectContent></Select></div>
               <div className="space-y-2"><Label>Kategori</Label><Select value={formData.category} onValueChange={(value) => setFormData({ ...formData, category: value })}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent><SelectItem value="reguler">Reguler</SelectItem><SelectItem value="promo">🔥 Promo</SelectItem><SelectItem value="vip">👑 VIP</SelectItem></SelectContent></Select></div>
-            </div>
-            <div className="space-y-2">
-              <Label>Jenis Kontrak (Term)</Label>
-              <Select value={formData.term_type} onValueChange={(value) => setFormData({ ...formData, term_type: value })}>
-                <SelectTrigger><SelectValue /></SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="long">📈 Jangka Panjang (dihitung untuk syarat naik VIP)</SelectItem>
-                  <SelectItem value="short">⚡ Jangka Pendek (TIDAK dihitung untuk syarat naik VIP)</SelectItem>
-                </SelectContent>
-              </Select>
-              <p className="text-[10px] text-muted-foreground">
-                Jangka Panjang = pembelian bawahan menaikkan progres VIP upline. Jangka Pendek = pembelian bawahan tidak berpengaruh ke syarat kenaikan level upline.
-              </p>
             </div>
             <div className="space-y-2">
               <Label>Mode Profit</Label>
