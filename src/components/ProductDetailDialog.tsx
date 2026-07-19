@@ -167,7 +167,7 @@ const ProductDetailDialog = ({
                   onInvest();
                 }}
               >
-                Sewa Robot Sekarang
+                Pembelian Produk Sekarang
               </Button>
             )}
           </div>
