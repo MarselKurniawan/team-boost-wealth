@@ -7,19 +7,19 @@ const corsHeaders = {
 };
 
 // Commission rates by level (on purchase)
-// Level A (direct referral) = 10%, Level B (2nd gen) = 3%, Level C (3rd gen) = 2%
+// Level A (direct referral) = 10%, Level B (2nd gen) = 2%, Level C (3rd gen) = 1%
 const COMMISSION_RATES: Record<string, number> = {
   A: 0.10, // 10%
-  B: 0.03, // 3%
-  C: 0.02, // 2%
+  B: 0.02, // 2%
+  C: 0.01, // 1%
 };
 
 // Rabat rates by level (on daily profit)
-// Level A = 5%, Level B = 3%, Level C = 2%
+// Level A = 5%, Level B = 2%, Level C = 1%
 const RABAT_RATES: Record<string, number> = {
   A: 0.05, // 5%
-  B: 0.03, // 3%
-  C: 0.02, // 2%
+  B: 0.02, // 2%
+  C: 0.01, // 1%
 };
 
 interface ReferrerData {

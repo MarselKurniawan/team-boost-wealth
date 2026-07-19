@@ -18,15 +18,15 @@ export interface MultiLevelTeam {
 // Commission rates by level (on purchase)
 export const COMMISSION_RATES = {
   A: 10, // 10%
-  B: 3,  // 3%
-  C: 2,  // 2%
+  B: 2,  // 2%
+  C: 1,  // 1%
 };
 
 // Rabat rates by level (on daily profit)
 export const RABAT_RATES = {
   A: 5, // 5%
-  B: 3, // 3%
-  C: 2, // 2%
+  B: 2, // 2%
+  C: 1, // 1%
 };
 
 // Default VIP thresholds (fallback if DB fetch fails)

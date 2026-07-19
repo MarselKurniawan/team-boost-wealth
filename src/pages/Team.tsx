@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import { Button } from "@/components/ui/button";
-import { Users, Copy, Link2, Gift, Image as ImageIcon, Info, ChevronRight, Crown, Sparkles, TrendingUp } from "lucide-react";
+import { Users, Copy, Link2, Gift, Image as ImageIcon, Info, ChevronRight, Crown, TrendingUp } from "lucide-react";
 import { WhatsAppIcon } from "@/components/icons/WhatsAppIcon";
 import { useAuth } from "@/hooks/useAuth";
 import { formatCurrency, Profile } from "@/lib/database";
@@ -70,8 +70,8 @@ const Team = () => {
       <div className="relative overflow-hidden pt-8 pb-24 px-4 bg-gradient-to-br from-[#1e3a8a] via-[#1e40af] to-[#3b82f6]">
         <div className="absolute -top-16 -right-10 w-56 h-56 rounded-full bg-white/10 blur-2xl" />
         <div className="absolute top-10 -left-16 w-48 h-48 rounded-full bg-cyan-300/20 blur-3xl" />
-        <Sparkles className="absolute top-6 right-8 w-4 h-4 text-white/40" />
-        <Sparkles className="absolute top-16 left-10 w-3 h-3 text-white/30" />
+        
+        
 
         <div className="relative text-center">
           <p className="text-[10px] uppercase tracking-[0.32em] text-white/70 font-semibold">Tim Referral</p>

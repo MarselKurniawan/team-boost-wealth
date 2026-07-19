@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { formatCurrency } from "@/lib/database";
-import { Gift, Sparkles, PartyPopper, Coins } from "lucide-react";
+import { Gift, PartyPopper, Coins } from "lucide-react";
 
 interface ClaimRewardDialogProps {
   open: boolean;
@@ -36,7 +36,7 @@ const ClaimRewardDialog = ({ open, onOpenChange, amount, productName, onClaim }:
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
               {[...Array(20)].map((_, i) => (
                 <div key={i} className="absolute animate-confetti" style={{ left: `${Math.random() * 100}%`, animationDelay: `${Math.random() * 0.5}s`, animationDuration: `${1 + Math.random() * 1}s` }}>
-                  <Sparkles className="w-4 h-4" style={{ color: ['#00F5FF', '#FF00E5', '#FFD700'][Math.floor(Math.random() * 3)] }} />
+                  
                 </div>
               ))}
             </div>
@@ -61,7 +61,7 @@ const ClaimRewardDialog = ({ open, onOpenChange, amount, productName, onClaim }:
             <Gift className="w-5 h-5 mr-2" />Claim Sekarang
           </Button>
         )}
-        {claimed && <div className="flex items-center justify-center gap-2 text-success animate-fade-in"><Sparkles className="w-4 h-4" /><span className="font-medium">Income berhasil di-claim!</span><Sparkles className="w-4 h-4" /></div>}
+        {claimed && <div className="flex items-center justify-center gap-2 text-success animate-fade-in"><span className="font-medium">Income berhasil di-claim!</span></div>}
       </DialogContent>
     </Dialog>
   );

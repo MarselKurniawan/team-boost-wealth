@@ -42,7 +42,7 @@ const DATA_OPTIONS = [
   { type: "transactions" as DataType, label: "Transaksi", icon: Receipt, description: "Riwayat transaksi" },
   { type: "investments" as DataType, label: "Investasi", icon: TrendingUp, description: "Data investasi aktif" },
   { type: "products" as DataType, label: "Produk", icon: Package, description: "Daftar produk" },
-  { type: "coupons" as DataType, label: "Kupon", icon: Ticket, description: "Data kupon" },
+  { type: "coupons" as DataType, label: "Redeem Code", icon: Ticket, description: "Data kupon" },
 ];
 
 const BackupDialog = ({ open, onOpenChange }: BackupDialogProps) => {

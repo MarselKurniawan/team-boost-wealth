@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { Sparkles, Plus, Trash2 } from "lucide-react";
+import { Plus, Trash2 } from "lucide-react";
 
 interface Reward {
   id?: string;
@@ -121,7 +121,7 @@ const SpinSettingsDialog = ({ open, onOpenChange }: Props) => {
       <DialogContent className="w-[95vw] max-w-lg mx-auto p-0 overflow-hidden flex flex-col max-h-[90vh]">
         <DialogHeader className="p-4 border-b">
           <DialogTitle className="flex items-center gap-2 text-sm">
-            <Sparkles className="w-4 h-4 text-primary" /> Setting Hadiah Buka Kotak
+             Setting Hadiah Buka Kotak
           </DialogTitle>
           <DialogDescription className="text-[11px]">
             Label = nama hadiah. Hadiah = nominal saldo (isi 0 untuk hadiah non-saldo). Total persentase harus 100%.

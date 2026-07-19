@@ -42,7 +42,6 @@ const AdminProducts = () => {
     promo_daily_income: "",
     promo_validity: "",
     max_per_user: "1",
-    term_type: "long",
     stock: "",
     profit_mode: "daily",
   });
@@ -64,7 +63,7 @@ const AdminProducts = () => {
   const calculateTotalIncome = (dailyIncome: number, validity: number) => dailyIncome * validity;
 
   const resetForm = () => {
-    setFormData({ name: "", price: "", daily_income: "", validity: "", vip_level: "0", image: "", description: "", category: "reguler", promo_price: "", promo_daily_income: "", promo_validity: "", max_per_user: "1", term_type: "long", stock: "", profit_mode: "daily" });
+    setFormData({ name: "", price: "", daily_income: "", validity: "", vip_level: "0", image: "", description: "", category: "reguler", promo_price: "", promo_daily_income: "", promo_validity: "", max_per_user: "1", stock: "", profit_mode: "daily" });
   };
 
   const openCreateDialog = () => {
@@ -93,7 +92,6 @@ const AdminProducts = () => {
       promo_daily_income: product.promo_daily_income?.toString() || "",
       promo_validity: product.promo_validity?.toString() || "",
       max_per_user: product.max_per_user == null ? "0" : product.max_per_user.toString(),
-      term_type: (product as any).term_type === 'short' ? 'short' : 'long',
       stock: (product as any).stock == null ? "" : String((product as any).stock),
       profit_mode: (product as any).profit_mode === 'locked' ? 'locked' : 'daily',
     });
@@ -183,7 +181,6 @@ const AdminProducts = () => {
       promo_daily_income: formData.promo_daily_income ? parseInt(formData.promo_daily_income) : null,
       promo_validity: formData.promo_validity ? parseInt(formData.promo_validity) : null,
       max_per_user: isNaN(maxPerUserNum) || maxPerUserNum <= 0 ? null : maxPerUserNum,
-      term_type: formData.term_type === 'short' ? 'short' : 'long',
       stock: formData.stock.trim() === "" ? null : Math.max(0, parseInt(formData.stock) || 0),
       profit_mode: formData.profit_mode === 'locked' ? 'locked' : 'daily',
     } as any;
@@ -262,11 +259,8 @@ const AdminProducts = () => {
                          {product.category === 'promo' ? '🔥 Promo' : '👑 VIP'}
                        </Badge>
                      )}
-                     <Badge className={`text-[10px] ml-1 ${(product as any).term_type === 'short' ? 'bg-amber-500/20 text-amber-600 border border-amber-500/40' : 'bg-emerald-500/20 text-emerald-600 border border-emerald-500/40'}`}>
-                       {(product as any).term_type === 'short' ? '⚡ Jangka Pendek' : '📈 Jangka Panjang'}
-                     </Badge>
-                     <Badge className={`text-[10px] ml-1 ${(product as any).profit_mode === 'locked' ? 'bg-primary/15 text-primary border border-primary/40' : 'bg-muted text-muted-foreground border border-border'}`}>
-                       {(product as any).profit_mode === 'locked' ? '🔒 Locked Payout' : '💰 Profit Harian'}
+                    <Badge className={`text-[10px] ml-1 ${(product as any).profit_mode === 'locked' ? 'bg-primary/15 text-primary border border-primary/40' : 'bg-emerald-500/20 text-emerald-600 border border-emerald-500/40'}`}>
+                      {(product as any).profit_mode === 'locked' ? '🔒 Terkunci' : '💰 Harian'}
                      </Badge>
                      <Badge className={`text-[10px] ml-1 ${product.is_active ? 'bg-emerald-500/15 text-emerald-600 border border-emerald-500/40' : 'bg-destructive/15 text-destructive border border-destructive/40'}`}>
                        {product.is_active ? '🟢 Dibuka' : '🔴 Tertutup'}
@@ -319,19 +313,6 @@ const AdminProducts = () => {
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-2"><Label>Level VIP</Label><Select value={formData.vip_level} onValueChange={(value) => setFormData({ ...formData, vip_level: value })}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent>{[0, 1, 2, 3, 4, 5].map((level) => <SelectItem key={level} value={level.toString()}>VIP {level}</SelectItem>)}</SelectContent></Select></div>
               <div className="space-y-2"><Label>Kategori</Label><Select value={formData.category} onValueChange={(value) => setFormData({ ...formData, category: value })}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent><SelectItem value="reguler">Reguler</SelectItem><SelectItem value="promo">🔥 Promo</SelectItem><SelectItem value="vip">👑 VIP</SelectItem></SelectContent></Select></div>
-            </div>
-            <div className="space-y-2">
-              <Label>Jenis Kontrak (Term)</Label>
-              <Select value={formData.term_type} onValueChange={(value) => setFormData({ ...formData, term_type: value })}>
-                <SelectTrigger><SelectValue /></SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="long">📈 Jangka Panjang (dihitung untuk syarat naik VIP)</SelectItem>
-                  <SelectItem value="short">⚡ Jangka Pendek (TIDAK dihitung untuk syarat naik VIP)</SelectItem>
-                </SelectContent>
-              </Select>
-              <p className="text-[10px] text-muted-foreground">
-                Jangka Panjang = pembelian bawahan menaikkan progres VIP upline. Jangka Pendek = pembelian bawahan tidak berpengaruh ke syarat kenaikan level upline.
-              </p>
             </div>
             <div className="space-y-2">
               <Label>Mode Profit</Label>

@@ -149,7 +149,7 @@ const InvestDialog = ({ open, onOpenChange, product, balance, onSuccess }: Inves
         type: 'invest',
         amount: totalPrice,
         status: 'success',
-        description: `Sewa Robot${quantity > 1 ? ` (x${quantity})` : ''}`,
+        description: `Pembelian Produk${quantity > 1 ? ` (x${quantity})` : ''}`,
       });
 
       // Process referral commission for upline (commission on purchase)

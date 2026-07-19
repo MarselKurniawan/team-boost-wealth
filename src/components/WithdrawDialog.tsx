@@ -6,7 +6,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
 import { createTransaction, updateProfile, getBankAccounts, formatCurrency, BankAccount } from "@/lib/database";
 import { cn } from "@/lib/utils";
-import { ArrowUpFromLine, Wallet, Landmark, Check, Clock, AlertCircle, Sparkles } from "lucide-react";
+import { ArrowUpFromLine, Wallet, Landmark, Check, Clock, AlertCircle } from "lucide-react";
 
 interface WithdrawDialogProps {
   open: boolean;
@@ -40,8 +40,8 @@ const WithdrawDialog = ({ open, onOpenChange, balance, onSuccess }: WithdrawDial
   const quickPct = [25, 50, 75, 100];
 
   const handleSubmit = async () => {
-    if (!amountNum || amountNum < 50000) {
-      toast({ title: "Jumlah kurang", description: "Minimum withdraw Rp 50.000", variant: "destructive" });
+    if (!amountNum || amountNum < 40000) {
+      toast({ title: "Jumlah kurang", description: "Minimum withdraw Rp 40.000", variant: "destructive" });
       return;
     }
     if (amountNum > balance) {
@@ -89,7 +89,7 @@ const WithdrawDialog = ({ open, onOpenChange, balance, onSuccess }: WithdrawDial
         <div className="relative overflow-hidden pt-5 pb-16 px-5 bg-gradient-to-br from-[#0b1e5c] via-[#1e40af] to-[#3b82f6]">
           <div className="absolute -top-12 -right-8 w-44 h-44 rounded-full bg-cyan-300/15 blur-2xl" />
           <div className="absolute -bottom-6 -left-8 w-32 h-32 rounded-full bg-white/10 blur-2xl" />
-          <Sparkles className="absolute top-4 right-6 w-3.5 h-3.5 text-white/50" />
+          
 
           <DialogHeader className="relative text-left space-y-1">
             <p className="text-[9px] uppercase tracking-[0.3em] text-white/70 font-semibold">Tarik Dana</p>
