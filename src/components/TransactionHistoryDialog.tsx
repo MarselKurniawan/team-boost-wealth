@@ -35,7 +35,7 @@ const labelOf = (type: string) => {
     rabat: "Rabat Referral",
     checkin: "Check-in Harian",
     spin: "Roda Putar",
-    coupon: "Kupon",
+    coupon: "Redeem Code",
     referral: "Bonus Referral",
   };
   return map[type] || type;

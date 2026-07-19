@@ -143,7 +143,7 @@ const Admin = () => {
 
     const result = await createCoupon(code, { max_uses, reward_min, reward_max });
     if (result) {
-      toast({ title: "Kupon Dibuat", description: `${code} · ${max_uses}x · ${formatCurrency(reward_min)}-${formatCurrency(reward_max)}` });
+      toast({ title: "Redeem Code Dibuat", description: `${code} · ${max_uses}x · ${formatCurrency(reward_min)}-${formatCurrency(reward_max)}` });
       setCouponForm({ code: "", max_uses: "1", reward_min: "100", reward_max: "1000" });
       loadData();
     } else {
@@ -207,7 +207,7 @@ const Admin = () => {
 
   const handleDeleteCoupon = async (id: string) => {
     await deleteCoupon(id);
-    toast({ title: "Kupon Dihapus" });
+    toast({ title: "Redeem Code Dihapus" });
     loadData();
   };
 
