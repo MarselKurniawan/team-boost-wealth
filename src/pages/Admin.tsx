@@ -49,8 +49,7 @@ import {
   DollarSign,
   Clock,
   Crown,
-  Sparkles,
-  Shield,
+    Shield,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -493,7 +492,7 @@ const Admin = () => {
             <Crown className="w-3.5 h-3.5" />
           </Button>
           <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => setSpinDialogOpen(true)} title="Setting Hadiah Buka Kotak">
-            <Sparkles className="w-3.5 h-3.5" />
+            
           </Button>
 
           <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => setLegalityDialogOpen(true)} title="Legalitas">

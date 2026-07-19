@@ -5,7 +5,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { formatCurrency, updateProfile, createTransaction } from "@/lib/database";
-import { Sparkles, Gift, Ticket, PackageOpen } from "lucide-react";
+import { Gift, Ticket, PackageOpen } from "lucide-react";
 
 interface SpinWheelDialogProps {
   open: boolean;

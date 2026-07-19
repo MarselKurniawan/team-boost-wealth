@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import { Button } from "@/components/ui/button";
-import { Users, Copy, Link2, Gift, Image as ImageIcon, Info, ChevronRight, Crown, Sparkles, TrendingUp } from "lucide-react";
+import { Users, Copy, Link2, Gift, Image as ImageIcon, Info, ChevronRight, Crown, TrendingUp } from "lucide-react";
 import { WhatsAppIcon } from "@/components/icons/WhatsAppIcon";
 import { useAuth } from "@/hooks/useAuth";
 import { formatCurrency, Profile } from "@/lib/database";

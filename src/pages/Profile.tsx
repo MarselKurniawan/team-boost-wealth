@@ -8,7 +8,7 @@ import {
   User as UserIcon, Shield, LogOut, ChevronRight, Copy, Eye, EyeOff,
   ClipboardList, Receipt, Crown, Users, ArrowDownToLine, ArrowUpFromLine,
   Lock, Landmark, Headphones, Share2,
-  FileText, Sparkles, TrendingUp, Wallet, Settings, Building2,
+  FileText, TrendingUp, Wallet, Settings, Building2,
 } from "lucide-react";
 
 import ProfileDialog from "@/components/ProfileDialog";

@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
 import { useCoupon, formatCurrency } from "@/lib/database";
-import { Ticket, Gift, Sparkles } from "lucide-react";
+import { Ticket, Gift } from "lucide-react";
 
 interface CouponDialogProps {
   open: boolean;
@@ -70,7 +70,7 @@ const CouponDialog = ({ open, onOpenChange, onSuccess, prefillCode }: CouponDial
               </div>
               <div className="space-y-2">
                 <div className="flex items-center justify-center gap-2">
-                  <Sparkles className="w-5 h-5 text-vip-gold" /><h3 className="text-xl font-bold text-foreground">Selamat!</h3><Sparkles className="w-5 h-5 text-vip-gold" />
+                  <h3 className="text-xl font-bold text-foreground">Selamat!</h3>
                 </div>
                 <p className="text-sm text-muted-foreground">Anda mendapatkan hadiah</p>
                 <p className="text-3xl font-bold text-success">{formatCurrency(reward)}</p>

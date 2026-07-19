@@ -8,7 +8,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { formatCurrency } from "@/lib/database";
 import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
-import { Wallet, Sparkles, ChevronRight, ExternalLink, ShieldCheck, Check } from "lucide-react";
+import { Wallet, ChevronRight, ExternalLink, ShieldCheck, Check } from "lucide-react";
 
 interface RechargeDialogProps {
   open: boolean;
