@@ -124,17 +124,17 @@ const Admin = () => {
   const [couponForm, setCouponForm] = useState({ code: "", max_uses: "1", reward_min: "100", reward_max: "1000" });
 
   const generateRandomCode = () => {
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    const chars = '0123456789';
     let code = '';
-    for (let i = 0; i < 6; i++) code += chars.charAt(Math.floor(Math.random() * chars.length));
+    for (let i = 0; i < 8; i++) code += chars.charAt(Math.floor(Math.random() * chars.length));
     setCouponForm(prev => ({ ...prev, code }));
   };
 
   const generateCoupon = async () => {
-    let code = couponForm.code.trim().toUpperCase();
+    let code = couponForm.code.replace(/\D/g, "");
     if (!code) {
-      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-      for (let i = 0; i < 6; i++) code += chars.charAt(Math.floor(Math.random() * chars.length));
+      const chars = '0123456789';
+      for (let i = 0; i < 8; i++) code += chars.charAt(Math.floor(Math.random() * chars.length));
     }
     const max_uses = Math.max(1, parseInt(couponForm.max_uses) || 1);
     const reward_min = Math.max(0, parseInt(couponForm.reward_min) || 0);
@@ -574,16 +574,18 @@ const Admin = () => {
       <Dialog open={couponDialogOpen} onOpenChange={setCouponDialogOpen}>
         <DialogContent className="w-[95vw] max-w-md mx-auto">
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-2"><Ticket className="w-5 h-5 text-primary" />Kelola Kupon</DialogTitle>
+            <DialogTitle className="flex items-center gap-2"><Ticket className="w-5 h-5 text-primary" />Kelola Redeem Code</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
             <div className="space-y-3 p-3 rounded-lg border border-dashed border-border bg-muted/30">
               <div className="space-y-1.5">
-                <Label className="text-[11px]">Kode Kupon (opsional)</Label>
+                <Label className="text-[11px]">Redeem Code (opsional, angka saja)</Label>
                 <div className="flex gap-2">
                   <Input
+                    inputMode="numeric"
+                    pattern="[0-9]*"
                     value={couponForm.code}
-                    onChange={(e) => setCouponForm({ ...couponForm, code: e.target.value.toUpperCase() })}
+                    onChange={(e) => setCouponForm({ ...couponForm, code: e.target.value.replace(/\D/g, "") })}
                     placeholder="Auto-generate jika kosong"
                     className="h-8 text-xs font-mono"
                   />
@@ -627,7 +629,7 @@ const Admin = () => {
                 </div>
               </div>
               <Button onClick={generateCoupon} className="w-full h-9 text-xs">
-                <Ticket className="w-4 h-4 mr-2" />Buat Kupon
+                <Ticket className="w-4 h-4 mr-2" />Buat Redeem Code
               </Button>
             </div>
 
