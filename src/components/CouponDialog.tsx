@@ -24,7 +24,7 @@ const CouponDialog = ({ open, onOpenChange, onSuccess, prefillCode }: CouponDial
   const [showReward, setShowReward] = useState(false);
 
   useEffect(() => {
-    if (open && prefillCode) setCouponCode(prefillCode.toUpperCase());
+    if (open && prefillCode) setCouponCode(prefillCode.replace(/\D/g, ""));
   }, [open, prefillCode]);
 
   const handleSubmit = async () => {
