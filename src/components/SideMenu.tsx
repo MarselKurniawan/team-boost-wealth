@@ -53,9 +53,9 @@ const SideMenu = ({ open, onOpenChange }: Props) => {
           {/* VIP card */}
           <div className="mx-4 mt-4 rounded-2xl overflow-hidden bg-gradient-to-br from-[#e6efff] to-[#dbe7ff] border border-emerald-100">
             <div className="px-3 py-2.5 flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-gradient-to-br from-[#047857] to-[#10b981] text-white text-[10px] font-bold">
-                  <Crown className="w-2.5 h-2.5" /> VIP{profile?.vip_level ?? 0}
+              <div className="flex items-center gap-2 min-w-0">
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-gradient-to-br from-[#047857] to-[#10b981] text-white text-[10px] font-bold shrink-0">
+                  <Crown className="w-2.5 h-2.5" /> L{profile?.vip_level ?? 0}
                 </span>
                 <span className="text-[10px] font-semibold text-foreground truncate">{vipTitle}</span>
               </div>
