@@ -209,7 +209,7 @@ const InvestDialog = ({ open, onOpenChange, product, balance, onSuccess }: Inves
                 <div className="flex items-start justify-between mb-3">
                   <div>
                     <h3 className="font-semibold text-foreground">{product.name}</h3>
-                    <Badge variant="vip" className="text-xs mt-1">VIP {product.vip_level}</Badge>
+                    <Badge variant="vip" className="text-xs mt-1">{titleFor(product.vip_level)}</Badge>
                   </div>
                   <p className="text-lg font-bold text-primary">{formatCurrency(product.price)}/unit</p>
                 </div>
