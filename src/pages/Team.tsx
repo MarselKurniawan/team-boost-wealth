@@ -95,7 +95,7 @@ const Team = () => {
               <p className="text-[10px] uppercase tracking-[0.28em] text-muted-foreground font-semibold">Tingkatan Saya</p>
               <p className="mt-0.5 font-heading text-xl font-bold text-foreground truncate">{currentVipTitle}</p>
               <div className="mt-1 inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-primary/10 text-primary">
-                <span className="text-[9px] font-bold uppercase tracking-wider">VIP {currentVipLevel}</span>
+                <span className="text-[9px] font-bold uppercase tracking-wider">Level {currentVipLevel}</span>
               </div>
             </div>
           </div>
