@@ -255,7 +255,7 @@ const AdminProducts = () => {
                 <div className="flex-1 py-3 pr-3">
                   <div className="flex items-start justify-between mb-2">
                     <div><h3 className="font-semibold text-foreground">{product.name}</h3><p className="text-xs text-muted-foreground">{product.description}</p></div>
-                     <Badge variant="vip" className="text-xs">VIP {product.vip_level}</Badge>
+                     <Badge variant="vip" className="text-xs">{titleFor(product.vip_level)}</Badge>
                      {product.category !== 'reguler' && (
                        <Badge className={product.category === 'promo' ? 'bg-destructive/90 text-destructive-foreground text-[10px] ml-1' : 'bg-vip-gold/90 text-secondary-foreground text-[10px] ml-1'}>
                          {product.category === 'promo' ? '🔥 Promo' : '👑 VIP'}
