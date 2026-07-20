@@ -18,6 +18,7 @@ import {
   Info
 } from "lucide-react";
 import { Product, formatCurrency } from "@/lib/database";
+import { useVipTitles } from "@/hooks/useVipTitles";
 
 interface ProductDetailDialogProps {
   open: boolean;
