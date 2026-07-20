@@ -313,7 +313,7 @@ const AdminProducts = () => {
               <div className="flex items-center justify-between"><div className="flex items-center gap-2"><TrendingUp className="w-4 h-4 text-success" /><span className="text-sm text-muted-foreground">Total Penghasilan (otomatis)</span></div><span className="font-bold text-success">{formatCurrency(calculatedTotalIncome)}</span></div>
             </div>
             <div className="grid grid-cols-2 gap-3">
-              <div className="space-y-2"><Label>Level VIP</Label><Select value={formData.vip_level} onValueChange={(value) => setFormData({ ...formData, vip_level: value })}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent>{[0, 1, 2, 3, 4, 5].map((level) => <SelectItem key={level} value={level.toString()}>VIP {level}</SelectItem>)}</SelectContent></Select></div>
+              <div className="space-y-2"><Label>Level VIP</Label><Select value={formData.vip_level} onValueChange={(value) => setFormData({ ...formData, vip_level: value })}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent>{(vipLevels.length ? vipLevels : [0,1,2,3,4,5]).map((level) => <SelectItem key={level} value={level.toString()}>{titleFor(level)}</SelectItem>)}</SelectContent></Select></div>
               <div className="space-y-2"><Label>Kategori</Label><Select value={formData.category} onValueChange={(value) => setFormData({ ...formData, category: value })}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent><SelectItem value="reguler">Reguler</SelectItem><SelectItem value="promo">🔥 Promo</SelectItem><SelectItem value="vip">👑 VIP</SelectItem></SelectContent></Select></div>
             </div>
             <div className="space-y-2">
