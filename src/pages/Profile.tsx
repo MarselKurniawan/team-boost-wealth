@@ -112,7 +112,7 @@ const Profile = () => {
         {/* Decorative blobs */}
         <div className="absolute -top-16 -right-10 w-56 h-56 rounded-full bg-white/10 blur-2xl" />
         <div className="absolute top-10 -left-16 w-48 h-48 rounded-full bg-lime-300/20 blur-3xl" />
-        <div className="absolute bottom-0 right-1/3 w-32 h-32 rounded-full bg-indigo-300/20 blur-2xl" />
+        <div className="absolute bottom-0 right-1/3 w-32 h-32 rounded-full bg-emerald-400/20 blur-2xl" />
         {/* Sparkle */}
         
         
