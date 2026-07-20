@@ -19,6 +19,7 @@ interface InvestDialogProps {
 
 const InvestDialog = ({ open, onOpenChange, product, balance, onSuccess }: InvestDialogProps) => {
   const { toast } = useToast();
+  const { titleFor } = useVipTitles();
   const { user, profile } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [success, setSuccess] = useState(false);
