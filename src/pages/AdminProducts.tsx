@@ -18,11 +18,13 @@ import {
   Product,
 } from "@/lib/database";
 import { supabase } from "@/integrations/supabase/client";
+import { useVipTitles } from "@/hooks/useVipTitles";
 import { Package, Plus, Edit, Trash2, ArrowLeft, TrendingUp, DollarSign, Upload, Image, Loader2 } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const AdminProducts = () => {
   const { toast } = useToast();
+  const { titleFor, levels: vipLevels } = useVipTitles();
   const [products, setProducts] = useState<Product[]>([]);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -236,9 +238,9 @@ const AdminProducts = () => {
       {/* Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         <Card className="shadow-card"><CardContent className="p-4"><div className="flex items-center gap-2 mb-2"><Package className="w-4 h-4 text-primary" /><p className="text-xs text-muted-foreground">Total Produk</p></div><p className="text-2xl font-bold">{products.length}</p></CardContent></Card>
-        <Card className="shadow-card"><CardContent className="p-4"><div className="flex items-center gap-2 mb-2"><TrendingUp className="w-4 h-4 text-success" /><p className="text-xs text-muted-foreground">VIP 0-1</p></div><p className="text-2xl font-bold">{products.filter((p) => p.vip_level <= 1).length}</p></CardContent></Card>
-        <Card className="shadow-card"><CardContent className="p-4"><div className="flex items-center gap-2 mb-2"><DollarSign className="w-4 h-4 text-accent" /><p className="text-xs text-muted-foreground">VIP 2-3</p></div><p className="text-2xl font-bold">{products.filter((p) => p.vip_level >= 2 && p.vip_level <= 3).length}</p></CardContent></Card>
-        <Card className="shadow-card"><CardContent className="p-4"><div className="flex items-center gap-2 mb-2"><TrendingUp className="w-4 h-4 text-vip-gold" /><p className="text-xs text-muted-foreground">VIP 4-5</p></div><p className="text-2xl font-bold">{products.filter((p) => p.vip_level >= 4).length}</p></CardContent></Card>
+        <Card className="shadow-card"><CardContent className="p-4"><div className="flex items-center gap-2 mb-2"><TrendingUp className="w-4 h-4 text-success" /><p className="text-xs text-muted-foreground">Aktif</p></div><p className="text-2xl font-bold">{products.filter((p) => p.is_active).length}</p></CardContent></Card>
+        <Card className="shadow-card"><CardContent className="p-4"><div className="flex items-center gap-2 mb-2"><DollarSign className="w-4 h-4 text-accent" /><p className="text-xs text-muted-foreground">Harian</p></div><p className="text-2xl font-bold">{products.filter((p) => (p as any).profit_mode !== 'locked').length}</p></CardContent></Card>
+        <Card className="shadow-card"><CardContent className="p-4"><div className="flex items-center gap-2 mb-2"><TrendingUp className="w-4 h-4 text-vip-gold" /><p className="text-xs text-muted-foreground">Terkunci</p></div><p className="text-2xl font-bold">{products.filter((p) => (p as any).profit_mode === 'locked').length}</p></CardContent></Card>
       </div>
 
       {/* Products List */}
@@ -253,7 +255,7 @@ const AdminProducts = () => {
                 <div className="flex-1 py-3 pr-3">
                   <div className="flex items-start justify-between mb-2">
                     <div><h3 className="font-semibold text-foreground">{product.name}</h3><p className="text-xs text-muted-foreground">{product.description}</p></div>
-                     <Badge variant="vip" className="text-xs">VIP {product.vip_level}</Badge>
+                     <Badge variant="vip" className="text-xs">{titleFor(product.vip_level)}</Badge>
                      {product.category !== 'reguler' && (
                        <Badge className={product.category === 'promo' ? 'bg-destructive/90 text-destructive-foreground text-[10px] ml-1' : 'bg-vip-gold/90 text-secondary-foreground text-[10px] ml-1'}>
                          {product.category === 'promo' ? '🔥 Promo' : '👑 VIP'}
@@ -311,7 +313,7 @@ const AdminProducts = () => {
               <div className="flex items-center justify-between"><div className="flex items-center gap-2"><TrendingUp className="w-4 h-4 text-success" /><span className="text-sm text-muted-foreground">Total Penghasilan (otomatis)</span></div><span className="font-bold text-success">{formatCurrency(calculatedTotalIncome)}</span></div>
             </div>
             <div className="grid grid-cols-2 gap-3">
-              <div className="space-y-2"><Label>Level VIP</Label><Select value={formData.vip_level} onValueChange={(value) => setFormData({ ...formData, vip_level: value })}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent>{[0, 1, 2, 3, 4, 5].map((level) => <SelectItem key={level} value={level.toString()}>VIP {level}</SelectItem>)}</SelectContent></Select></div>
+              <div className="space-y-2"><Label>Level VIP</Label><Select value={formData.vip_level} onValueChange={(value) => setFormData({ ...formData, vip_level: value })}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent>{(vipLevels.length ? vipLevels : [0,1,2,3,4,5]).map((level) => <SelectItem key={level} value={level.toString()}>{titleFor(level)}</SelectItem>)}</SelectContent></Select></div>
               <div className="space-y-2"><Label>Kategori</Label><Select value={formData.category} onValueChange={(value) => setFormData({ ...formData, category: value })}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent><SelectItem value="reguler">Reguler</SelectItem><SelectItem value="promo">🔥 Promo</SelectItem><SelectItem value="vip">👑 VIP</SelectItem></SelectContent></Select></div>
             </div>
             <div className="space-y-2">

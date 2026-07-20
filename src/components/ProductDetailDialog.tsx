@@ -18,6 +18,7 @@ import {
   Info
 } from "lucide-react";
 import { Product, formatCurrency } from "@/lib/database";
+import { useVipTitles } from "@/hooks/useVipTitles";
 
 interface ProductDetailDialogProps {
   open: boolean;
@@ -34,6 +35,7 @@ const ProductDetailDialog = ({
   userName = "Pengguna",
   onInvest,
 }: ProductDetailDialogProps) => {
+  const { titleFor } = useVipTitles();
   if (!product) return null;
 
   return (
@@ -49,7 +51,7 @@ const ProductDetailDialog = ({
             />
             <div className="absolute inset-0 bg-gradient-to-t from-card via-card/50 to-transparent" />
             <Badge variant="vip" className="absolute top-4 right-4">
-              VIP {product.vip_level}
+              {titleFor(product.vip_level)}
             </Badge>
           </div>
 

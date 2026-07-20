@@ -20,12 +20,12 @@ const Layout = ({ children, wide = false }: { children: React.ReactNode; wide?: 
 
 
   return (
-    <div className="min-h-screen bg-[#f0f4fb] pb-24">
-      <header className="sticky top-0 z-30 border-b border-blue-100 bg-white/90 backdrop-blur">
+    <div className="min-h-screen bg-[#f0fbf4] pb-24">
+      <header className="sticky top-0 z-30 border-b border-emerald-100 bg-white/90 backdrop-blur">
         <div className={`mx-auto ${wide ? "max-w-4xl" : "max-w-md"} px-4 h-12 flex items-center justify-between`}>
           <button
             onClick={() => setMenuOpen(true)}
-            className="w-8 h-8 rounded-lg hover:bg-blue-50 flex items-center justify-center text-foreground"
+            className="w-8 h-8 rounded-lg hover:bg-emerald-50 flex items-center justify-center text-foreground"
             aria-label="Menu"
           >
             <Menu className="w-4 h-4" />
@@ -40,7 +40,7 @@ const Layout = ({ children, wide = false }: { children: React.ReactNode; wide?: 
           </div>
           <button
             onClick={() => navigate("/notifications")}
-            className="relative w-8 h-8 rounded-lg hover:bg-blue-50 flex items-center justify-center text-foreground"
+            className="relative w-8 h-8 rounded-lg hover:bg-emerald-50 flex items-center justify-center text-foreground"
             aria-label="Pesan"
           >
             <MessageSquare className="w-4 h-4" />
@@ -53,7 +53,7 @@ const Layout = ({ children, wide = false }: { children: React.ReactNode; wide?: 
 
       {/* Bottom nav with prominent center */}
       <nav className="fixed bottom-0 left-1/2 -translate-x-1/2 z-40 w-full max-w-md">
-        <div className="relative bg-white border-t border-blue-100 px-3 pt-2 pb-3">
+        <div className="relative bg-white border-t border-emerald-100 px-3 pt-2 pb-3">
           <div className="grid grid-cols-5 items-end gap-1">
             {items.map((item) => {
               const active = pathname === item.to;
@@ -61,8 +61,8 @@ const Layout = ({ children, wide = false }: { children: React.ReactNode; wide?: 
                 return (
                   <Link key={item.to} to={item.to} className="flex flex-col items-center -mt-6">
                     <div className={cn(
-                      "w-14 h-14 rounded-full flex items-center justify-center shadow-lg shadow-blue-500/40 ring-4 ring-white",
-                      "bg-gradient-to-br from-[#3b82f6] to-[#1e3a8a] text-white"
+                      "w-14 h-14 rounded-full flex items-center justify-center shadow-lg shadow-emerald-500/40 ring-4 ring-white",
+                      "bg-gradient-to-br from-[#10b981] to-[#065f46] text-white"
                     )}>
                       <item.icon className="w-6 h-6" strokeWidth={2.2} />
                     </div>

@@ -162,7 +162,7 @@ const Account = () => {
   return (
     <div className="space-y-3.5 p-4 pt-4">
       {/* Header banner — matches home wallet aesthetic */}
-      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-[#1e40af] to-[#3b82f6] p-3.5 text-white shadow-md shadow-blue-500/30">
+      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-[#047857] to-[#10b981] p-3.5 text-white shadow-md shadow-emerald-500/30">
         <div className="absolute -right-6 -top-6 w-24 h-24 rounded-full bg-white/10" />
         <div className="absolute right-4 bottom-1">
           <Package className="w-12 h-12 text-white/10" strokeWidth={1} />
@@ -176,7 +176,7 @@ const Account = () => {
 
       {/* Claimable Notification Banner */}
       {claimableInvestments.length > 0 && (
-        <div className="rounded-2xl bg-gradient-to-r from-emerald-50 to-cyan-50 border border-emerald-200 p-3 flex items-center gap-3">
+        <div className="rounded-2xl bg-gradient-to-r from-emerald-50 to-lime-50 border border-emerald-200 p-3 flex items-center gap-3">
           <div className="w-9 h-9 rounded-full bg-emerald-500 text-white flex items-center justify-center shrink-0">
             <Bell className="w-4 h-4" />
           </div>
@@ -190,8 +190,8 @@ const Account = () => {
       )}
 
       {/* Statistik — Blue tone redesign */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#1e3a8a] via-[#1e40af] to-[#3b82f6] p-4 shadow-lg shadow-blue-500/30">
-        <div className="absolute -top-10 -right-10 w-40 h-40 rounded-full bg-cyan-300/20 blur-2xl" />
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#065f46] via-[#047857] to-[#10b981] p-4 shadow-lg shadow-emerald-500/30">
+        <div className="absolute -top-10 -right-10 w-40 h-40 rounded-full bg-lime-300/20 blur-2xl" />
         <div className="absolute -bottom-8 -left-8 w-32 h-32 rounded-full bg-white/10 blur-2xl" />
 
         <div className="relative flex items-center justify-between mb-3">
@@ -250,7 +250,7 @@ const Account = () => {
             return (
               <div
                 key={inv.id}
-                className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-[#1e40af] to-[#3b82f6] p-3.5 text-white shadow-md shadow-blue-500/30"
+                className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-[#047857] to-[#10b981] p-3.5 text-white shadow-md shadow-emerald-500/30"
               >
                 <div className="absolute -right-6 -top-6 w-24 h-24 rounded-full bg-white/10" />
                 <div className="absolute right-6 bottom-2">
@@ -295,7 +295,7 @@ const Account = () => {
                   </div>
                 </div>
 
-                <div className="relative rounded-xl bg-gradient-to-r from-blue-50 to-cyan-50 border border-blue-100 p-2 flex items-center gap-2">
+                <div className="relative rounded-xl bg-gradient-to-r from-emerald-50 to-lime-50 border border-emerald-100 p-2 flex items-center gap-2">
                   <div className="flex-1 min-w-0 pl-1">
                     <p className="text-[9px] font-semibold text-muted-foreground uppercase tracking-wider">
                       {isLocked ? "Payout otomatis" : "Profit hari ini"}
@@ -314,7 +314,7 @@ const Account = () => {
                   ) : canClaim ? (
                     <button
                       onClick={() => handleOpenClaimDialog(inv)}
-                      className="h-8 px-3.5 rounded-xl bg-gradient-to-br from-[#3b82f6] to-[#1e3a8a] text-white hover:opacity-95 text-[11px] font-bold shrink-0 shadow-md shadow-blue-500/30 flex items-center gap-1.5 transition"
+                      className="h-8 px-3.5 rounded-xl bg-gradient-to-br from-[#10b981] to-[#065f46] text-white hover:opacity-95 text-[11px] font-bold shrink-0 shadow-md shadow-emerald-500/30 flex items-center gap-1.5 transition"
                     >
                       <Gift className="w-3.5 h-3.5" />
                       Klaim
@@ -322,7 +322,7 @@ const Account = () => {
                   ) : (
                     <button
                       disabled
-                      className="h-8 px-3 rounded-xl bg-white border border-blue-100 text-[10px] font-semibold text-foreground flex items-center gap-1.5 shrink-0"
+                      className="h-8 px-3 rounded-xl bg-white border border-emerald-100 text-[10px] font-semibold text-foreground flex items-center gap-1.5 shrink-0"
                     >
                       <Clock className="w-3.5 h-3.5 text-primary" />
                       <ProfitCountdown lastClaimedAt={inv.last_claimed_at} createdAt={inv.created_at} />
@@ -444,13 +444,13 @@ const TransactionLog = ({
   ];
 
   return (
-    <div className="rounded-2xl bg-white border border-blue-100 shadow-sm overflow-hidden">
-      <div className="flex items-center justify-between p-3.5 border-b border-blue-50">
+    <div className="rounded-2xl bg-white border border-emerald-100 shadow-sm overflow-hidden">
+      <div className="flex items-center justify-between p-3.5 border-b border-emerald-50">
         <div className="flex items-center gap-1.5">
           <div className="w-1 h-4 rounded-full bg-primary" />
           <h3 className="text-[13px] font-heading font-bold text-foreground">Catatan Transaksi</h3>
         </div>
-        <div className="flex bg-blue-50 rounded-full p-0.5">
+        <div className="flex bg-emerald-50 rounded-full p-0.5">
           {filters.map((f) => (
             <button
               key={f.key}
@@ -460,7 +460,7 @@ const TransactionLog = ({
               }}
               className={`px-2.5 h-6 text-[10px] font-bold rounded-full transition ${
                 filter === f.key
-                  ? "bg-gradient-to-r from-[#1e40af] to-[#3b82f6] text-white shadow-sm"
+                  ? "bg-gradient-to-r from-[#047857] to-[#10b981] text-white shadow-sm"
                   : "text-primary/70 hover:text-primary"
               }`}
             >
@@ -473,7 +473,7 @@ const TransactionLog = ({
       <div className="p-2">
         {filtered.length === 0 ? (
           <div className="text-center py-10">
-            <div className="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center mx-auto mb-2">
+            <div className="w-12 h-12 rounded-2xl bg-emerald-50 flex items-center justify-center mx-auto mb-2">
               <Wallet className="w-5 h-5 text-primary/50" />
             </div>
             <p className="text-[11px] font-semibold text-foreground">Belum ada transaksi</p>
@@ -487,7 +487,7 @@ const TransactionLog = ({
               return (
                 <div
                   key={transaction.id}
-                  className="relative flex items-center justify-between gap-2 p-2.5 rounded-xl bg-gradient-to-r from-blue-50/40 to-transparent border border-blue-50 hover:border-blue-200 transition"
+                  className="relative flex items-center justify-between gap-2 p-2.5 rounded-xl bg-gradient-to-r from-emerald-50/40 to-transparent border border-emerald-50 hover:border-emerald-200 transition"
                 >
                   <div
                     className={`absolute left-0 top-2 bottom-2 w-1 rounded-r-full ${isPositive ? "bg-emerald-400" : "bg-rose-300"}`}
@@ -529,14 +529,14 @@ const TransactionLog = ({
                 </p>
                 <div className="flex items-center gap-1">
                   <button
-                    className="h-7 w-7 rounded-full bg-blue-50 text-primary flex items-center justify-center disabled:opacity-40"
+                    className="h-7 w-7 rounded-full bg-emerald-50 text-primary flex items-center justify-center disabled:opacity-40"
                     disabled={currentPage <= 1}
                     onClick={() => setPage(currentPage - 1)}
                   >
                     <ChevronLeft className="w-3.5 h-3.5" />
                   </button>
                   <button
-                    className="h-7 w-7 rounded-full bg-blue-50 text-primary flex items-center justify-center disabled:opacity-40"
+                    className="h-7 w-7 rounded-full bg-emerald-50 text-primary flex items-center justify-center disabled:opacity-40"
                     disabled={currentPage >= totalPages}
                     onClick={() => setPage(currentPage + 1)}
                   >

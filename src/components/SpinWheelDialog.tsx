@@ -146,9 +146,9 @@ const SpinWheelDialog = ({ open, onOpenChange, onSuccess }: SpinWheelDialogProps
     <Dialog open={open} onOpenChange={(o) => !opening && onOpenChange(o)}>
       <DialogContent className="sm:max-w-md p-0 overflow-hidden border-0">
         {/* Gradient header */}
-        <div className="relative overflow-hidden pt-6 pb-14 px-5 bg-gradient-to-br from-[#1e3a8a] via-[#1e40af] to-[#3b82f6]">
+        <div className="relative overflow-hidden pt-6 pb-14 px-5 bg-gradient-to-br from-[#065f46] via-[#047857] to-[#10b981]">
           <div className="absolute -top-8 -right-10 w-40 h-40 rounded-full bg-white/10 blur-2xl" />
-          <div className="absolute top-4 -left-8 w-28 h-28 rounded-full bg-cyan-300/20 blur-xl" />
+          <div className="absolute top-4 -left-8 w-28 h-28 rounded-full bg-lime-300/20 blur-xl" />
           
           
 
@@ -193,12 +193,12 @@ const SpinWheelDialog = ({ open, onOpenChange, onSuccess }: SpinWheelDialogProps
                     onClick={() => handlePickBox(i)}
                     className={`group relative aspect-square rounded-2xl border-2 transition-all overflow-hidden ${
                       isOpen
-                        ? "border-primary bg-gradient-to-br from-primary/20 to-cyan-100 scale-105"
+                        ? "border-primary bg-gradient-to-br from-primary/20 to-lime-100 scale-105"
                         : isPicked
                         ? "border-primary bg-primary/10 animate-pulse"
                         : isDim
                         ? "border-border bg-muted/40 opacity-40"
-                        : "border-primary/30 bg-gradient-to-br from-[#1e40af] to-[#3b82f6] hover:scale-105 hover:border-primary shadow-md"
+                        : "border-primary/30 bg-gradient-to-br from-[#047857] to-[#10b981] hover:scale-105 hover:border-primary shadow-md"
                     } disabled:cursor-not-allowed`}
                   >
                     {/* Ribbon lines */}
@@ -250,7 +250,7 @@ const SpinWheelDialog = ({ open, onOpenChange, onSuccess }: SpinWheelDialogProps
             <Button
               onClick={reset}
               disabled={tickets.length === 0}
-              className="w-full h-11 rounded-full bg-gradient-to-r from-[#1e40af] to-[#3b82f6] text-white text-xs font-bold shadow-md"
+              className="w-full h-11 rounded-full bg-gradient-to-r from-[#047857] to-[#10b981] text-white text-xs font-bold shadow-md"
             >
               <Gift className="w-4 h-4 mr-1.5" />
               {tickets.length === 0 ? "Tiket Habis" : "Buka Kotak Lagi"}

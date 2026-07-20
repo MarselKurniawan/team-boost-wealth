@@ -7,6 +7,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { TrendingUp, CheckCircle2, Minus, Plus, Lock } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import { useVipTitles } from "@/hooks/useVipTitles";
 
 interface InvestDialogProps {
   open: boolean;
@@ -18,6 +19,7 @@ interface InvestDialogProps {
 
 const InvestDialog = ({ open, onOpenChange, product, balance, onSuccess }: InvestDialogProps) => {
   const { toast } = useToast();
+  const { titleFor } = useVipTitles();
   const { user, profile } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -207,7 +209,7 @@ const InvestDialog = ({ open, onOpenChange, product, balance, onSuccess }: Inves
                 <div className="flex items-start justify-between mb-3">
                   <div>
                     <h3 className="font-semibold text-foreground">{product.name}</h3>
-                    <Badge variant="vip" className="text-xs mt-1">VIP {product.vip_level}</Badge>
+                    <Badge variant="vip" className="text-xs mt-1">{titleFor(product.vip_level)}</Badge>
                   </div>
                   <p className="text-lg font-bold text-primary">{formatCurrency(product.price)}/unit</p>
                 </div>

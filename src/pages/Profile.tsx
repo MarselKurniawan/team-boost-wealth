@@ -88,31 +88,31 @@ const Profile = () => {
   const uid = profile.user_id.slice(0, 6).toUpperCase();
 
   const gridItems = [
-    { icon: ClipboardList, label: "Pesanan", desc: "Riwayat investasi", tint: "bg-blue-50 text-blue-600", action: () => navigate("/account") },
-    { icon: Receipt, label: "Tagihan", desc: "Riwayat transaksi", tint: "bg-sky-50 text-sky-600", action: () => setHistoryOpen(true) },
-    { icon: Crown, label: "VIP", desc: "Komisi hingga 15%", tint: "bg-indigo-50 text-indigo-600", action: () => setReferralOpen(true) },
-    { icon: Users, label: "Tim", desc: "Kelola referral", tint: "bg-cyan-50 text-cyan-600", action: () => navigate("/team") },
+    { icon: ClipboardList, label: "Pesanan", desc: "Riwayat investasi", tint: "bg-emerald-50 text-emerald-600", action: () => navigate("/account") },
+    { icon: Receipt, label: "Tagihan", desc: "Riwayat transaksi", tint: "bg-emerald-50 text-emerald-600", action: () => setHistoryOpen(true) },
+    { icon: Crown, label: "VIP", desc: "Komisi hingga 15%", tint: "bg-emerald-50 text-emerald-800", action: () => setReferralOpen(true) },
+    { icon: Users, label: "Tim", desc: "Kelola referral", tint: "bg-lime-50 text-lime-600", action: () => navigate("/team") },
   ];
 
   const listItems = [
-    { icon: ArrowDownToLine, label: "Riwayat Deposit", tint: "bg-blue-50 text-blue-600", action: () => setHistoryOpen(true) },
-    { icon: ArrowUpFromLine, label: "Riwayat Penarikan", tint: "bg-sky-50 text-sky-600", action: () => setHistoryOpen(true) },
-    { icon: Landmark, label: "Akun Bank", tint: "bg-indigo-50 text-indigo-600", action: () => setBankDialogOpen(true) },
-    { icon: Lock, label: "Ganti Password", tint: "bg-cyan-50 text-cyan-600", action: () => openProfileDialog("password") },
-    { icon: Headphones, label: "Layanan Pelanggan", tint: "bg-sky-50 text-sky-600", action: () => toast({ title: "Hubungi Kami", description: "WhatsApp: +62 812-3456-7890" }) },
-    { icon: Building2, label: "Profil Perusahaan", tint: "bg-blue-50 text-blue-600", action: () => setCompanyDialogOpen(true) },
-    { icon: FileText, label: "Legalitas Perusahaan", tint: "bg-indigo-50 text-indigo-600", action: () => setLegalityDialogOpen(true) },
+    { icon: ArrowDownToLine, label: "Riwayat Deposit", tint: "bg-emerald-50 text-emerald-600", action: () => setHistoryOpen(true) },
+    { icon: ArrowUpFromLine, label: "Riwayat Penarikan", tint: "bg-emerald-50 text-emerald-600", action: () => setHistoryOpen(true) },
+    { icon: Landmark, label: "Akun Bank", tint: "bg-emerald-50 text-emerald-800", action: () => setBankDialogOpen(true) },
+    { icon: Lock, label: "Ganti Password", tint: "bg-lime-50 text-lime-600", action: () => openProfileDialog("password") },
+    { icon: Headphones, label: "Layanan Pelanggan", tint: "bg-emerald-50 text-emerald-600", action: () => toast({ title: "Hubungi Kami", description: "WhatsApp: +62 812-3456-7890" }) },
+    { icon: Building2, label: "Profil Perusahaan", tint: "bg-emerald-50 text-emerald-600", action: () => setCompanyDialogOpen(true) },
+    { icon: FileText, label: "Legalitas Perusahaan", tint: "bg-emerald-50 text-emerald-800", action: () => setLegalityDialogOpen(true) },
   ];
 
 
   return (
-    <div className="bg-[#f0f4fb] min-h-screen pb-10">
+    <div className="bg-[#f0fbf4] min-h-screen pb-10">
       {/* Decorative gradient banner */}
-      <div className="relative overflow-hidden pt-6 pb-24 px-4 bg-gradient-to-br from-[#1e3a8a] via-[#1e40af] to-[#3b82f6]">
+      <div className="relative overflow-hidden pt-6 pb-24 px-4 bg-gradient-to-br from-[#065f46] via-[#047857] to-[#10b981]">
         {/* Decorative blobs */}
         <div className="absolute -top-16 -right-10 w-56 h-56 rounded-full bg-white/10 blur-2xl" />
-        <div className="absolute top-10 -left-16 w-48 h-48 rounded-full bg-cyan-300/20 blur-3xl" />
-        <div className="absolute bottom-0 right-1/3 w-32 h-32 rounded-full bg-indigo-300/20 blur-2xl" />
+        <div className="absolute top-10 -left-16 w-48 h-48 rounded-full bg-lime-300/20 blur-3xl" />
+        <div className="absolute bottom-0 right-1/3 w-32 h-32 rounded-full bg-emerald-400/20 blur-2xl" />
         {/* Sparkle */}
         
         
@@ -128,7 +128,7 @@ const Profile = () => {
       <div className="px-4 -mt-20 space-y-3 relative z-10">
         {/* Identity card with overlapping avatar */}
         <div className="bg-white rounded-3xl border border-white shadow-[0_10px_30px_-15px_rgba(30,64,175,0.35)] p-4 pt-8 relative">
-          <div className="absolute -top-8 left-4 w-16 h-16 rounded-2xl bg-gradient-to-br from-[#3b82f6] to-[#1e3a8a] p-[2px] shadow-lg shadow-blue-500/30">
+          <div className="absolute -top-8 left-4 w-16 h-16 rounded-2xl bg-gradient-to-br from-[#10b981] to-[#065f46] p-[2px] shadow-lg shadow-emerald-500/30">
             <div className="w-full h-full rounded-2xl bg-white flex items-center justify-center">
               <UserIcon className="w-8 h-8 text-primary" strokeWidth={1.75} />
             </div>
@@ -154,9 +154,9 @@ const Profile = () => {
         </div>
 
         {/* Balance card — decorated */}
-        <div className="relative overflow-hidden rounded-3xl p-4 bg-gradient-to-br from-[#1e40af] to-[#1e3a8a] text-white shadow-[0_10px_30px_-15px_rgba(30,64,175,0.55)]">
+        <div className="relative overflow-hidden rounded-3xl p-4 bg-gradient-to-br from-[#047857] to-[#065f46] text-white shadow-[0_10px_30px_-15px_rgba(30,64,175,0.55)]">
           <div className="absolute -right-8 -bottom-8 w-40 h-40 rounded-full bg-white/5" />
-          <div className="absolute -right-2 -top-6 w-24 h-24 rounded-full bg-cyan-300/10" />
+          <div className="absolute -right-2 -top-6 w-24 h-24 rounded-full bg-lime-300/10" />
           <div className="absolute top-3 right-3">
             <Wallet className="w-16 h-16 text-white/5" strokeWidth={1} />
           </div>
@@ -169,7 +169,7 @@ const Profile = () => {
                   {balanceHidden ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
                 </button>
               </div>
-              <TrendingUp className="w-4 h-4 text-cyan-300" />
+              <TrendingUp className="w-4 h-4 text-lime-300" />
             </div>
             <p className="mt-1 font-heading text-3xl font-bold break-all">
               {balanceHidden ? "••••••" : formatCurrency(profile.balance || 0)}
@@ -181,7 +181,7 @@ const Profile = () => {
               </div>
               <div className="rounded-xl bg-white/10 backdrop-blur-sm px-3 py-2 border border-white/10">
                 <p className="text-white/60">Pendapatan</p>
-                <p className="font-semibold break-all mt-0.5 text-cyan-200">{formatCurrency(profile.total_income || 0)}</p>
+                <p className="font-semibold break-all mt-0.5 text-lime-200">{formatCurrency(profile.total_income || 0)}</p>
               </div>
             </div>
             <div className="mt-4 grid grid-cols-2 gap-2">
@@ -207,7 +207,7 @@ const Profile = () => {
             <button
               key={item.label}
               onClick={item.action}
-              className="bg-white rounded-2xl border border-blue-100/60 shadow-[0_4px_15px_-8px_rgba(30,64,175,0.15)] p-3 text-left hover:-translate-y-0.5 hover:shadow-[0_8px_20px_-8px_rgba(30,64,175,0.25)] transition-all"
+              className="bg-white rounded-2xl border border-emerald-100/60 shadow-[0_4px_15px_-8px_rgba(30,64,175,0.15)] p-3 text-left hover:-translate-y-0.5 hover:shadow-[0_8px_20px_-8px_rgba(30,64,175,0.25)] transition-all"
             >
               <div className={`w-9 h-9 rounded-xl ${item.tint} flex items-center justify-center mb-2`}>
                 <item.icon className="w-4 h-4" strokeWidth={2} />
@@ -221,9 +221,9 @@ const Profile = () => {
         {/* Share referral CTA — accented */}
         <button
           onClick={() => setReferralOpen(true)}
-          className="w-full relative overflow-hidden rounded-2xl p-3 flex items-center gap-3 bg-gradient-to-r from-blue-50 via-white to-cyan-50 border border-blue-100 shadow-sm hover:shadow-md transition-shadow"
+          className="w-full relative overflow-hidden rounded-2xl p-3 flex items-center gap-3 bg-gradient-to-r from-emerald-50 via-white to-lime-50 border border-emerald-100 shadow-sm hover:shadow-md transition-shadow"
         >
-          <div className="absolute -right-4 -top-4 w-20 h-20 rounded-full bg-blue-100/50" />
+          <div className="absolute -right-4 -top-4 w-20 h-20 rounded-full bg-emerald-100/50" />
           <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-primary-glow flex items-center justify-center shrink-0 shadow-md relative">
             <Share2 className="w-4 h-4 text-white" strokeWidth={2.2} />
           </div>
@@ -235,13 +235,13 @@ const Profile = () => {
         </button>
 
         {/* Menu list */}
-        <div className="bg-white rounded-2xl border border-blue-100/60 shadow-[0_4px_15px_-8px_rgba(30,64,175,0.12)] overflow-hidden">
+        <div className="bg-white rounded-2xl border border-emerald-100/60 shadow-[0_4px_15px_-8px_rgba(30,64,175,0.12)] overflow-hidden">
           {listItems.map((item, i) => (
             <button
               key={item.label}
               onClick={item.action}
-              className={`w-full flex items-center justify-between px-3 py-2.5 hover:bg-blue-50/50 transition-colors ${
-                i !== listItems.length - 1 ? "border-b border-blue-50" : ""
+              className={`w-full flex items-center justify-between px-3 py-2.5 hover:bg-emerald-50/50 transition-colors ${
+                i !== listItems.length - 1 ? "border-b border-emerald-50" : ""
               }`}
             >
               <div className="flex items-center gap-2.5">
@@ -268,7 +268,7 @@ const Profile = () => {
 
         <Button
           variant="outline"
-          className="w-full h-11 rounded-2xl border-blue-200 bg-white text-primary hover:bg-blue-50"
+          className="w-full h-11 rounded-2xl border-emerald-200 bg-white text-primary hover:bg-emerald-50"
           onClick={handleLogout}
         >
           <LogOut className="w-4 h-4" /> Keluar

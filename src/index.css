@@ -6,41 +6,41 @@
 
 @layer base {
   :root {
-    --background: 210 40% 99%;      /* off-white with blue tint */
-    --foreground: 222 60% 14%;      /* deep ink */
+    --background: 140 30% 98%;      /* off-white with green tint */
+    --foreground: 155 55% 12%;      /* deep forest */
 
     --card: 0 0% 100%;
-    --card-foreground: 222 60% 14%;
+    --card-foreground: 155 55% 12%;
 
-    --primary: 224 76% 33%;         /* bold cobalt blue */
+    --primary: 152 65% 22%;         /* dark TerraCycle green */
     --primary-foreground: 0 0% 100%;
-    --primary-glow: 224 76% 45%;
+    --primary-glow: 145 60% 42%;    /* fresh light green */
 
-    --secondary: 220 20% 96%;
-    --secondary-foreground: 222 60% 14%;
+    --secondary: 140 30% 95%;
+    --secondary-foreground: 155 55% 12%;
 
-    --muted: 220 25% 95%;
-    --muted-foreground: 222 20% 45%;
+    --muted: 140 25% 94%;
+    --muted-foreground: 155 15% 38%;
 
-    --accent: 220 25% 92%;
-    --accent-foreground: 222 60% 14%;
+    --accent: 140 40% 90%;
+    --accent-foreground: 155 55% 12%;
 
-    --success: 224 76% 33%;
+    --success: 145 65% 32%;
     --success-foreground: 0 0% 100%;
-    --success-light: 220 30% 96%;
+    --success-light: 140 45% 94%;
 
-    --vip-gold: 224 76% 33%;
-    --vip-gold-glow: 224 76% 45%;
+    --vip-gold: 152 65% 22%;
+    --vip-gold-glow: 145 60% 42%;
 
     --destructive: 0 72% 48%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 222 25% 88%;
-    --input: 222 25% 88%;
-    --ring: 224 76% 33%;
+    --border: 145 25% 86%;
+    --input: 145 25% 86%;
+    --ring: 152 65% 22%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222 60% 14%;
+    --popover-foreground: 155 55% 12%;
 
     /* Flat, no gradients */
     --gradient-primary: hsl(var(--primary));
@@ -63,31 +63,31 @@
   }
 
   .dark {
-    --background: 210 40% 99%;
-    --foreground: 222 60% 14%;
+    --background: 140 30% 98%;
+    --foreground: 155 55% 12%;
     --card: 0 0% 100%;
-    --card-foreground: 222 60% 14%;
-    --primary: 224 76% 33%;
+    --card-foreground: 155 55% 12%;
+    --primary: 152 65% 22%;
     --primary-foreground: 0 0% 100%;
-    --primary-glow: 224 76% 45%;
-    --secondary: 220 20% 96%;
-    --secondary-foreground: 222 60% 14%;
-    --muted: 220 25% 95%;
-    --muted-foreground: 222 20% 45%;
-    --accent: 220 25% 92%;
-    --accent-foreground: 222 60% 14%;
-    --success: 224 76% 33%;
+    --primary-glow: 145 60% 42%;
+    --secondary: 140 30% 95%;
+    --secondary-foreground: 155 55% 12%;
+    --muted: 140 25% 94%;
+    --muted-foreground: 155 15% 38%;
+    --accent: 140 40% 90%;
+    --accent-foreground: 155 55% 12%;
+    --success: 145 65% 32%;
     --success-foreground: 0 0% 100%;
-    --success-light: 220 30% 96%;
-    --vip-gold: 224 76% 33%;
-    --vip-gold-glow: 224 76% 45%;
+    --success-light: 140 45% 94%;
+    --vip-gold: 152 65% 22%;
+    --vip-gold-glow: 145 60% 42%;
     --destructive: 0 72% 48%;
     --destructive-foreground: 0 0% 100%;
-    --border: 222 25% 88%;
-    --input: 222 25% 88%;
-    --ring: 224 76% 33%;
+    --border: 145 25% 86%;
+    --input: 145 25% 86%;
+    --ring: 152 65% 22%;
     --popover: 0 0% 100%;
-    --popover-foreground: 222 60% 14%;
+    --popover-foreground: 155 55% 12%;
   }
 }
 

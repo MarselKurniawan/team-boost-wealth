@@ -14,10 +14,12 @@ import { getProducts, formatCurrency, Product } from "@/lib/database";
 import InvestDialog from "@/components/InvestDialog";
 import ProductDetailDialog from "@/components/ProductDetailDialog";
 import ProductCard from "@/components/ProductCard";
+import { useVipTitles } from "@/hooks/useVipTitles";
 import { cn } from "@/lib/utils";
 
 const ProductPage = () => {
   const { profile, refreshProfile } = useAuth();
+  const { titleFor } = useVipTitles();
   const [products, setProducts] = useState<Product[]>([]);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [investOpen, setInvestOpen] = useState(false);
@@ -86,7 +88,7 @@ const ProductPage = () => {
     <div className="pb-8">
       {/* HERO strip */}
       <div className="px-4 pt-4">
-        <div className="rounded-2xl bg-gradient-to-r from-[#1e40af] to-[#3b82f6] p-3.5 text-white relative overflow-hidden">
+        <div className="rounded-2xl bg-gradient-to-r from-[#047857] to-[#10b981] p-3.5 text-white relative overflow-hidden">
           <div className="absolute -right-6 -top-6 w-24 h-24 rounded-full bg-white/10" />
           <p className="text-[10px] uppercase tracking-[0.2em] text-white/70 font-semibold">Katalog</p>
           <h1 className="text-lg font-heading font-bold mt-0.5">Pilih Robot Investasi</h1>
@@ -95,9 +97,9 @@ const ProductPage = () => {
       </div>
 
       {/* Sticky tabs + filter */}
-      <div className="sticky top-12 z-20 bg-[#f0f4fb]/95 backdrop-blur px-4 pt-3 pb-2">
+      <div className="sticky top-12 z-20 bg-[#f0fbf4]/95 backdrop-blur px-4 pt-3 pb-2">
         <div className="flex items-center gap-2">
-          <div className="flex-1 grid grid-cols-3 rounded-full bg-white border border-blue-100 p-1">
+          <div className="flex-1 grid grid-cols-3 rounded-full bg-white border border-emerald-100 p-1">
             {tabs.map(t => {
               const active = activeCategory === t.id;
               return (
@@ -107,7 +109,7 @@ const ProductPage = () => {
                   className={cn(
                     "flex items-center justify-center gap-1 h-8 rounded-full text-[11px] font-semibold transition-all",
                     active
-                      ? "bg-gradient-to-br from-[#3b82f6] to-[#1e3a8a] text-white shadow-md shadow-blue-500/30"
+                      ? "bg-gradient-to-br from-[#10b981] to-[#065f46] text-white shadow-md shadow-emerald-500/30"
                       : "text-foreground/70 hover:text-foreground"
                   )}
                 >
@@ -118,7 +120,7 @@ const ProductPage = () => {
           </div>
 
           <DropdownMenu>
-            <DropdownMenuTrigger className="relative w-10 h-10 rounded-full bg-white border border-blue-100 flex items-center justify-center text-foreground hover:border-primary/40 outline-none">
+            <DropdownMenuTrigger className="relative w-10 h-10 rounded-full bg-white border border-emerald-100 flex items-center justify-center text-foreground hover:border-primary/40 outline-none">
               <SlidersHorizontal className="w-4 h-4" />
               {activeFiltersCount > 0 && (
                 <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-primary text-primary-foreground text-[9px] font-bold flex items-center justify-center">
@@ -170,11 +172,11 @@ const ProductPage = () => {
           {lockedProducts.map((product) => {
             const displayPrice = product.promo_price ?? product.price;
             return (
-              <Card key={product.id} className="opacity-70 relative overflow-hidden border-blue-100">
+              <Card key={product.id} className="opacity-70 relative overflow-hidden border-emerald-100">
                 <div className="absolute inset-0 bg-white/60 backdrop-blur-sm z-10 flex items-center justify-center">
                   <div className="text-center">
                     <Lock className="w-5 h-5 text-primary mx-auto mb-1" />
-                    <p className="text-[10px] text-primary font-semibold">Buka kunci VIP {product.vip_level}</p>
+                    <p className="text-[10px] text-primary font-semibold">Buka kunci {titleFor(product.vip_level)}</p>
                   </div>
                 </div>
                 <CardContent className="p-3">

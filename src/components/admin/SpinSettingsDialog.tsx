@@ -20,7 +20,7 @@ interface Reward {
 
 interface Props { open: boolean; onOpenChange: (o: boolean) => void; }
 
-const DEFAULT_FILL = "#3b82f6";
+const DEFAULT_FILL = "#10b981";
 
 // Convert "hsl(217 90% 58%)" or hex to a hex string for the color input.
 const toHex = (c: string): string => {
@@ -76,6 +76,10 @@ const SpinSettingsDialog = ({ open, onOpenChange }: Props) => {
   };
 
   const addRow = () => {
+    if (rewards.length >= 3) {
+      toast({ title: "Maksimal 3 Hadiah", description: "Kotak kejutan hanya boleh berisi 3 hadiah.", variant: "destructive" });
+      return;
+    }
     setRewards(prev => [...prev, {
       label: "Baru", amount: 0, weight: 0, fill: DEFAULT_FILL, sort_order: prev.length + 1, is_active: true
     }]);
@@ -162,8 +166,8 @@ const SpinSettingsDialog = ({ open, onOpenChange }: Props) => {
                 </div>
               </div>
             ))}
-            <Button variant="outline" size="sm" className="w-full text-xs" onClick={addRow}>
-              <Plus className="w-3 h-3 mr-1" /> Tambah Hadiah
+            <Button variant="outline" size="sm" className="w-full text-xs" onClick={addRow} disabled={rewards.length >= 3}>
+              <Plus className="w-3 h-3 mr-1" /> Tambah Hadiah {rewards.length >= 3 ? "(maks 3)" : `(${rewards.length}/3)`}
             </Button>
             <p className={`text-[11px] text-center font-semibold ${isValidTotal ? "text-success" : "text-destructive"}`}>
               Total Persentase: {totalPct.toFixed(1)}% {isValidTotal ? "✓" : "(harus 100%)"}
