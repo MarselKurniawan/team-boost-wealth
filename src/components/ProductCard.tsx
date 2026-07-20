@@ -74,9 +74,11 @@ const ProductCard = ({ product, onViewDetail, onInvest }: ProductCardProps) => {
             <div className="rounded-lg bg-lime-50/70 px-2 py-1.5">
               <div className="flex items-center gap-1 text-lime-700">
                 <Users2 className="w-2.5 h-2.5" />
-                <span className="text-[9px] font-semibold">Limit</span>
+                <span className="text-[9px] font-semibold">Stok</span>
               </div>
-              <p className="text-[11px] font-bold text-foreground mt-0.5">Unlimited</p>
+              <p className="text-[11px] font-bold text-foreground mt-0.5">
+                {(product as any).stock == null ? "Tidak terbatas" : `${(product as any).stock} unit`}
+              </p>
             </div>
           </div>
         </div>
