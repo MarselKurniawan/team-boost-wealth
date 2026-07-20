@@ -7,6 +7,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { TrendingUp, CheckCircle2, Minus, Plus, Lock } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import { useVipTitles } from "@/hooks/useVipTitles";
 
 interface InvestDialogProps {
   open: boolean;
