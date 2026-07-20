@@ -176,7 +176,7 @@ const ProductPage = () => {
                 <div className="absolute inset-0 bg-white/60 backdrop-blur-sm z-10 flex items-center justify-center">
                   <div className="text-center">
                     <Lock className="w-5 h-5 text-primary mx-auto mb-1" />
-                    <p className="text-[10px] text-primary font-semibold">Buka kunci VIP {product.vip_level}</p>
+                    <p className="text-[10px] text-primary font-semibold">Buka kunci {titleFor(product.vip_level)}</p>
                   </div>
                 </div>
                 <CardContent className="p-3">
