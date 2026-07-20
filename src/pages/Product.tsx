@@ -14,6 +14,7 @@ import { getProducts, formatCurrency, Product } from "@/lib/database";
 import InvestDialog from "@/components/InvestDialog";
 import ProductDetailDialog from "@/components/ProductDetailDialog";
 import ProductCard from "@/components/ProductCard";
+import { useVipTitles } from "@/hooks/useVipTitles";
 import { cn } from "@/lib/utils";
 
 const ProductPage = () => {
