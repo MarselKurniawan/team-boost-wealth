@@ -123,7 +123,7 @@ const Home = () => {
       <div className="px-4 pt-4">
         <button
           onClick={() => navigate("/team")}
-          className="relative w-full overflow-hidden rounded-2xl p-3.5 flex items-center gap-3 text-left bg-gradient-to-r from-[#dbeafe] via-[#e0e7ff] to-[#cffafe] border border-blue-200/60 shadow-sm hover:shadow-md transition-shadow"
+          className="relative w-full overflow-hidden rounded-2xl p-3.5 flex items-center gap-3 text-left bg-gradient-to-r from-[#dbeafe] via-[#e0e7ff] to-[#cffafe] border border-emerald-200/60 shadow-sm hover:shadow-md transition-shadow"
         >
           <div className="flex-1 min-w-0">
             <p className="text-[13px] font-heading font-bold text-primary leading-tight">
@@ -131,7 +131,7 @@ const Home = () => {
             </p>
             <p className="text-[11px] text-primary/80 mt-0.5 font-semibold">Bonus setiap teman aktif berinvestasi</p>
           </div>
-          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#3b82f6] to-[#1e3a8a] flex items-center justify-center shrink-0 shadow-lg shadow-blue-500/30">
+          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#10b981] to-[#065f46] flex items-center justify-center shrink-0 shadow-lg shadow-emerald-500/30">
             <Gift className="w-7 h-7 text-white" strokeWidth={2} />
           </div>
         </button>
@@ -144,9 +144,9 @@ const Home = () => {
             <button
               key={a.label}
               onClick={a.action}
-              className="flex flex-col items-center gap-1.5 py-2.5 rounded-2xl bg-white border border-blue-100 hover:border-primary/40 hover:-translate-y-0.5 transition-all"
+              className="flex flex-col items-center gap-1.5 py-2.5 rounded-2xl bg-white border border-emerald-100 hover:border-primary/40 hover:-translate-y-0.5 transition-all"
             >
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-50 to-cyan-50 border border-blue-100 flex items-center justify-center text-primary">
+              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-50 to-lime-50 border border-emerald-100 flex items-center justify-center text-primary">
                 <a.icon className="w-4 h-4" />
               </div>
               <span className="text-[10px] font-semibold text-foreground">{a.label}</span>
@@ -157,21 +157,21 @@ const Home = () => {
 
       {/* THREE INFO CARDS */}
       <div className="px-4 mt-4 grid grid-cols-3 gap-2">
-        <div className="rounded-2xl bg-white border border-blue-100 p-2.5 shadow-sm">
-          <div className="w-7 h-7 rounded-lg bg-blue-50 text-primary flex items-center justify-center mb-1.5">
+        <div className="rounded-2xl bg-white border border-emerald-100 p-2.5 shadow-sm">
+          <div className="w-7 h-7 rounded-lg bg-emerald-50 text-primary flex items-center justify-center mb-1.5">
             <CalendarCheck className="w-3.5 h-3.5" />
           </div>
           <p className="text-[11px] font-heading font-bold text-foreground leading-tight">Check-in Harian</p>
           <p className="text-[9px] text-muted-foreground leading-snug mt-0.5">Hadiah setiap hari</p>
           <button
             onClick={() => setCheckinOpen(true)}
-            className="mt-1.5 w-full h-6 rounded-full bg-gradient-to-r from-[#3b82f6] to-[#1e3a8a] text-white text-[10px] font-bold"
+            className="mt-1.5 w-full h-6 rounded-full bg-gradient-to-r from-[#10b981] to-[#065f46] text-white text-[10px] font-bold"
           >
             Check-in
           </button>
         </div>
 
-        <div className="rounded-2xl bg-white border border-blue-100 p-2.5 shadow-sm">
+        <div className="rounded-2xl bg-white border border-emerald-100 p-2.5 shadow-sm">
           <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-amber-100 to-orange-100 text-orange-600 flex items-center justify-center mb-1.5">
             <PackageOpen className="w-3.5 h-3.5" />
           </div>
@@ -185,15 +185,15 @@ const Home = () => {
           </button>
         </div>
 
-        <div className="rounded-2xl bg-white border border-blue-100 p-2.5 shadow-sm">
-          <div className="w-7 h-7 rounded-lg bg-cyan-50 text-cyan-600 flex items-center justify-center mb-1.5">
+        <div className="rounded-2xl bg-white border border-emerald-100 p-2.5 shadow-sm">
+          <div className="w-7 h-7 rounded-lg bg-lime-50 text-lime-600 flex items-center justify-center mb-1.5">
             <Ticket className="w-3.5 h-3.5" />
           </div>
           <p className="text-[11px] font-heading font-bold text-foreground leading-tight">Redeem Code</p>
           <p className="text-[9px] text-muted-foreground leading-snug mt-0.5">Klaim bonus kode</p>
           <button
             onClick={() => setCouponOpen(true)}
-            className="mt-1.5 w-full h-6 rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 text-white text-[10px] font-bold"
+            className="mt-1.5 w-full h-6 rounded-full bg-gradient-to-r from-lime-500 to-emerald-600 text-white text-[10px] font-bold"
           >
             Klaim
           </button>
@@ -202,7 +202,7 @@ const Home = () => {
 
       {/* WALLET STRIP */}
       <div className="px-4 mt-4">
-        <div className="rounded-2xl bg-gradient-to-r from-[#1e40af] to-[#3b82f6] p-3.5 text-white shadow-md shadow-blue-500/30 relative overflow-hidden">
+        <div className="rounded-2xl bg-gradient-to-r from-[#047857] to-[#10b981] p-3.5 text-white shadow-md shadow-emerald-500/30 relative overflow-hidden">
           <div className="absolute -right-6 -top-6 w-24 h-24 rounded-full bg-white/10" />
           <div className="absolute right-8 bottom-2">
             <Wallet className="w-10 h-10 text-white/10" strokeWidth={1} />
@@ -229,7 +229,7 @@ const Home = () => {
         <div className="px-4 mt-3">
           <button
             onClick={handleOpenClaimDialog}
-            className="w-full rounded-2xl bg-gradient-to-r from-emerald-50 to-cyan-50 border border-emerald-200 p-3 flex items-center gap-3 text-left hover:shadow-md transition"
+            className="w-full rounded-2xl bg-gradient-to-r from-emerald-50 to-lime-50 border border-emerald-200 p-3 flex items-center gap-3 text-left hover:shadow-md transition"
           >
             <div className="w-10 h-10 rounded-full bg-emerald-500 text-white flex items-center justify-center shrink-0">
               <Coins className="w-5 h-5" />
@@ -256,7 +256,7 @@ const Home = () => {
         </div>
 
         {productList.length === 0 ? (
-          <div className="rounded-2xl border border-dashed border-blue-200 p-6 text-center bg-white">
+          <div className="rounded-2xl border border-dashed border-emerald-200 p-6 text-center bg-white">
             <ShoppingBag className="w-8 h-8 text-primary/50 mx-auto mb-2" />
             <p className="text-[12px] font-semibold text-foreground">Belum ada produk</p>
           </div>
@@ -286,7 +286,7 @@ const Home = () => {
             </DialogTitle>
           </DialogHeader>
           <div className="py-4 flex flex-col items-center gap-3">
-            <div className="w-20 h-20 rounded-full bg-gradient-to-br from-[#3b82f6] to-[#1e3a8a] flex items-center justify-center">
+            <div className="w-20 h-20 rounded-full bg-gradient-to-br from-[#10b981] to-[#065f46] flex items-center justify-center">
               {claimed ? <PartyPopper className="w-10 h-10 text-white" /> : <Gift className="w-10 h-10 text-white" />}
             </div>
             <div className="text-center">

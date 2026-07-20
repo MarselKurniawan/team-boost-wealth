@@ -20,7 +20,7 @@ interface Reward {
 
 interface Props { open: boolean; onOpenChange: (o: boolean) => void; }
 
-const DEFAULT_FILL = "#3b82f6";
+const DEFAULT_FILL = "#10b981";
 
 // Convert "hsl(217 90% 58%)" or hex to a hex string for the color input.
 const toHex = (c: string): string => {

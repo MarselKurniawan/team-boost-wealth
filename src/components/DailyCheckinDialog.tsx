@@ -120,12 +120,12 @@ const DailyCheckinDialog = ({ open, onOpenChange, onSuccess }: DailyCheckinDialo
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-sm p-0 overflow-hidden border-0 bg-[#f0f4fb]">
+      <DialogContent className="max-w-sm p-0 overflow-hidden border-0 bg-[#f0fbf4]">
         {/* Header */}
-        <div className="relative px-5 pt-5 pb-4 bg-white border-b border-blue-100">
+        <div className="relative px-5 pt-5 pb-4 bg-white border-b border-emerald-100">
           <DialogHeader className="text-left space-y-0">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-[#3b82f6] to-[#1e3a8a] flex items-center justify-center shadow-md shadow-blue-500/30">
+              <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-[#10b981] to-[#065f46] flex items-center justify-center shadow-md shadow-emerald-500/30">
                 <CalendarCheck className="w-4 h-4 text-white" />
               </div>
               <div>
@@ -138,7 +138,7 @@ const DailyCheckinDialog = ({ open, onOpenChange, onSuccess }: DailyCheckinDialo
           </DialogHeader>
 
           <div className="mt-3 grid grid-cols-2 gap-2">
-            <div className="rounded-xl bg-blue-50 border border-blue-100 px-3 py-2">
+            <div className="rounded-xl bg-emerald-50 border border-emerald-100 px-3 py-2">
               <div className="flex items-center gap-1 text-primary">
                 <Flame className="w-3 h-3" />
                 <p className="text-[9px] font-semibold uppercase tracking-wider">Streak</p>
@@ -147,8 +147,8 @@ const DailyCheckinDialog = ({ open, onOpenChange, onSuccess }: DailyCheckinDialo
                 {streak}<span className="text-[10px] font-medium text-muted-foreground ml-1">hari</span>
               </p>
             </div>
-            <div className="rounded-xl bg-cyan-50 border border-cyan-100 px-3 py-2">
-              <div className="flex items-center gap-1 text-cyan-700">
+            <div className="rounded-xl bg-lime-50 border border-lime-100 px-3 py-2">
+              <div className="flex items-center gap-1 text-lime-700">
                 <Coins className="w-3 h-3" />
                 <p className="text-[9px] font-semibold uppercase tracking-wider">Minggu ini</p>
               </div>
@@ -162,7 +162,7 @@ const DailyCheckinDialog = ({ open, onOpenChange, onSuccess }: DailyCheckinDialo
         {/* Body */}
         <div className="px-5 py-4 space-y-4">
           {/* Weekly grid */}
-          <div className="rounded-2xl bg-white border border-blue-100 p-3.5">
+          <div className="rounded-2xl bg-white border border-emerald-100 p-3.5">
             <div className="flex items-center justify-between mb-2.5">
               <p className="text-[10px] font-heading font-bold uppercase tracking-wider text-foreground">
                 Minggu Ini
@@ -192,16 +192,16 @@ const DailyCheckinDialog = ({ open, onOpenChange, onSuccess }: DailyCheckinDialo
                       className={cn(
                         "w-full aspect-square rounded-lg flex items-center justify-center text-[10px] font-heading font-bold transition-all",
                         isChecked &&
-                          "bg-gradient-to-br from-[#3b82f6] to-[#1e3a8a] text-white shadow-md shadow-blue-500/30",
+                          "bg-gradient-to-br from-[#10b981] to-[#065f46] text-white shadow-md shadow-emerald-500/30",
                         isToday &&
                           canCheckin &&
                           "bg-white text-primary border-2 border-primary border-dashed animate-pulse",
                         isToday &&
                           !canCheckin &&
                           !isChecked &&
-                          "bg-gradient-to-br from-[#3b82f6] to-[#1e3a8a] text-white",
+                          "bg-gradient-to-br from-[#10b981] to-[#065f46] text-white",
                         isMissed && "bg-red-50 text-red-300 border border-red-100",
-                        isFuture && "bg-blue-50/60 text-muted-foreground/50 border border-blue-100"
+                        isFuture && "bg-emerald-50/60 text-muted-foreground/50 border border-emerald-100"
                       )}
                     >
                       {isChecked ? (
@@ -222,8 +222,8 @@ const DailyCheckinDialog = ({ open, onOpenChange, onSuccess }: DailyCheckinDialo
 
           {/* Reward card */}
           {showReward ? (
-            <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#1e3a8a] via-[#1e40af] to-[#3b82f6] p-4 shadow-lg shadow-blue-500/30">
-              <div className="absolute -top-8 -right-8 w-32 h-32 rounded-full bg-cyan-300/20 blur-2xl" />
+            <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#065f46] via-[#047857] to-[#10b981] p-4 shadow-lg shadow-emerald-500/30">
+              <div className="absolute -top-8 -right-8 w-32 h-32 rounded-full bg-lime-300/20 blur-2xl" />
               <div className="relative flex items-center gap-3">
                 <div className="w-12 h-12 rounded-2xl bg-white/15 border border-white/20 backdrop-blur flex items-center justify-center shrink-0">
                   <Coins className="w-6 h-6 text-white" />
@@ -235,15 +235,15 @@ const DailyCheckinDialog = ({ open, onOpenChange, onSuccess }: DailyCheckinDialo
                   <p className="text-white text-xl font-heading font-bold break-all leading-tight">
                     +{formatCurrency(rewardAmount)}
                   </p>
-                  <p className="text-[10px] text-cyan-200 font-semibold mt-0.5">
+                  <p className="text-[10px] text-lime-200 font-semibold mt-0.5">
                     Sudah masuk saldo
                   </p>
                 </div>
               </div>
             </div>
           ) : (
-            <div className="rounded-2xl bg-white border border-blue-100 px-3.5 py-3 flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center shrink-0">
+            <div className="rounded-2xl bg-white border border-emerald-100 px-3.5 py-3 flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-lg bg-emerald-50 flex items-center justify-center shrink-0">
                 <Zap className="w-4 h-4 text-primary" />
               </div>
               <div className="min-w-0">
@@ -260,7 +260,7 @@ const DailyCheckinDialog = ({ open, onOpenChange, onSuccess }: DailyCheckinDialo
           <Button
             onClick={handleCheckin}
             disabled={!canCheckin || isChecking}
-            className="w-full h-11 rounded-2xl bg-gradient-to-r from-[#3b82f6] to-[#1e3a8a] hover:opacity-95 text-white text-xs font-bold shadow-md shadow-blue-500/30 disabled:opacity-60"
+            className="w-full h-11 rounded-2xl bg-gradient-to-r from-[#10b981] to-[#065f46] hover:opacity-95 text-white text-xs font-bold shadow-md shadow-emerald-500/30 disabled:opacity-60"
           >
             {isChecking ? "Memproses..." : canCheckin ? "Absen Sekarang" : "Sudah Absen"}
           </Button>

@@ -65,11 +65,11 @@ const Team = () => {
   }, [team, filter]);
 
   return (
-    <div className="bg-[#f0f4fb] min-h-screen pb-8">
+    <div className="bg-[#f0fbf4] min-h-screen pb-8">
       {/* Decorative hero header */}
-      <div className="relative overflow-hidden pt-8 pb-24 px-4 bg-gradient-to-br from-[#1e3a8a] via-[#1e40af] to-[#3b82f6]">
+      <div className="relative overflow-hidden pt-8 pb-24 px-4 bg-gradient-to-br from-[#065f46] via-[#047857] to-[#10b981]">
         <div className="absolute -top-16 -right-10 w-56 h-56 rounded-full bg-white/10 blur-2xl" />
-        <div className="absolute top-10 -left-16 w-48 h-48 rounded-full bg-cyan-300/20 blur-3xl" />
+        <div className="absolute top-10 -left-16 w-48 h-48 rounded-full bg-lime-300/20 blur-3xl" />
         
         
 
@@ -86,9 +86,9 @@ const Team = () => {
         {/* VIP identity card — dynamic title, no auto-upgrade */}
         <div className="relative overflow-hidden rounded-3xl bg-white shadow-xl border border-primary/10 p-5">
           {/* decorative crown blob */}
-          <div className="absolute -top-8 -right-8 w-32 h-32 rounded-full bg-gradient-to-br from-primary/15 to-cyan-200/40 blur-2xl" />
+          <div className="absolute -top-8 -right-8 w-32 h-32 rounded-full bg-gradient-to-br from-primary/15 to-lime-200/40 blur-2xl" />
           <div className="relative flex items-center gap-4">
-            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#1e3a8a] via-[#1e40af] to-[#3b82f6] flex items-center justify-center shrink-0 shadow-md">
+            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#065f46] via-[#047857] to-[#10b981] flex items-center justify-center shrink-0 shadow-md">
               <Crown className="w-7 h-7 text-white" />
             </div>
             <div className="flex-1 min-w-0">
@@ -125,7 +125,7 @@ const Team = () => {
 
         {/* Income summary */}
         <div className="grid grid-cols-2 gap-3">
-          <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#1e40af] to-[#3b82f6] text-white p-3.5 shadow-md">
+          <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#047857] to-[#10b981] text-white p-3.5 shadow-md">
             <div className="absolute -top-6 -right-6 w-20 h-20 rounded-full bg-white/10 blur-xl" />
             <div className="relative flex items-center gap-1.5">
               <TrendingUp className="w-3.5 h-3.5" />

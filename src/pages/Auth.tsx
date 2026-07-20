@@ -193,7 +193,7 @@ const Auth = () => {
         <div className="bg-white/85 backdrop-blur-xl border border-white shadow-[0_20px_60px_-15px_rgba(37,87,214,0.35)] rounded-3xl p-7">
           {/* Logo */}
           <div className="flex flex-col items-center mb-5">
-            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#2F6BE8] to-[#1E48BF] flex items-center justify-center p-2 shadow-lg shadow-blue-500/30 mb-2.5">
+            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#2F6BE8] to-[#1E48BF] flex items-center justify-center p-2 shadow-lg shadow-emerald-500/30 mb-2.5">
               <img src={brandLogo} alt="Terracycle" className="w-full h-full object-contain" />
             </div>
             <span className="font-heading text-lg font-bold tracking-tight text-[#1E48BF]">TERRACYCLE</span>
@@ -233,7 +233,7 @@ const Auth = () => {
                     </div>
                   </div>
 
-                  <Button type="submit" className="w-full h-10 text-xs rounded-xl bg-gradient-to-r from-[#2F6BE8] to-[#1E48BF] hover:opacity-95 shadow-md shadow-blue-500/30" disabled={isLoading}>
+                  <Button type="submit" className="w-full h-10 text-xs rounded-xl bg-gradient-to-r from-[#2F6BE8] to-[#1E48BF] hover:opacity-95 shadow-md shadow-emerald-500/30" disabled={isLoading}>
                     {isLoading ? "Memproses..." : "Masuk"}
                   </Button>
 
@@ -303,7 +303,7 @@ const Auth = () => {
                       <Label htmlFor="bank-number" className="text-[11px] text-slate-600">Nomor Rekening</Label>
                       <Input id="bank-number" type="text" inputMode="numeric" placeholder="Nomor rekening" value={bankNumber} onChange={(e) => setBankNumber(e.target.value.replace(/[^0-9]/g, ""))} required className="bg-white/70 border-slate-200 h-10 text-xs rounded-xl focus-visible:ring-[#2557D6]" />
                     </div>
-                    <Button type="button" className="w-full h-10 text-xs rounded-xl bg-gradient-to-r from-[#2F6BE8] to-[#1E48BF] hover:opacity-95 shadow-md shadow-blue-500/30" disabled={otpSending} onClick={handleSendOtp}>
+                    <Button type="button" className="w-full h-10 text-xs rounded-xl bg-gradient-to-r from-[#2F6BE8] to-[#1E48BF] hover:opacity-95 shadow-md shadow-emerald-500/30" disabled={otpSending} onClick={handleSendOtp}>
                       {otpSending ? (<><Loader2 className="w-3.5 h-3.5 mr-2 animate-spin" />Memproses...</>) : "Lanjut ke Verifikasi"}
                     </Button>
                   </div>
@@ -333,7 +333,7 @@ const Auth = () => {
                       <Label htmlFor="otp-code" className="text-[11px] text-slate-600">Masukkan Kode di Atas</Label>
                       <Input id="otp-code" type="text" placeholder="Ketik kode captcha" value={otpCode} onChange={(e) => setOtpCode(e.target.value.toUpperCase().slice(0, 6))} maxLength={6} className="bg-white/70 text-center text-lg tracking-widest font-mono h-11 uppercase rounded-xl border-slate-200" autoFocus />
                     </div>
-                    <Button type="submit" className="w-full h-10 text-xs rounded-xl bg-gradient-to-r from-[#2F6BE8] to-[#1E48BF] hover:opacity-95 shadow-md shadow-blue-500/30" disabled={isLoading}>
+                    <Button type="submit" className="w-full h-10 text-xs rounded-xl bg-gradient-to-r from-[#2F6BE8] to-[#1E48BF] hover:opacity-95 shadow-md shadow-emerald-500/30" disabled={isLoading}>
                       {isLoading ? (<><Loader2 className="w-3.5 h-3.5 mr-2 animate-spin" />Memverifikasi...</>) : "Verifikasi & Daftar"}
                     </Button>
                     <div className="text-left text-[11px]">

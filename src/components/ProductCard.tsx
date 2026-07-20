@@ -20,12 +20,12 @@ const ProductCard = ({ product, onViewDetail, onInvest }: ProductCardProps) => {
   const isKontrak = product.category === "vip" || (product.vip_level ?? 0) > 0;
 
   return (
-    <article className="rounded-2xl bg-white border border-blue-100 shadow-[0_4px_18px_-12px_rgba(30,64,175,0.35)] overflow-hidden">
+    <article className="rounded-2xl bg-white border border-emerald-100 shadow-[0_4px_18px_-12px_rgba(30,64,175,0.35)] overflow-hidden">
       {/* Top: image + name */}
       <div className="flex gap-3 p-3">
         <button
           onClick={() => onViewDetail(product)}
-          className="relative w-24 h-24 shrink-0 rounded-xl overflow-hidden bg-blue-50 ring-1 ring-blue-100"
+          className="relative w-24 h-24 shrink-0 rounded-xl overflow-hidden bg-emerald-50 ring-1 ring-emerald-100"
         >
           <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
           {hasPromoPrice && (
@@ -41,7 +41,7 @@ const ProductCard = ({ product, onViewDetail, onInvest }: ProductCardProps) => {
               {product.name}
             </h3>
             <span className={`shrink-0 inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[9px] font-bold ${
-              isKontrak ? "bg-primary text-primary-foreground" : "bg-blue-50 text-primary border border-blue-100"
+              isKontrak ? "bg-primary text-primary-foreground" : "bg-emerald-50 text-primary border border-emerald-100"
             }`}>
               {isKontrak ? <Lock className="w-2.5 h-2.5" /> : <Zap className="w-2.5 h-2.5" />}
               {isKontrak ? "Kontrak" : "Harian"}
@@ -50,29 +50,29 @@ const ProductCard = ({ product, onViewDetail, onInvest }: ProductCardProps) => {
 
           {/* 2x2 stats grid */}
           <div className="mt-2 grid grid-cols-2 gap-1.5">
-            <div className="rounded-lg bg-blue-50/70 px-2 py-1.5">
+            <div className="rounded-lg bg-emerald-50/70 px-2 py-1.5">
               <div className="flex items-center gap-1 text-primary">
                 <Percent className="w-2.5 h-2.5" />
                 <span className="text-[9px] font-semibold">Rendimen</span>
               </div>
               <p className="text-[11px] font-bold text-foreground mt-0.5">{dailyPct}%</p>
             </div>
-            <div className="rounded-lg bg-cyan-50/70 px-2 py-1.5">
-              <div className="flex items-center gap-1 text-cyan-700">
+            <div className="rounded-lg bg-lime-50/70 px-2 py-1.5">
+              <div className="flex items-center gap-1 text-lime-700">
                 <Zap className="w-2.5 h-2.5" />
                 <span className="text-[9px] font-semibold">Harian</span>
               </div>
               <p className="text-[11px] font-bold text-foreground mt-0.5 break-all">{formatCurrency(daily)}</p>
             </div>
-            <div className="rounded-lg bg-blue-50/70 px-2 py-1.5">
+            <div className="rounded-lg bg-emerald-50/70 px-2 py-1.5">
               <div className="flex items-center gap-1 text-primary">
                 <Calendar className="w-2.5 h-2.5" />
                 <span className="text-[9px] font-semibold">Periode</span>
               </div>
               <p className="text-[11px] font-bold text-foreground mt-0.5">{validity} Hari</p>
             </div>
-            <div className="rounded-lg bg-cyan-50/70 px-2 py-1.5">
-              <div className="flex items-center gap-1 text-cyan-700">
+            <div className="rounded-lg bg-lime-50/70 px-2 py-1.5">
+              <div className="flex items-center gap-1 text-lime-700">
                 <Users2 className="w-2.5 h-2.5" />
                 <span className="text-[9px] font-semibold">Limit</span>
               </div>
@@ -84,7 +84,7 @@ const ProductCard = ({ product, onViewDetail, onInvest }: ProductCardProps) => {
 
       {/* Bottom: price + CTA */}
       <div className="px-3 pb-3">
-        <div className="rounded-xl bg-gradient-to-r from-blue-50 to-cyan-50 border border-blue-100 p-2 flex items-center gap-2">
+        <div className="rounded-xl bg-gradient-to-r from-emerald-50 to-lime-50 border border-emerald-100 p-2 flex items-center gap-2">
           <div className="flex-1 min-w-0 pl-1">
             <p className="text-[9px] font-semibold text-muted-foreground uppercase tracking-wider">Investasi</p>
             <div className="flex items-baseline gap-1.5">
@@ -98,7 +98,7 @@ const ProductCard = ({ product, onViewDetail, onInvest }: ProductCardProps) => {
           </div>
           <Button
             onClick={() => onInvest(product)}
-            className="h-9 px-3.5 rounded-xl bg-gradient-to-br from-[#3b82f6] to-[#1e3a8a] text-white hover:opacity-95 text-[11px] font-bold shrink-0 shadow-md shadow-blue-500/30"
+            className="h-9 px-3.5 rounded-xl bg-gradient-to-br from-[#10b981] to-[#065f46] text-white hover:opacity-95 text-[11px] font-bold shrink-0 shadow-md shadow-emerald-500/30"
           >
             <ShoppingCart className="w-3.5 h-3.5" /> Beli sekarang
           </Button>

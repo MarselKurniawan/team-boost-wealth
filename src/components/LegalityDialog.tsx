@@ -22,7 +22,7 @@ const statusStyle = (status: string) => {
   if (s.includes("aktif") || s.includes("valid") || s.includes("active") || s.includes("verified"))
     return "bg-emerald-100 text-emerald-700";
   if (s.includes("proses") || s.includes("pending")) return "bg-amber-100 text-amber-700";
-  return "bg-blue-100 text-blue-700";
+  return "bg-emerald-100 text-emerald-700";
 };
 
 const LegalityDialog = ({ open, onOpenChange }: Props) => {
@@ -46,7 +46,7 @@ const LegalityDialog = ({ open, onOpenChange }: Props) => {
         {/* Clean Badge Header */}
         <div className="p-5 border-b border-slate-100 flex items-center justify-between bg-white sticky top-0 z-10">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-blue-50 rounded-full flex items-center justify-center text-blue-600">
+            <div className="w-10 h-10 bg-emerald-50 rounded-full flex items-center justify-center text-emerald-600">
               <ShieldCheck className="w-5 h-5" strokeWidth={2} />
             </div>
             <div>
@@ -57,7 +57,7 @@ const LegalityDialog = ({ open, onOpenChange }: Props) => {
         </div>
 
         {/* Grid */}
-        <div className="p-4 bg-[#f0f4fb]">
+        <div className="p-4 bg-[#f0fbf4]">
           {docs.length === 0 ? (
             <div className="py-12 text-center">
               <FileText className="w-8 h-8 mx-auto text-slate-300 mb-2" />
@@ -69,10 +69,10 @@ const LegalityDialog = ({ open, onOpenChange }: Props) => {
                 <button
                   key={doc.id}
                   onClick={() => doc.image_url && setPreview(doc.image_url)}
-                  className="bg-white p-3 rounded-2xl border border-slate-200 flex flex-col gap-3 text-left hover:border-blue-300 transition-colors"
+                  className="bg-white p-3 rounded-2xl border border-slate-200 flex flex-col gap-3 text-left hover:border-emerald-300 transition-colors"
                 >
                   <div className="flex justify-between items-start">
-                    <div className="p-2 bg-blue-50 rounded-lg text-blue-600">
+                    <div className="p-2 bg-emerald-50 rounded-lg text-emerald-600">
                       <FileText className="w-4 h-4" strokeWidth={2} />
                     </div>
                     <span
@@ -104,12 +104,12 @@ const LegalityDialog = ({ open, onOpenChange }: Props) => {
           )}
 
           {/* Footer trust bar */}
-          <div className="mt-4 bg-[#1e3a8a] rounded-xl p-3 flex items-center gap-3">
+          <div className="mt-4 bg-[#065f46] rounded-xl p-3 flex items-center gap-3">
             <div className="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center shrink-0">
               <ShieldCheck className="w-4 h-4 text-white" />
             </div>
             <div className="min-w-0">
-              <p className="text-[8px] text-blue-200 uppercase font-bold tracking-wider">
+              <p className="text-[8px] text-emerald-200 uppercase font-bold tracking-wider">
                 Status Kepatuhan
               </p>
               <p className="text-[10px] text-white font-medium leading-tight">

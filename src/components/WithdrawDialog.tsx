@@ -86,8 +86,8 @@ const WithdrawDialog = ({ open, onOpenChange, balance, onSuccess }: WithdrawDial
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="w-[95vw] max-w-md mx-auto max-h-[90vh] p-0 overflow-hidden flex flex-col border-0 rounded-3xl">
         {/* Hero */}
-        <div className="relative overflow-hidden pt-5 pb-16 px-5 bg-gradient-to-br from-[#0b1e5c] via-[#1e40af] to-[#3b82f6]">
-          <div className="absolute -top-12 -right-8 w-44 h-44 rounded-full bg-cyan-300/15 blur-2xl" />
+        <div className="relative overflow-hidden pt-5 pb-16 px-5 bg-gradient-to-br from-[#0b1e5c] via-[#047857] to-[#10b981]">
+          <div className="absolute -top-12 -right-8 w-44 h-44 rounded-full bg-lime-300/15 blur-2xl" />
           <div className="absolute -bottom-6 -left-8 w-32 h-32 rounded-full bg-white/10 blur-2xl" />
           
 
@@ -114,7 +114,7 @@ const WithdrawDialog = ({ open, onOpenChange, balance, onSuccess }: WithdrawDial
         </div>
 
         <ScrollArea className="flex-1 -mt-10 px-5">
-          <div className="rounded-2xl bg-white border border-blue-100 shadow-[0_10px_30px_-15px_rgba(30,64,175,0.35)] p-4 space-y-4">
+          <div className="rounded-2xl bg-white border border-emerald-100 shadow-[0_10px_30px_-15px_rgba(30,64,175,0.35)] p-4 space-y-4">
             {/* Amount */}
             <div>
               <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-2">Jumlah Penarikan</p>
@@ -133,7 +133,7 @@ const WithdrawDialog = ({ open, onOpenChange, balance, onSuccess }: WithdrawDial
                   <button
                     key={p}
                     onClick={() => setAmount(Math.floor(balance * p / 100).toString())}
-                    className="h-8 rounded-lg bg-blue-50 text-primary text-[10px] font-bold border border-blue-100 hover:border-primary/40"
+                    className="h-8 rounded-lg bg-emerald-50 text-primary text-[10px] font-bold border border-emerald-100 hover:border-primary/40"
                   >
                     {p}%
                   </button>
@@ -155,13 +155,13 @@ const WithdrawDialog = ({ open, onOpenChange, balance, onSuccess }: WithdrawDial
                         className={cn(
                           "w-full flex items-center gap-3 rounded-xl border px-3 py-2.5 text-left transition",
                           active
-                            ? "border-primary bg-gradient-to-r from-blue-50 to-cyan-50"
-                            : "border-blue-100 bg-white hover:border-primary/40"
+                            ? "border-primary bg-gradient-to-r from-emerald-50 to-lime-50"
+                            : "border-emerald-100 bg-white hover:border-primary/40"
                         )}
                       >
                         <div className={cn(
                           "w-9 h-9 rounded-xl flex items-center justify-center shrink-0",
-                          active ? "bg-gradient-to-br from-[#3b82f6] to-[#1e3a8a] text-white" : "bg-blue-50 text-primary"
+                          active ? "bg-gradient-to-br from-[#10b981] to-[#065f46] text-white" : "bg-emerald-50 text-primary"
                         )}>
                           {acc.account_type === "bank" ? <Landmark className="w-4 h-4" /> : <Wallet className="w-4 h-4" />}
                         </div>
@@ -184,7 +184,7 @@ const WithdrawDialog = ({ open, onOpenChange, balance, onSuccess }: WithdrawDial
               )}
             </div>
 
-            <div className="flex items-start gap-2 rounded-xl bg-blue-50 border border-blue-100 p-2.5">
+            <div className="flex items-start gap-2 rounded-xl bg-emerald-50 border border-emerald-100 p-2.5">
               <Clock className="w-3.5 h-3.5 text-primary mt-0.5 shrink-0" />
               <p className="text-[10px] text-muted-foreground leading-snug">
                 Penarikan tersedia setiap hari tanpa libur. Proses 1–24 jam. Dikenakan pajak penarikan 10%.
@@ -195,18 +195,18 @@ const WithdrawDialog = ({ open, onOpenChange, balance, onSuccess }: WithdrawDial
         </ScrollArea>
 
         {/* Footer */}
-        <div className="px-5 py-3 border-t border-blue-100 bg-white/95 backdrop-blur space-y-2">
+        <div className="px-5 py-3 border-t border-emerald-100 bg-white/95 backdrop-blur space-y-2">
           {amountNum > 0 && (
-            <div className="rounded-xl bg-gradient-to-r from-blue-50 to-cyan-50 border border-blue-100 p-2.5 space-y-1 text-[10px]">
+            <div className="rounded-xl bg-gradient-to-r from-emerald-50 to-lime-50 border border-emerald-100 p-2.5 space-y-1 text-[10px]">
               <div className="flex justify-between"><span className="text-muted-foreground">Jumlah</span><span className="font-semibold break-all">{formatCurrency(amountNum)}</span></div>
               <div className="flex justify-between"><span className="text-muted-foreground">Pajak 10%</span><span className="font-semibold text-destructive break-all">-{formatCurrency(taxFee)}</span></div>
-              <div className="flex justify-between border-t border-blue-100 pt-1"><span className="font-semibold">Anda Terima</span><span className="font-heading font-bold text-primary break-all">{formatCurrency(netAmount)}</span></div>
+              <div className="flex justify-between border-t border-emerald-100 pt-1"><span className="font-semibold">Anda Terima</span><span className="font-heading font-bold text-primary break-all">{formatCurrency(netAmount)}</span></div>
             </div>
           )}
           <Button
             onClick={handleSubmit}
             disabled={isLoading || !amount || !selectedAccount}
-            className="w-full h-11 rounded-2xl bg-gradient-to-r from-[#3b82f6] to-[#1e3a8a] text-white text-xs font-bold shadow-md shadow-blue-500/30"
+            className="w-full h-11 rounded-2xl bg-gradient-to-r from-[#10b981] to-[#065f46] text-white text-xs font-bold shadow-md shadow-emerald-500/30"
           >
             {isLoading ? "Memproses..." : "Ajukan Penarikan"}
           </Button>

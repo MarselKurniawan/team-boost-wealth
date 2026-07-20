@@ -100,10 +100,10 @@ const ReferralDialog = ({ open, onOpenChange, referralCode }: ReferralDialogProp
               </Button>
               <Button
                 variant="outline"
-                className="flex items-center gap-2 bg-blue-500/10 border-blue-500/30 hover:bg-blue-500/20"
+                className="flex items-center gap-2 bg-emerald-500/10 border-emerald-500/30 hover:bg-emerald-500/20"
                 onClick={shareTelegram}
               >
-                <Send className="w-5 h-5 text-blue-500" />
+                <Send className="w-5 h-5 text-emerald-500" />
                 <span>Telegram</span>
               </Button>
             </div>

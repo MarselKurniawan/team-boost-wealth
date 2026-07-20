@@ -36,9 +36,9 @@ const SideMenu = ({ open, onOpenChange }: Props) => {
           {/* Header identity */}
           <button
             onClick={() => go("/profile")}
-            className="relative flex items-center gap-3 p-4 pt-6 text-left bg-white border-b border-blue-100"
+            className="relative flex items-center gap-3 p-4 pt-6 text-left bg-white border-b border-emerald-100"
           >
-            <div className="w-11 h-11 rounded-full bg-gradient-to-br from-[#3b82f6] to-[#1e3a8a] p-[2px]">
+            <div className="w-11 h-11 rounded-full bg-gradient-to-br from-[#10b981] to-[#065f46] p-[2px]">
               <div className="w-full h-full rounded-full bg-white flex items-center justify-center text-primary text-sm font-bold">
                 {(profile?.name?.[0] || "U").toUpperCase()}
               </div>
@@ -51,10 +51,10 @@ const SideMenu = ({ open, onOpenChange }: Props) => {
           </button>
 
           {/* VIP card */}
-          <div className="mx-4 mt-4 rounded-2xl overflow-hidden bg-gradient-to-br from-[#e6efff] to-[#dbe7ff] border border-blue-100">
+          <div className="mx-4 mt-4 rounded-2xl overflow-hidden bg-gradient-to-br from-[#e6efff] to-[#dbe7ff] border border-emerald-100">
             <div className="px-3 py-2.5 flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-gradient-to-br from-[#1e40af] to-[#3b82f6] text-white text-[10px] font-bold">
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-gradient-to-br from-[#047857] to-[#10b981] text-white text-[10px] font-bold">
                   <Crown className="w-2.5 h-2.5" /> VIP{profile?.vip_level ?? 0}
                 </span>
                 <span className="text-[10px] font-semibold text-foreground truncate">{vipTitle}</span>
@@ -74,14 +74,14 @@ const SideMenu = ({ open, onOpenChange }: Props) => {
           </div>
 
           {/* Menu list */}
-          <div className="mt-4 mx-4 rounded-2xl bg-white border border-blue-100 divide-y divide-blue-50 overflow-hidden flex-1 overflow-y-auto">
+          <div className="mt-4 mx-4 rounded-2xl bg-white border border-emerald-100 divide-y divide-emerald-50 overflow-hidden flex-1 overflow-y-auto">
             {items.map((it) => (
               <button
                 key={it.label}
                 onClick={it.action}
-                className="w-full flex items-center gap-3 px-3.5 py-3 hover:bg-blue-50/70 transition-colors text-left"
+                className="w-full flex items-center gap-3 px-3.5 py-3 hover:bg-emerald-50/70 transition-colors text-left"
               >
-                <div className="w-7 h-7 rounded-lg bg-blue-50 text-primary flex items-center justify-center">
+                <div className="w-7 h-7 rounded-lg bg-emerald-50 text-primary flex items-center justify-center">
                   <it.icon className="w-3.5 h-3.5" />
                 </div>
                 <span className="flex-1 text-[12px] font-medium text-foreground">{it.label}</span>

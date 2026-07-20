@@ -73,8 +73,8 @@ const RechargeDialog = ({ open, onOpenChange, onSuccess }: RechargeDialogProps) 
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="w-[95vw] max-w-md mx-auto max-h-[90vh] p-0 overflow-hidden flex flex-col border-0 rounded-3xl">
         {/* Hero header */}
-        <div className="relative overflow-hidden pt-5 pb-14 px-5 bg-gradient-to-br from-[#0b1e5c] via-[#1e40af] to-[#3b82f6]">
-          <div className="absolute -top-10 -right-8 w-40 h-40 rounded-full bg-cyan-300/15 blur-2xl" />
+        <div className="relative overflow-hidden pt-5 pb-14 px-5 bg-gradient-to-br from-[#0b1e5c] via-[#047857] to-[#10b981]">
+          <div className="absolute -top-10 -right-8 w-40 h-40 rounded-full bg-lime-300/15 blur-2xl" />
           <div className="absolute bottom-0 -left-10 w-32 h-32 rounded-full bg-white/10 blur-2xl" />
           
 
@@ -102,7 +102,7 @@ const RechargeDialog = ({ open, onOpenChange, onSuccess }: RechargeDialogProps) 
         </div>
 
         <ScrollArea className="flex-1 -mt-8 px-5">
-          <div className="rounded-2xl bg-white border border-blue-100 shadow-[0_10px_30px_-15px_rgba(30,64,175,0.35)] p-4 space-y-4">
+          <div className="rounded-2xl bg-white border border-emerald-100 shadow-[0_10px_30px_-15px_rgba(30,64,175,0.35)] p-4 space-y-4">
             {/* Preset chips */}
             <div>
               <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-2">Pilih cepat</p>
@@ -116,8 +116,8 @@ const RechargeDialog = ({ open, onOpenChange, onSuccess }: RechargeDialogProps) 
                       className={cn(
                         "h-9 rounded-xl text-[10px] font-bold transition border",
                         active
-                          ? "bg-gradient-to-br from-[#3b82f6] to-[#1e3a8a] text-white border-transparent shadow-md shadow-blue-500/30"
-                          : "bg-blue-50/50 text-primary border-blue-100 hover:border-primary/40"
+                          ? "bg-gradient-to-br from-[#10b981] to-[#065f46] text-white border-transparent shadow-md shadow-emerald-500/30"
+                          : "bg-emerald-50/50 text-primary border-emerald-100 hover:border-primary/40"
                       )}
                     >
                       {formatCurrency(p)}
@@ -140,13 +140,13 @@ const RechargeDialog = ({ open, onOpenChange, onSuccess }: RechargeDialogProps) 
                       className={cn(
                         "w-full flex items-center gap-3 rounded-xl border px-3 py-2.5 text-left transition",
                         active
-                          ? "border-primary bg-gradient-to-r from-blue-50 to-cyan-50 shadow-sm"
-                          : "border-blue-100 bg-white hover:border-primary/40"
+                          ? "border-primary bg-gradient-to-r from-emerald-50 to-lime-50 shadow-sm"
+                          : "border-emerald-100 bg-white hover:border-primary/40"
                       )}
                     >
                       <div className={cn(
                         "w-9 h-9 rounded-xl flex items-center justify-center text-[10px] font-heading font-bold shrink-0",
-                        active ? "bg-gradient-to-br from-[#3b82f6] to-[#1e3a8a] text-white" : "bg-blue-50 text-primary"
+                        active ? "bg-gradient-to-br from-[#10b981] to-[#065f46] text-white" : "bg-emerald-50 text-primary"
                       )}>
                         {m.code.slice(0, 3)}
                       </div>
@@ -175,7 +175,7 @@ const RechargeDialog = ({ open, onOpenChange, onSuccess }: RechargeDialogProps) 
         </ScrollArea>
 
         {/* Footer */}
-        <div className="px-5 py-3 border-t border-blue-100 bg-white/95 backdrop-blur">
+        <div className="px-5 py-3 border-t border-emerald-100 bg-white/95 backdrop-blur">
           {amount && selected && (
             <div className="flex items-center justify-between text-[11px] mb-2">
               <span className="text-muted-foreground">Total via {selected.name}</span>
@@ -185,7 +185,7 @@ const RechargeDialog = ({ open, onOpenChange, onSuccess }: RechargeDialogProps) 
           <Button
             onClick={handleSubmit}
             disabled={isLoading || !amount || !method}
-            className="w-full h-11 rounded-2xl bg-gradient-to-r from-[#3b82f6] to-[#1e3a8a] text-white text-xs font-bold shadow-md shadow-blue-500/30 hover:opacity-95"
+            className="w-full h-11 rounded-2xl bg-gradient-to-r from-[#10b981] to-[#065f46] text-white text-xs font-bold shadow-md shadow-emerald-500/30 hover:opacity-95"
           >
             {isLoading ? "Memproses..." : "Lanjut ke Pembayaran"}
           </Button>
