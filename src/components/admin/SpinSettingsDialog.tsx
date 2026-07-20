@@ -166,8 +166,8 @@ const SpinSettingsDialog = ({ open, onOpenChange }: Props) => {
                 </div>
               </div>
             ))}
-            <Button variant="outline" size="sm" className="w-full text-xs" onClick={addRow}>
-              <Plus className="w-3 h-3 mr-1" /> Tambah Hadiah
+            <Button variant="outline" size="sm" className="w-full text-xs" onClick={addRow} disabled={rewards.length >= 3}>
+              <Plus className="w-3 h-3 mr-1" /> Tambah Hadiah {rewards.length >= 3 ? "(maks 3)" : `(${rewards.length}/3)`}
             </Button>
             <p className={`text-[11px] text-center font-semibold ${isValidTotal ? "text-success" : "text-destructive"}`}>
               Total Persentase: {totalPct.toFixed(1)}% {isValidTotal ? "✓" : "(harus 100%)"}
