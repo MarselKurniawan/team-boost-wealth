@@ -76,6 +76,10 @@ const SpinSettingsDialog = ({ open, onOpenChange }: Props) => {
   };
 
   const addRow = () => {
+    if (rewards.length >= 3) {
+      toast({ title: "Maksimal 3 Hadiah", description: "Kotak kejutan hanya boleh berisi 3 hadiah.", variant: "destructive" });
+      return;
+    }
     setRewards(prev => [...prev, {
       label: "Baru", amount: 0, weight: 0, fill: DEFAULT_FILL, sort_order: prev.length + 1, is_active: true
     }]);
