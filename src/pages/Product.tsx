@@ -19,6 +19,7 @@ import { cn } from "@/lib/utils";
 
 const ProductPage = () => {
   const { profile, refreshProfile } = useAuth();
+  const { titleFor } = useVipTitles();
   const [products, setProducts] = useState<Product[]>([]);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [investOpen, setInvestOpen] = useState(false);
