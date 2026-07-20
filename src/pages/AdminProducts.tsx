@@ -24,6 +24,7 @@ import { Link } from "react-router-dom";
 
 const AdminProducts = () => {
   const { toast } = useToast();
+  const { titleFor, levels: vipLevels } = useVipTitles();
   const [products, setProducts] = useState<Product[]>([]);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
