@@ -18,6 +18,7 @@ import {
   Product,
 } from "@/lib/database";
 import { supabase } from "@/integrations/supabase/client";
+import { useVipTitles } from "@/hooks/useVipTitles";
 import { Package, Plus, Edit, Trash2, ArrowLeft, TrendingUp, DollarSign, Upload, Image, Loader2 } from "lucide-react";
 import { Link } from "react-router-dom";
 
