@@ -250,6 +250,16 @@ export const getProducts = async (): Promise<Product[]> => {
   return data || [];
 };
 
+// Include locked (is_active=false) products so member catalog can show "coming soon" placeholders
+export const getCatalogProducts = async (): Promise<Product[]> => {
+  const { data, error } = await supabase
+    .from('products')
+    .select('*')
+    .order('price', { ascending: true });
+  if (error) { console.error('Error fetching catalog:', error); return []; }
+  return data || [];
+};
+
 export const getAllProducts = async (): Promise<Product[]> => {
   const { data, error } = await supabase
     .from('products')
