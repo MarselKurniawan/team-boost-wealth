@@ -165,7 +165,7 @@ const ProductPage = () => {
         ))}
       </div>
 
-      {availableProducts.length === 0 && lockedProducts.length === 0 && (
+      {availableProducts.length === 0 && lockedProducts.length === 0 && comingSoonProducts.length === 0 && (
         <div className="text-center py-12 text-muted-foreground text-xs">Tidak ada produk dalam kategori ini</div>
       )}
 
@@ -195,6 +195,45 @@ const ProductPage = () => {
               </Card>
             );
           })}
+        </div>
+      )}
+
+      {comingSoonProducts.length > 0 && (
+        <div className="px-4 mt-4">
+          <div className="flex items-center gap-2 mb-2">
+            <div className="h-px flex-1 bg-emerald-200/60" />
+            <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-primary/70">Segera Dibuka</p>
+            <div className="h-px flex-1 bg-emerald-200/60" />
+          </div>
+          <div className="space-y-2.5">
+            {comingSoonProducts.map((product) => {
+              const displayPrice = product.promo_price ?? product.price;
+              return (
+                <Card key={product.id} className="relative overflow-hidden border-emerald-100 rounded-2xl">
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/85 via-white/75 to-emerald-50/70 z-10 flex items-center justify-center">
+                    <div className="text-center px-3">
+                      <div className="w-10 h-10 mx-auto rounded-full bg-gradient-to-br from-[#10b981] to-[#065f46] flex items-center justify-center shadow-md shadow-emerald-500/30 mb-1.5">
+                        <PackageOpen className="w-5 h-5 text-white" />
+                      </div>
+                      <p className="text-[11px] text-primary font-bold">Produk masih terkunci</p>
+                      <p className="text-[9px] text-muted-foreground mt-0.5">Akan dibuka secara bertahap</p>
+                    </div>
+                  </div>
+                  <CardContent className="p-3">
+                    <div className="flex gap-3">
+                      <div className="w-24 h-24 rounded-xl overflow-hidden bg-muted flex-shrink-0">
+                        <img src={product.image} alt={product.name} className="w-full h-full object-cover grayscale" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-xs font-semibold text-foreground truncate">{product.name}</p>
+                        <p className="text-xs text-primary/60 mt-1">{formatCurrency(displayPrice)}</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              );
+            })}
+          </div>
         </div>
       )}
 
