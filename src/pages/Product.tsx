@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
-import { Lock, SlidersHorizontal, Check, Zap, Timer, Crown, ArrowDownWideNarrow, ArrowUpWideNarrow } from "lucide-react";
+import { Lock, SlidersHorizontal, Check, Zap, Timer, Crown, ArrowDownWideNarrow, ArrowUpWideNarrow, PackageOpen } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,7 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useAuth } from "@/hooks/useAuth";
-import { getProducts, formatCurrency, Product } from "@/lib/database";
+import { getCatalogProducts, formatCurrency, Product } from "@/lib/database";
 import InvestDialog from "@/components/InvestDialog";
 import ProductDetailDialog from "@/components/ProductDetailDialog";
 import ProductCard from "@/components/ProductCard";
