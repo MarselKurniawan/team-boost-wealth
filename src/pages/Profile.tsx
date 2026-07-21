@@ -94,9 +94,12 @@ const Profile = () => {
     { icon: Users, label: "Tim", desc: "Kelola referral", tint: "bg-lime-50 text-lime-600", action: () => navigate("/team") },
   ];
 
+  const [historyMode, setHistoryMode] = useState<{ tab: "all"|"deposit"|"withdraw"|"earning"; title: string }>({ tab: "all", title: "Riwayat Keuangan" });
+  const openHistory = (tab: "all"|"deposit"|"withdraw"|"earning", title: string) => { setHistoryMode({ tab, title }); setHistoryOpen(true); };
+
   const listItems = [
-    { icon: ArrowDownToLine, label: "Riwayat Deposit", tint: "bg-emerald-50 text-emerald-600", action: () => setHistoryOpen(true) },
-    { icon: ArrowUpFromLine, label: "Riwayat Penarikan", tint: "bg-emerald-50 text-emerald-600", action: () => setHistoryOpen(true) },
+    { icon: ArrowDownToLine, label: "Riwayat Deposit", tint: "bg-emerald-50 text-emerald-600", action: () => openHistory("deposit", "Riwayat Deposit") },
+    { icon: ArrowUpFromLine, label: "Riwayat Penarikan", tint: "bg-emerald-50 text-emerald-600", action: () => openHistory("withdraw", "Riwayat Penarikan") },
     { icon: Landmark, label: "Akun Bank", tint: "bg-emerald-50 text-emerald-800", action: () => setBankDialogOpen(true) },
     { icon: Lock, label: "Ganti Password", tint: "bg-lime-50 text-lime-600", action: () => openProfileDialog("password") },
     { icon: Headphones, label: "Layanan Pelanggan", tint: "bg-emerald-50 text-emerald-600", action: () => toast({ title: "Hubungi Kami", description: "WhatsApp: +62 812-3456-7890" }) },
