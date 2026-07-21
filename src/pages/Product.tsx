@@ -31,7 +31,7 @@ const ProductPage = () => {
   const [vipLevelFilter, setVipLevelFilter] = useState<number | "all">("all");
 
   const loadData = async () => {
-    const productsData = await getProducts();
+    const productsData = await getCatalogProducts();
     setProducts(productsData);
     await refreshProfile();
   };
@@ -63,10 +63,12 @@ const ProductPage = () => {
     );
   }
 
-  let availableProducts = filteredProducts.filter(p => p.vip_level <= userVipLevel);
-  let lockedProducts = filteredProducts.filter(p => p.vip_level > userVipLevel);
-  if (vipFilter === "available") lockedProducts = [];
-  if (vipFilter === "locked") availableProducts = [];
+  const activeProducts = filteredProducts.filter(p => p.is_active !== false);
+  const comingSoonProducts = filteredProducts.filter(p => p.is_active === false);
+  let availableProducts = activeProducts.filter(p => p.vip_level <= userVipLevel);
+  let lockedProducts = activeProducts.filter(p => p.vip_level > userVipLevel);
+  if (vipFilter === "available") { lockedProducts = []; }
+  if (vipFilter === "locked") { availableProducts = []; }
 
   const handleViewDetail = (product: Product) => { setSelectedProduct(product); setDetailOpen(true); };
   const handleInvest = (product: Product) => { setSelectedProduct(product); setInvestOpen(true); };
