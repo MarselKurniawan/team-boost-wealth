@@ -77,6 +77,9 @@ const Profile = () => {
     }
   };
 
+  const [historyMode, setHistoryMode] = useState<{ tab: "all"|"deposit"|"withdraw"|"earning"; title: string }>({ tab: "all", title: "Riwayat Keuangan" });
+  const openHistory = (tab: "all"|"deposit"|"withdraw"|"earning", title: string) => { setHistoryMode({ tab, title }); setHistoryOpen(true); };
+
   const handleLogout = async () => {
     await signOut();
     toast({ title: "Logout Berhasil" });
@@ -89,13 +92,10 @@ const Profile = () => {
 
   const gridItems = [
     { icon: ClipboardList, label: "Pesanan", desc: "Riwayat investasi", tint: "bg-emerald-50 text-emerald-600", action: () => navigate("/account") },
-    { icon: Receipt, label: "Tagihan", desc: "Riwayat transaksi", tint: "bg-emerald-50 text-emerald-600", action: () => setHistoryOpen(true) },
+    { icon: Receipt, label: "Tagihan", desc: "Riwayat transaksi", tint: "bg-emerald-50 text-emerald-600", action: () => openHistory("all", "Riwayat Keuangan") },
     { icon: Crown, label: "VIP", desc: "Komisi hingga 15%", tint: "bg-emerald-50 text-emerald-800", action: () => setReferralOpen(true) },
     { icon: Users, label: "Tim", desc: "Kelola referral", tint: "bg-lime-50 text-lime-600", action: () => navigate("/team") },
   ];
-
-  const [historyMode, setHistoryMode] = useState<{ tab: "all"|"deposit"|"withdraw"|"earning"; title: string }>({ tab: "all", title: "Riwayat Keuangan" });
-  const openHistory = (tab: "all"|"deposit"|"withdraw"|"earning", title: string) => { setHistoryMode({ tab, title }); setHistoryOpen(true); };
 
   const listItems = [
     { icon: ArrowDownToLine, label: "Riwayat Deposit", tint: "bg-emerald-50 text-emerald-600", action: () => openHistory("deposit", "Riwayat Deposit") },
@@ -112,11 +112,12 @@ const Profile = () => {
     <div className="bg-[#f0fbf4] min-h-screen pb-10">
       {/* Decorative gradient banner */}
       <div className="relative overflow-hidden pt-6 pb-24 px-4 bg-gradient-to-br from-[#065f46] via-[#047857] to-[#10b981]">
-        {/* Decorative blobs */}
-        <div className="absolute -top-16 -right-10 w-56 h-56 rounded-full bg-white/10 blur-2xl" />
-        <div className="absolute top-10 -left-16 w-48 h-48 rounded-full bg-lime-300/20 blur-3xl" />
-        <div className="absolute bottom-0 right-1/3 w-32 h-32 rounded-full bg-emerald-400/20 blur-2xl" />
-        {/* Sparkle */}
+        {/* Decorative solid overlays (no blur — safer on low-end mobile GPUs) */}
+        <div className="absolute -top-16 -right-10 w-56 h-56 rounded-full bg-white/10 pointer-events-none" />
+        <div className="absolute top-10 -left-16 w-48 h-48 rounded-full bg-lime-300/15 pointer-events-none" />
+        <div className="absolute bottom-0 right-1/3 w-32 h-32 rounded-full bg-emerald-400/15 pointer-events-none" />
+        
+        
         
         
 
@@ -293,7 +294,7 @@ const Profile = () => {
       <ReferralDialog open={referralOpen} onOpenChange={setReferralOpen} referralCode={profile.referral_code || ""} />
       <DailyCheckinDialog open={checkinOpen} onOpenChange={setCheckinOpen} onSuccess={refreshProfile} />
       <SpinWheelDialog open={spinOpen} onOpenChange={setSpinOpen} onSuccess={refreshProfile} />
-      <TransactionHistoryDialog open={historyOpen} onOpenChange={setHistoryOpen} />
+      <TransactionHistoryDialog open={historyOpen} onOpenChange={setHistoryOpen} defaultTab={historyMode.tab} title={historyMode.title} />
     </div>
   );
 };
