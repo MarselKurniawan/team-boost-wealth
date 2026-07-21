@@ -172,36 +172,42 @@ const BankAccountDialog = ({ open, onOpenChange, onSuccess }: BankAccountDialogP
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="w-[95vw] max-w-md mx-auto max-h-[85vh] overflow-hidden flex flex-col">
-        <DialogHeader>
-          <DialogTitle className="flex items-center gap-2 text-base sm:text-lg">
-            <Landmark className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
-            Account Bank & E-Wallet
-          </DialogTitle>
-          <DialogDescription className="text-sm">Kelola rekening untuk penarikan</DialogDescription>
-        </DialogHeader>
+      <DialogContent className="w-[95vw] max-w-md mx-auto max-h-[88vh] p-0 gap-0 overflow-hidden rounded-3xl border-0 shadow-2xl flex flex-col">
+        {/* Editorial header */}
+        <div className="relative bg-gradient-to-br from-[#065f46] via-[#047857] to-[#10b981] text-white px-5 pt-5 pb-6 shrink-0">
+          <div className="absolute -right-10 -top-10 w-40 h-40 rounded-full bg-white/10" />
+          <div className="absolute -left-6 -bottom-6 w-28 h-28 rounded-full bg-lime-300/15" />
+          <div className="relative">
+            <p className="text-[9px] uppercase tracking-[0.32em] text-white/70 font-semibold">Metode Penarikan</p>
+            <h2 className="text-lg font-heading font-bold mt-0.5">Akun Bank & E-Wallet</h2>
+            <p className="text-[10px] text-white/70 mt-0.5">Kelola tujuan penarikan dana kamu</p>
+          </div>
+        </div>
 
-        <div className="flex-1 overflow-hidden flex flex-col gap-4">
-          <ScrollArea className="flex-1 max-h-[200px]">
-            <div className="space-y-2 pr-4">
+        <div className="flex-1 overflow-hidden flex flex-col gap-3 bg-white px-4 pt-4 pb-4 -mt-3 rounded-t-3xl relative">
+          <ScrollArea className="flex-1 max-h-[220px]">
+            <div className="space-y-2 pr-3">
               {accounts.length === 0 ? (
-                <div className="text-center py-6 text-muted-foreground">
-                  <Wallet className="w-10 h-10 mx-auto mb-2 opacity-50" />
-                  <p className="text-sm">Belum ada rekening tersimpan</p>
+                <div className="text-center py-8">
+                  <div className="w-14 h-14 mx-auto rounded-full bg-emerald-50 flex items-center justify-center mb-2">
+                    <Wallet className="w-6 h-6 text-primary/60" />
+                  </div>
+                  <p className="text-[11px] font-semibold text-foreground">Belum ada rekening</p>
+                  <p className="text-[10px] text-muted-foreground mt-0.5">Tambahkan minimal 1 rekening untuk menarik dana</p>
                 </div>
               ) : accounts.map((account) => (
-                <div key={account.id} className="flex items-center justify-between p-3 bg-muted/50 rounded-lg border border-border/50">
-                  <div className="flex items-center gap-3">
-                    <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${account.account_type === "bank" ? "bg-primary/20 text-primary" : "bg-accent/20 text-accent"}`}>
-                      {account.account_type === "bank" ? <Landmark className="w-5 h-5" /> : <Wallet className="w-5 h-5" />}
+                <div key={account.id} className="flex items-center justify-between p-3 rounded-2xl bg-gradient-to-r from-emerald-50/70 to-lime-50/50 border border-emerald-100">
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${account.account_type === "bank" ? "bg-white text-primary border border-emerald-200" : "bg-gradient-to-br from-[#10b981] to-[#065f46] text-white"}`}>
+                      {account.account_type === "bank" ? <Landmark className="w-4 h-4" /> : <Wallet className="w-4 h-4" />}
                     </div>
-                    <div>
-                      <p className="font-medium text-sm text-foreground">{account.provider.includes("|") ? account.provider.split("|")[1] : account.provider}</p>
-                      <p className="text-xs text-muted-foreground">{account.account_number} - {account.account_name}</p>
+                    <div className="min-w-0">
+                      <p className="font-heading font-bold text-[12px] text-foreground truncate">{account.provider.includes("|") ? account.provider.split("|")[1] : account.provider}</p>
+                      <p className="text-[10px] text-muted-foreground truncate">{account.account_number} · {account.account_name}</p>
                     </div>
                   </div>
-                  <Button variant="ghost" size="icon" className="text-destructive hover:bg-destructive/20" onClick={() => handleDeleteAccount(account.id)}>
-                    <Trash2 className="w-4 h-4" />
+                  <Button variant="ghost" size="icon" className="text-destructive hover:bg-destructive/10 h-8 w-8 shrink-0" onClick={() => handleDeleteAccount(account.id)}>
+                    <Trash2 className="w-3.5 h-3.5" />
                   </Button>
                 </div>
               ))}
@@ -209,25 +215,25 @@ const BankAccountDialog = ({ open, onOpenChange, onSuccess }: BankAccountDialogP
           </ScrollArea>
 
           {isAdding ? (
-            <div className="space-y-3 border-t pt-4">
+            <div className="space-y-3 border-t border-emerald-100 pt-3">
               <div className="flex gap-2">
-                <Button type="button" variant={accountType === "bank" ? "default" : "outline"} className="flex-1" onClick={() => { setAccountType("bank"); setProvider(""); }}>
-                  <Landmark className="w-4 h-4 mr-2" />Bank
+                <Button type="button" variant={accountType === "bank" ? "default" : "outline"} className={`flex-1 h-9 rounded-full text-[11px] ${accountType==="bank"?"bg-gradient-to-br from-[#10b981] to-[#065f46] text-white":"border-emerald-200"}`} onClick={() => { setAccountType("bank"); setProvider(""); }}>
+                  <Landmark className="w-3.5 h-3.5 mr-1" />Bank
                 </Button>
-                <Button type="button" variant={accountType === "ewallet" ? "default" : "outline"} className="flex-1" onClick={() => { setAccountType("ewallet"); setProvider(""); }}>
-                  <Wallet className="w-4 h-4 mr-2" />E-Wallet
+                <Button type="button" variant={accountType === "ewallet" ? "default" : "outline"} className={`flex-1 h-9 rounded-full text-[11px] ${accountType==="ewallet"?"bg-gradient-to-br from-[#10b981] to-[#065f46] text-white":"border-emerald-200"}`} onClick={() => { setAccountType("ewallet"); setProvider(""); }}>
+                  <Wallet className="w-3.5 h-3.5 mr-1" />E-Wallet
                 </Button>
               </div>
-              <div className="space-y-2">
-                <Label>{accountType === "bank" ? "Nama Bank" : "Nama E-Wallet"}</Label>
+              <div className="space-y-1.5">
+                <Label className="text-[10px] font-bold uppercase tracking-wider text-primary/70">{accountType === "bank" ? "Nama Bank" : "Nama E-Wallet"}</Label>
                 <Popover open={providerOpen} onOpenChange={setProviderOpen}>
                   <PopoverTrigger asChild>
-                    <Button variant="outline" className="w-full justify-between bg-muted/50">
+                    <Button variant="outline" className="w-full justify-between rounded-xl border-emerald-200 bg-white h-10 text-[12px] font-normal">
                       {provider ? selectedProviderLabel : `Pilih ${accountType === "bank" ? "bank" : "e-wallet"}...`}
-                      <ChevronsUpDown className="ml-2 h-4 w-4 opacity-50" />
+                      <ChevronsUpDown className="ml-2 h-3.5 w-3.5 opacity-50" />
                     </Button>
                   </PopoverTrigger>
-                  <PopoverContent className="w-full p-0 z-[100]" align="start">
+                  <PopoverContent className="w-[--radix-popover-trigger-width] p-0 z-[100]" align="start">
                     <Command>
                       <CommandInput placeholder="Cari..." />
                       <CommandList>
@@ -245,21 +251,23 @@ const BankAccountDialog = ({ open, onOpenChange, onSuccess }: BankAccountDialogP
                   </PopoverContent>
                 </Popover>
               </div>
-              <div className="space-y-2">
-                <Label>{accountType === "bank" ? "Nomor Rekening" : "Nomor HP/ID"}</Label>
-                <Input value={accountNumber} onChange={(e) => setAccountNumber(e.target.value)} placeholder="Masukkan nomor" className="bg-muted/50" />
+              <div className="space-y-1.5">
+                <Label className="text-[10px] font-bold uppercase tracking-wider text-primary/70">{accountType === "bank" ? "Nomor Rekening" : "Nomor HP/ID"}</Label>
+                <Input value={accountNumber} onChange={(e) => setAccountNumber(e.target.value)} placeholder="Masukkan nomor" className="rounded-xl border-emerald-200 bg-white h-10 text-[12px]" />
               </div>
-              <div className="space-y-2">
-                <Label>Nama Pemilik</Label>
-                <Input value={accountName} onChange={(e) => setAccountName(e.target.value)} placeholder="Nama sesuai rekening" className="bg-muted/50" />
+              <div className="space-y-1.5">
+                <Label className="text-[10px] font-bold uppercase tracking-wider text-primary/70">Nama Pemilik</Label>
+                <Input value={accountName} onChange={(e) => setAccountName(e.target.value)} placeholder="Nama sesuai rekening" className="rounded-xl border-emerald-200 bg-white h-10 text-[12px]" />
               </div>
-              <div className="flex gap-2 pt-2">
-                <Button className="flex-1" onClick={handleAddAccount}><Check className="w-4 h-4 mr-2" />Simpan</Button>
-                <Button variant="outline" onClick={resetForm}>Batal</Button>
+              <div className="flex gap-2 pt-1">
+                <Button className="flex-1 h-10 rounded-full bg-gradient-to-br from-[#10b981] to-[#065f46] text-white text-[11px] font-bold" onClick={handleAddAccount}>
+                  <Check className="w-3.5 h-3.5 mr-1" />Simpan Rekening
+                </Button>
+                <Button variant="outline" className="h-10 rounded-full border-emerald-200 text-[11px]" onClick={resetForm}>Batal</Button>
               </div>
             </div>
           ) : (
-            <Button variant="outline" className="w-full border-dashed" onClick={() => setIsAdding(true)}>
+            <Button variant="outline" className="w-full h-11 rounded-2xl border-dashed border-emerald-300 text-primary text-[12px] font-semibold bg-emerald-50/40" onClick={() => setIsAdding(true)}>
               <Plus className="w-4 h-4 mr-2" />Tambah Rekening Baru
             </Button>
           )}
