@@ -130,10 +130,23 @@ function rsaPublicDecryptChunked(b64: string, pub: forge.pki.rsa.PublicKey): str
   return forge.util.decodeUtf8(out);
 }
 
-export function signParams(params: Record<string, unknown>, mode: "valueOnly" | "keyValue" = "valueOnly"): string {
+type SignMode = "valueOnly" | "keyValue" | "sha256" | "sha1";
+
+export function signParams(params: Record<string, unknown>, mode: SignMode = "valueOnly"): string {
   const strA = mode === "keyValue" ? buildKeyValueStrA(params) : buildStrA(params);
   const priv = loadPrivateKey();
-  const b64 = rsaPrivateEncryptChunked(strA, priv);
+  let b64: string;
+  if (mode === "sha256") {
+    const md = forge.md.sha256.create();
+    md.update(strA, "utf8");
+    b64 = forge.util.encode64(priv.sign(md));
+  } else if (mode === "sha1") {
+    const md = forge.md.sha1.create();
+    md.update(strA, "utf8");
+    b64 = forge.util.encode64(priv.sign(md));
+  } else {
+    b64 = rsaPrivateEncryptChunked(strA, priv);
+  }
   console.log("[Jayapay] Signature mode:", mode, "length:", b64.length);
   return b64;
 }
@@ -165,9 +178,11 @@ function isSignatureRejected(json: Record<string, unknown>): boolean {
 }
 
 export async function jayapayPost(path: string, body: Record<string, unknown>) {
-  const attempts: Array<{ mode: "valueOnly" | "keyValue"; body: Record<string, unknown> }> = [
+  const attempts: Array<{ mode: SignMode; body: Record<string, unknown> }> = [
     { mode: "valueOnly", body },
     { mode: "keyValue", body },
+    { mode: "sha256", body },
+    { mode: "sha1", body },
   ];
 
   let last: { ok: boolean; status: number; json: Record<string, unknown>; signMode: string } | null = null;
