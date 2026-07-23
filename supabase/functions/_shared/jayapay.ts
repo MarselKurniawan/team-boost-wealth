@@ -174,7 +174,7 @@ export async function jayapayPost(path: string, body: Record<string, unknown>) {
   for (const attempt of attempts) {
     const sign = signParams(attempt.body, attempt.mode);
     const finalBody = { ...attempt.body, sign };
-    console.log("[Jayapay] POST →", path, "| env:", JAYAPAY_ENV, "| merchant:", attempt.body.mchNo, "| mode:", attempt.mode);
+    console.log("[Jayapay] POST →", path, "| env:", JAYAPAY_ENV, "| merchant:", attempt.body.merchantCode || attempt.body.mchNo, "| mode:", attempt.mode);
 
     const res = await fetch(jayapayUrl(path), {
       method: "POST",
