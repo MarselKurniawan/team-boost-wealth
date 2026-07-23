@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
 import { formatCurrency } from "@/lib/database";
@@ -101,7 +100,7 @@ const RechargeDialog = ({ open, onOpenChange, onSuccess }: RechargeDialogProps) 
           </div>
         </div>
 
-        <ScrollArea className="flex-1 min-h-0 -mt-8 px-5 overflow-y-auto">
+        <div className="flex-1 min-h-0 -mt-8 px-5 overflow-y-auto overscroll-contain">
           <div className="rounded-2xl bg-white border border-emerald-100 shadow-[0_10px_30px_-15px_rgba(30,64,175,0.35)] p-4 space-y-4">
             {/* Preset chips */}
             <div>
@@ -172,7 +171,7 @@ const RechargeDialog = ({ open, onOpenChange, onSuccess }: RechargeDialogProps) 
             </div>
           </div>
           <div className="h-4" />
-        </ScrollArea>
+        </div>
 
         {/* Footer */}
         <div className="px-5 py-3 border-t border-emerald-100 bg-white/95 backdrop-blur">

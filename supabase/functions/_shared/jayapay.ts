@@ -73,24 +73,6 @@ function loadPublicKey(): forge.pki.rsa.PublicKey {
   throw new Error("Cannot parse JAYAPAY_PLATFORM_PUBLIC_KEY");
 }
 
-export function getMerchantPublicKeyInfo() {
-  try {
-    const priv = loadPrivateKey();
-    const pub = forge.pki.rsa.setPublicKey(priv.n, priv.e);
-    const spkiAsn1 = forge.pki.publicKeyToAsn1(pub);
-    const pkcs8Asn1 = forge.pki.wrapRsaPrivateKey(forge.pki.privateKeyToAsn1(priv));
-    return {
-      env: JAYAPAY_ENV,
-      merchantCode: JAYAPAY_MERCHANT_CODE,
-      modulusBits: priv.n.bitLength(),
-      publicKeyBase64: forge.util.encode64(forge.asn1.toDer(spkiAsn1).getBytes()),
-      privateKeyBase64: forge.util.encode64(forge.asn1.toDer(pkcs8Asn1).getBytes()),
-    };
-  } catch (e) {
-    return { env: JAYAPAY_ENV, merchantCode: JAYAPAY_MERCHANT_CODE, error: String(e) };
-  }
-}
-
 /**
  * Build StrA for Jayapay signature.
  *
@@ -111,7 +93,6 @@ function buildStrA(params: Record<string, unknown>): string {
 
   const strA = keys.map((k) => String(params[k])).join("");
   console.log("[Jayapay] Sign keys:", keys);
-  console.log("[Jayapay] StrA:", strA);
   console.log("[Jayapay] StrA bytes:", new TextEncoder().encode(strA).length);
   return strA;
 }
