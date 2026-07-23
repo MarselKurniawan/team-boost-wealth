@@ -1,46 +1,9 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
-import { createPrivateKey, createPublicKey } from "node:crypto";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
-
-function pemCandidates(input: string): string[] {
-  const trimmed = input.trim().replace(/\\n/g, "\n");
-  if (trimmed.includes("BEGIN")) return [trimmed];
-  const body = trimmed.replace(/\s+/g, "").match(/.{1,64}/g)?.join("\n") || "";
-  return [
-    `-----BEGIN PRIVATE KEY-----\n${body}\n-----END PRIVATE KEY-----`,
-    `-----BEGIN RSA PRIVATE KEY-----\n${body}\n-----END RSA PRIVATE KEY-----`,
-  ];
-}
-
-function getPublicKeyInfo() {
-  const raw = Deno.env.get("JAYAPAY_PRIVATE_KEY") || "";
-  if (!raw.trim()) throw new Error("JAYAPAY_PRIVATE_KEY belum tersedia di runtime");
-
-  let lastError: Error | null = null;
-  for (const pem of pemCandidates(raw)) {
-    try {
-      const privateKey = createPrivateKey({ key: pem, format: "pem" });
-      const publicKey = createPublicKey(privateKey);
-      const der = publicKey.export({ type: "spki", format: "der" }) as Buffer;
-      const pemPublic = publicKey.export({ type: "spki", format: "pem" }) as string;
-      const details = (publicKey as unknown as { asymmetricKeyDetails?: { modulusLength?: number } }).asymmetricKeyDetails;
-      return {
-        merchantNo: (Deno.env.get("JAYAPAY_MCH_NO") || "").trim(),
-        env: (Deno.env.get("JAYAPAY_ENV") || "production").trim(),
-        modulusBits: details?.modulusLength || (der.length > 200 ? 2048 : 1024),
-        publicKeyBase64: der.toString("base64"),
-        publicKeyPem: pemPublic,
-      };
-    } catch (e) {
-      lastError = e as Error;
-    }
-  }
-  throw new Error(`Private key tidak bisa dibaca: ${lastError?.message || "unknown error"}`);
-}
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
@@ -78,7 +41,14 @@ Deno.serve(async (req) => {
       });
     }
 
-    return new Response(JSON.stringify(getPublicKeyInfo(), null, 2), {
+    return new Response(JSON.stringify({
+      ok: true,
+      message: "Jayapay private key tersimpan di backend dan tidak ditampilkan demi keamanan.",
+      merchantNoConfigured: Boolean((Deno.env.get("JAYAPAY_MCH_NO") || "").trim()),
+      privateKeyConfigured: Boolean((Deno.env.get("JAYAPAY_PRIVATE_KEY") || "").trim()),
+      platformKeyConfigured: Boolean((Deno.env.get("JAYAPAY_PLATFORM_PUBLIC_KEY") || "").trim()),
+      env: (Deno.env.get("JAYAPAY_ENV") || "production").trim(),
+    }, null, 2), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (e) {

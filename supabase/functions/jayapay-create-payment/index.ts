@@ -1,5 +1,5 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
-import { getMerchantPublicKeyInfo, jayapayPost, JAYAPAY_MERCHANT_CODE } from "../_shared/jayapay.ts";
+import { jayapayPost, JAYAPAY_MERCHANT_CODE } from "../_shared/jayapay.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -68,12 +68,11 @@ Deno.serve(async (req) => {
 
     const payInPayload = {
       mchNo: JAYAPAY_MERCHANT_CODE,
-      method,
       orderNum,
       amount: Math.trunc(amount),
       productDetail: "Deposit Saldo",
       downNotifyUrl: notifyUrl,
-      timestamp: String(Math.floor(Date.now() / 1000)),
+      timestamp: String(Date.now()),
       customerName: (profile?.name || "User").replace(/[^\x20-\x7E]/g, "").slice(0, 64) || "User",
       customerPhone,
       expiryPeriod: 1440,
@@ -81,15 +80,7 @@ Deno.serve(async (req) => {
     };
 
     // Official Jayapay Pay-In create endpoint: /{countryCode}/pay/prePay
-    let resp = await jayapayPost("/id/pay/prePay", payInPayload);
-    const timestampMsg = String(resp.json?.msg || resp.json?.message || resp.json?.platRespMessage || "");
-    if (/timestamp must be a valid 13-digit number/i.test(timestampMsg)) {
-      console.warn("Jayapay requested 13-digit timestamp despite docs using 10-digit; retrying with millisecond timestamp");
-      resp = await jayapayPost("/id/pay/prePay", {
-        ...payInPayload,
-        timestamp: String(Date.now()),
-      });
-    }
+    const resp = await jayapayPost("/id/pay/prePay", payInPayload);
 
     const success = resp.ok && (resp.json?.platRespCode === "SUCCESS" || (resp.json?.success === true && resp.json?.code === "9999"));
     if (!success) {
@@ -99,18 +90,14 @@ Deno.serve(async (req) => {
       }).eq("id", tx.id);
       const msg = String(resp.json?.platRespMessage || resp.json?.msg || "Jayapay error");
       const isSignatureError = /signature|sign/i.test(msg);
-      const isMissingMerchantPublicKey = /publicKey has not been configured/i.test(msg);
       return new Response(JSON.stringify({
-        error: isMissingMerchantPublicKey
-          ? "Jayapay belum punya public key untuk merchantCode ini. Buka dashboard Jayapay → Collection & Payment Config → API Config, lalu paste nilai debug.publicKeyBase64 saja (TANPA -----BEGIN/END-----, tanpa enter, tanpa spasi)."
-          : isSignatureError
-          ? "Signature Jayapay ditolak. Pastikan JAYAPAY_PRIVATE_KEY cocok dengan public key merchant yang di-upload di dashboard Jayapay (Collection & Payment Config → API Config)."
+        error: isSignatureError
+          ? "Signature Jayapay ditolak. Private key merchant sudah dipakai langsung untuk signing, tapi Jayapay masih menolak tanda tangan dari merchant ini."
           : msg,
         detail: resp.json,
-        sentPayload: payInPayload,
+        sentPayloadFields: Object.keys(payInPayload),
         endpoint: "/id/pay/prePay",
         signMode: resp.signMode,
-        debug: getMerchantPublicKeyInfo(),
       }), {
         status: 502, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });

@@ -73,24 +73,6 @@ function loadPublicKey(): forge.pki.rsa.PublicKey {
   throw new Error("Cannot parse JAYAPAY_PLATFORM_PUBLIC_KEY");
 }
 
-export function getMerchantPublicKeyInfo() {
-  try {
-    const priv = loadPrivateKey();
-    const pub = forge.pki.rsa.setPublicKey(priv.n, priv.e);
-    const spkiAsn1 = forge.pki.publicKeyToAsn1(pub);
-    const pkcs8Asn1 = forge.pki.wrapRsaPrivateKey(forge.pki.privateKeyToAsn1(priv));
-    return {
-      env: JAYAPAY_ENV,
-      merchantCode: JAYAPAY_MERCHANT_CODE,
-      modulusBits: priv.n.bitLength(),
-      publicKeyBase64: forge.util.encode64(forge.asn1.toDer(spkiAsn1).getBytes()),
-      privateKeyBase64: forge.util.encode64(forge.asn1.toDer(pkcs8Asn1).getBytes()),
-    };
-  } catch (e) {
-    return { env: JAYAPAY_ENV, merchantCode: JAYAPAY_MERCHANT_CODE, error: String(e) };
-  }
-}
-
 /**
  * Build StrA for Jayapay signature.
  *
@@ -99,19 +81,22 @@ export function getMerchantPublicKeyInfo() {
  *   - Concatenate VALUES only — no keys, no separators
  *   - Exclude ONLY sign / platSign (per official docs)
  */
-function buildStrA(params: Record<string, unknown>): string {
+function sortedSignKeys(params: Record<string, unknown>): string[] {
   const OMIT = new Set(["sign", "platSign"]);
-  const keys = Object.keys(params)
+  return Object.keys(params)
     .filter((k) => !OMIT.has(k))
     .filter((k) => {
       const v = params[k];
       return v !== undefined && v !== null && String(v).length > 0;
     })
     .sort();
+}
+
+function buildStrA(params: Record<string, unknown>): string {
+  const keys = sortedSignKeys(params);
 
   const strA = keys.map((k) => String(params[k])).join("");
   console.log("[Jayapay] Sign keys:", keys);
-  console.log("[Jayapay] StrA:", strA);
   console.log("[Jayapay] StrA bytes:", new TextEncoder().encode(strA).length);
   return strA;
 }
@@ -145,7 +130,7 @@ export function signParams(params: Record<string, unknown>): string {
   const strA = buildStrA(params);
   const priv = loadPrivateKey();
   const b64 = rsaPrivateEncryptChunked(strA, priv);
-  console.log("[Jayapay] Signature length:", b64.length);
+  console.log("[Jayapay] Signature mode: valueOnly length:", b64.length);
   return b64;
 }
 
@@ -164,7 +149,9 @@ export function verifyCallback(params: Record<string, unknown>): boolean {
 }
 
 export function jayapayTimestamp(): string {
-  return Math.floor(Date.now() / 1000).toString();
+  const d = new Date();
+  const pad = (n: number) => String(n).padStart(2, "0");
+  return `${d.getFullYear()}${pad(d.getMonth() + 1)}${pad(d.getDate())}${pad(d.getHours())}${pad(d.getMinutes())}${pad(d.getSeconds())}`;
 }
 
 function isSignatureRejected(json: Record<string, unknown>): boolean {
@@ -193,7 +180,7 @@ export async function jayapayPost(path: string, body: Record<string, unknown>) {
   }
 
   if (isSignatureRejected(json)) {
-    console.error("[Jayapay] Signature rejected. Check StrA log above + key in dashboard.");
+    console.error("[Jayapay] Signature rejected. Merchant private key does not match the public key registered for this merchant.");
   }
 
   return { ok: res.ok, status: res.status, json, signMode: "valueOnly" };
