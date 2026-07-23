@@ -71,7 +71,7 @@ const RechargeDialog = ({ open, onOpenChange, onSuccess }: RechargeDialogProps) 
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="w-[95vw] max-w-md mx-auto max-h-[90vh] p-0 overflow-hidden flex flex-col border-0 rounded-3xl">
+      <DialogContent className="w-[95vw] max-w-md mx-auto h-[90dvh] max-h-[90dvh] p-0 overflow-hidden flex flex-col border-0 rounded-3xl">
         {/* Hero header */}
         <div className="relative overflow-hidden pt-5 pb-14 px-5 bg-gradient-to-br from-[#0b1e5c] via-[#047857] to-[#10b981]">
           <div className="absolute -top-10 -right-8 w-40 h-40 rounded-full bg-lime-300/15 blur-2xl" />
@@ -101,7 +101,7 @@ const RechargeDialog = ({ open, onOpenChange, onSuccess }: RechargeDialogProps) 
           </div>
         </div>
 
-        <ScrollArea className="flex-1 -mt-8 px-5">
+        <ScrollArea className="flex-1 min-h-0 -mt-8 px-5 overflow-y-auto">
           <div className="rounded-2xl bg-white border border-emerald-100 shadow-[0_10px_30px_-15px_rgba(30,64,175,0.35)] p-4 space-y-4">
             {/* Preset chips */}
             <div>
@@ -130,7 +130,7 @@ const RechargeDialog = ({ open, onOpenChange, onSuccess }: RechargeDialogProps) 
             {/* Payment method list */}
             <div>
               <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-2">Metode pembayaran</p>
-              <div className="space-y-1.5">
+              <div className="space-y-1.5 pb-1">
                 {PAYMENT_METHODS.map((m) => {
                   const active = method === m.code;
                   return (
