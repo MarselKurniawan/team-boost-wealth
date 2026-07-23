@@ -1,5 +1,5 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
-import { jayapayPost, JAYAPAY_MERCHANT_CODE } from "../_shared/jayapay.ts";
+import { jayapayPost, jayapayTimestamp, JAYAPAY_MERCHANT_CODE } from "../_shared/jayapay.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -67,16 +67,16 @@ Deno.serve(async (req) => {
     const customerPhone = (profile?.phone || "").replace(/[^0-9]/g, "") || "08000000000";
 
     const payInPayload = {
-      mchNo: JAYAPAY_MERCHANT_CODE,
+      merchantCode: JAYAPAY_MERCHANT_CODE,
       orderNum,
-      amount: Math.trunc(amount),
+      payMoney: Math.trunc(amount),
       productDetail: "Deposit Saldo",
-      downNotifyUrl: notifyUrl,
-      timestamp: String(Date.now()),
-      customerName: (profile?.name || "User").replace(/[^\x20-\x7E]/g, "").slice(0, 64) || "User",
-      customerPhone,
+      notifyUrl,
+      dateTime: jayapayTimestamp(),
+      name: (profile?.name || "User").replace(/[^\x20-\x7E]/g, "").slice(0, 64) || "User",
+      phone: customerPhone,
       expiryPeriod: 1440,
-      customerEmail,
+      email: customerEmail,
     };
 
     // Official Jayapay Pay-In create endpoint: /{countryCode}/pay/prePay

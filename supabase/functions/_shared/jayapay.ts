@@ -153,7 +153,9 @@ export function verifyCallback(params: Record<string, unknown>): boolean {
 }
 
 export function jayapayTimestamp(): string {
-  return Math.floor(Date.now() / 1000).toString();
+  const d = new Date();
+  const pad = (n: number) => String(n).padStart(2, "0");
+  return `${d.getFullYear()}${pad(d.getMonth() + 1)}${pad(d.getDate())}${pad(d.getHours())}${pad(d.getMinutes())}${pad(d.getSeconds())}`;
 }
 
 function isSignatureRejected(json: Record<string, unknown>): boolean {
