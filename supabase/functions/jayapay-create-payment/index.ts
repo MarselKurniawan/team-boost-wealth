@@ -68,7 +68,6 @@ Deno.serve(async (req) => {
 
     const payInPayload = {
       mchNo: JAYAPAY_MERCHANT_CODE,
-      method,
       orderNum,
       amount: Math.trunc(amount),
       productDetail: "Deposit Saldo",
