@@ -95,7 +95,7 @@ Deno.serve(async (req) => {
           ? "Signature Jayapay ditolak. Private key merchant sudah dipakai langsung untuk signing, tapi Jayapay masih menolak tanda tangan dari merchant ini."
           : msg,
         detail: resp.json,
-        sentPayload: payInPayload,
+        sentPayloadFields: Object.keys(payInPayload),
         endpoint: "/id/pay/prePay",
         signMode: resp.signMode,
       }), {

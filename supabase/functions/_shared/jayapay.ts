@@ -101,10 +101,6 @@ function buildStrA(params: Record<string, unknown>): string {
   return strA;
 }
 
-function buildKeyValueStrA(params: Record<string, unknown>): string {
-  return sortedSignKeys(params).map((k) => `${k}=${String(params[k])}`).join("&");
-}
-
 /**
  * Chunked RSA private-key encrypt (PKCS#1 v1.5) — matches Java rsaSplitCodec.
  * Block size = keySize/8 - 11 bytes per input chunk.
@@ -130,24 +126,11 @@ function rsaPublicDecryptChunked(b64: string, pub: forge.pki.rsa.PublicKey): str
   return forge.util.decodeUtf8(out);
 }
 
-type SignMode = "valueOnly" | "keyValue" | "sha256" | "sha1";
-
-export function signParams(params: Record<string, unknown>, mode: SignMode = "valueOnly"): string {
-  const strA = mode === "keyValue" ? buildKeyValueStrA(params) : buildStrA(params);
+export function signParams(params: Record<string, unknown>): string {
+  const strA = buildStrA(params);
   const priv = loadPrivateKey();
-  let b64: string;
-  if (mode === "sha256") {
-    const md = forge.md.sha256.create();
-    md.update(strA, "utf8");
-    b64 = forge.util.encode64(priv.sign(md));
-  } else if (mode === "sha1") {
-    const md = forge.md.sha1.create();
-    md.update(strA, "utf8");
-    b64 = forge.util.encode64(priv.sign(md));
-  } else {
-    b64 = rsaPrivateEncryptChunked(strA, priv);
-  }
-  console.log("[Jayapay] Signature mode:", mode, "length:", b64.length);
+  const b64 = rsaPrivateEncryptChunked(strA, priv);
+  console.log("[Jayapay] Signature mode: valueOnly length:", b64.length);
   return b64;
 }
 
@@ -178,40 +161,27 @@ function isSignatureRejected(json: Record<string, unknown>): boolean {
 }
 
 export async function jayapayPost(path: string, body: Record<string, unknown>) {
-  const attempts: Array<{ mode: SignMode; body: Record<string, unknown> }> = [
-    { mode: "valueOnly", body },
-    { mode: "keyValue", body },
-    { mode: "sha256", body },
-    { mode: "sha1", body },
-  ];
+  const sign = signParams(body);
+  const finalBody = { ...body, sign };
+  console.log("[Jayapay] POST →", path, "| env:", JAYAPAY_ENV, "| merchant:", body.mchNo);
 
-  let last: { ok: boolean; status: number; json: Record<string, unknown>; signMode: string } | null = null;
-  for (const attempt of attempts) {
-    const sign = signParams(attempt.body, attempt.mode);
-    const finalBody = { ...attempt.body, sign };
-    console.log("[Jayapay] POST →", path, "| env:", JAYAPAY_ENV, "| merchant:", attempt.body.merchantCode || attempt.body.mchNo, "| mode:", attempt.mode);
+  const res = await fetch(jayapayUrl(path), {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(finalBody),
+  });
 
-    const res = await fetch(jayapayUrl(path), {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(finalBody),
-    });
-
-    const text = await res.text();
-    let json: Record<string, unknown>;
-    try {
-      json = JSON.parse(text);
-    } catch {
-      json = { raw: text };
-    }
-
-    last = { ok: res.ok, status: res.status, json, signMode: attempt.mode };
-    if (!isSignatureRejected(json)) {
-      return last;
-    }
-
-    console.error("[Jayapay] Signature rejected for mode:", attempt.mode);
+  const text = await res.text();
+  let json: Record<string, unknown>;
+  try {
+    json = JSON.parse(text);
+  } catch {
+    json = { raw: text };
   }
 
-  return last!;
+  if (isSignatureRejected(json)) {
+    console.error("[Jayapay] Signature rejected. Merchant private key does not match the public key registered for this merchant.");
+  }
+
+  return { ok: res.ok, status: res.status, json, signMode: "valueOnly" };
 }
