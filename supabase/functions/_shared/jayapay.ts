@@ -81,20 +81,28 @@ function loadPublicKey(): forge.pki.rsa.PublicKey {
  *   - Concatenate VALUES only — no keys, no separators
  *   - Exclude ONLY sign / platSign (per official docs)
  */
-function buildStrA(params: Record<string, unknown>): string {
+function sortedSignKeys(params: Record<string, unknown>): string[] {
   const OMIT = new Set(["sign", "platSign"]);
-  const keys = Object.keys(params)
+  return Object.keys(params)
     .filter((k) => !OMIT.has(k))
     .filter((k) => {
       const v = params[k];
       return v !== undefined && v !== null && String(v).length > 0;
     })
     .sort();
+}
+
+function buildStrA(params: Record<string, unknown>): string {
+  const keys = sortedSignKeys(params);
 
   const strA = keys.map((k) => String(params[k])).join("");
   console.log("[Jayapay] Sign keys:", keys);
   console.log("[Jayapay] StrA bytes:", new TextEncoder().encode(strA).length);
   return strA;
+}
+
+function buildKeyValueStrA(params: Record<string, unknown>): string {
+  return sortedSignKeys(params).map((k) => `${k}=${String(params[k])}`).join("&");
 }
 
 /**
@@ -122,11 +130,11 @@ function rsaPublicDecryptChunked(b64: string, pub: forge.pki.rsa.PublicKey): str
   return forge.util.decodeUtf8(out);
 }
 
-export function signParams(params: Record<string, unknown>): string {
-  const strA = buildStrA(params);
+export function signParams(params: Record<string, unknown>, mode: "valueOnly" | "keyValue" = "valueOnly"): string {
+  const strA = mode === "keyValue" ? buildKeyValueStrA(params) : buildStrA(params);
   const priv = loadPrivateKey();
   const b64 = rsaPrivateEncryptChunked(strA, priv);
-  console.log("[Jayapay] Signature length:", b64.length);
+  console.log("[Jayapay] Signature mode:", mode, "length:", b64.length);
   return b64;
 }
 
@@ -155,27 +163,38 @@ function isSignatureRejected(json: Record<string, unknown>): boolean {
 }
 
 export async function jayapayPost(path: string, body: Record<string, unknown>) {
-  const sign = signParams(body);
-  const finalBody = { ...body, sign };
-  console.log("[Jayapay] POST →", path, "| env:", JAYAPAY_ENV, "| merchant:", body.mchNo);
+  const attempts: Array<{ mode: "valueOnly" | "keyValue"; body: Record<string, unknown> }> = [
+    { mode: "valueOnly", body },
+    { mode: "keyValue", body },
+  ];
 
-  const res = await fetch(jayapayUrl(path), {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(finalBody),
-  });
+  let last: { ok: boolean; status: number; json: Record<string, unknown>; signMode: string } | null = null;
+  for (const attempt of attempts) {
+    const sign = signParams(attempt.body, attempt.mode);
+    const finalBody = { ...attempt.body, sign };
+    console.log("[Jayapay] POST →", path, "| env:", JAYAPAY_ENV, "| merchant:", attempt.body.mchNo, "| mode:", attempt.mode);
 
-  const text = await res.text();
-  let json: Record<string, unknown>;
-  try {
-    json = JSON.parse(text);
-  } catch {
-    json = { raw: text };
+    const res = await fetch(jayapayUrl(path), {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(finalBody),
+    });
+
+    const text = await res.text();
+    let json: Record<string, unknown>;
+    try {
+      json = JSON.parse(text);
+    } catch {
+      json = { raw: text };
+    }
+
+    last = { ok: res.ok, status: res.status, json, signMode: attempt.mode };
+    if (!isSignatureRejected(json)) {
+      return last;
+    }
+
+    console.error("[Jayapay] Signature rejected for mode:", attempt.mode);
   }
 
-  if (isSignatureRejected(json)) {
-    console.error("[Jayapay] Signature rejected. Check StrA log above + key in dashboard.");
-  }
-
-  return { ok: res.ok, status: res.status, json, signMode: "valueOnly" };
+  return last!;
 }
