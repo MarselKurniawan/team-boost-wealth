@@ -6,44 +6,10 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
-import { supabase } from "@/integrations/supabase/client";
-import { Eye, EyeOff, Shield, Phone, Loader2, Landmark, Check, ChevronsUpDown } from "lucide-react";
+import { Eye, EyeOff, Phone, Loader2 } from "lucide-react";
 import { z } from "zod";
 import ForgotPasswordFlow from "@/components/ForgotPasswordFlow";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
-import { cn } from "@/lib/utils";
 import brandLogo from "@/assets/logo.png";
-
-const BANK_OPTIONS = [
-  {
-    group: "Bank",
-    items: [
-      "BCA",
-      "Mandiri",
-      "BRI",
-      "BNI",
-      "BTN",
-      "CIMB Niaga",
-      "Permata",
-      "Danamon",
-      "BSI",
-      "Maybank",
-      "Panin",
-      "OCBC NISP",
-      "Mega",
-      "BTPN",
-      "Bank Jago",
-      "SeaBank",
-      "Allo Bank",
-      "Neo Commerce",
-      "Bank Sinarmas",
-      "HSBC",
-    ],
-  },
-  { group: "E-Wallet", items: ["DANA", "OVO", "GoPay", "ShopeePay", "LinkAja", "Sakuku", "Jenius Pay", "i.saku"] },
-];
-const ALL_BANKS = BANK_OPTIONS.flatMap((g) => g.items);
 
 const phoneSchema = z
   .string()
@@ -61,11 +27,6 @@ const Auth = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showForgotPassword, setShowForgotPassword] = useState(false);
 
-  const [otpStep, setOtpStep] = useState<"form" | "otp">("form");
-  const [otpCode, setOtpCode] = useState("");
-  const [captchaCode, setCaptchaCode] = useState("");
-  const [otpSending, setOtpSending] = useState(false);
-
   useEffect(() => {
     if (!loading && user) navigate("/");
   }, [loading, user, navigate]);
@@ -76,10 +37,6 @@ const Auth = () => {
   const [registerPhone, setRegisterPhone] = useState("");
   const [registerPassword, setRegisterPassword] = useState("");
   const [referralCode, setReferralCode] = useState(searchParams.get("ref") || "");
-  const [bankName, setBankName] = useState("");
-  const [bankHolder, setBankHolder] = useState("");
-  const [bankNumber, setBankNumber] = useState("");
-  const registerName = bankHolder;
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -115,14 +72,8 @@ const Auth = () => {
     navigate("/");
   };
 
-  const generateCaptcha = () => {
-    const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-    let code = "";
-    for (let i = 0; i < 6; i++) code += chars[Math.floor(Math.random() * chars.length)];
-    return code;
-  };
-
-  const handleSendOtp = async () => {
+  const handleRegister = async (e: React.FormEvent) => {
+    e.preventDefault();
     try {
       phoneSchema.parse(registerPhone);
       passwordSchema.parse(registerPassword);
@@ -132,81 +83,45 @@ const Auth = () => {
         return;
       }
     }
-    if (!bankName.trim() || !bankHolder.trim() || !bankNumber.trim()) {
-      toast({ title: "Error", description: "Data bank harus diisi lengkap", variant: "destructive" });
-      return;
-    }
-    setOtpSending(true);
-    try {
-      try {
-        const enc = new TextEncoder().encode(registerPassword);
-        const hashBuf = await crypto.subtle.digest("SHA-1", enc);
-        const hashHex = Array.from(new Uint8Array(hashBuf))
-          .map((b) => b.toString(16).padStart(2, "0"))
-          .join("")
-          .toUpperCase();
-        const prefix = hashHex.slice(0, 5);
-        const suffix = hashHex.slice(5);
-        const res = await fetch(`https://api.pwnedpasswords.com/range/${prefix}`);
-        if (res.ok) {
-          const text = await res.text();
-          const leaked = text.split("\n").some((line) => line.split(":")[0].trim() === suffix);
-          if (leaked) {
-            toast({
-              title: "Password Tidak Aman",
-              description: "Password ini pernah bocor di kebocoran data publik. Silakan pakai password lain.",
-              variant: "destructive",
-            });
-            setOtpSending(false);
-            return;
-          }
-        }
-      } catch (hibpErr) {
-        console.warn("HIBP check skipped:", hibpErr);
-      }
-      setCaptchaCode(generateCaptcha());
-      setOtpCode("");
-      setOtpStep("otp");
-    } catch (err) {
-      toast({ title: "Error", description: "Terjadi kesalahan", variant: "destructive" });
-    }
-    setOtpSending(false);
-  };
 
-  const handleVerifyAndRegister = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (otpCode.trim().toUpperCase() !== captchaCode) {
-      toast({ title: "Captcha Salah", description: "Kode yang dimasukkan tidak sesuai", variant: "destructive" });
-      setCaptchaCode(generateCaptcha());
-      setOtpCode("");
-      return;
-    }
     setIsLoading(true);
+
+    // Check password against known data breaches before creating the account
     try {
-      const { error, userId } = await signUp(registerPhone, registerPassword, registerName, referralCode || undefined);
+      const enc = new TextEncoder().encode(registerPassword);
+      const hashBuf = await crypto.subtle.digest("SHA-1", enc);
+      const hashHex = Array.from(new Uint8Array(hashBuf))
+        .map((b) => b.toString(16).padStart(2, "0"))
+        .join("")
+        .toUpperCase();
+      const prefix = hashHex.slice(0, 5);
+      const suffix = hashHex.slice(5);
+      const res = await fetch(`https://api.pwnedpasswords.com/range/${prefix}`);
+      if (res.ok) {
+        const text = await res.text();
+        const leaked = text.split("\n").some((line) => line.split(":")[0].trim() === suffix);
+        if (leaked) {
+          toast({
+            title: "Password Tidak Aman",
+            description: "Password ini pernah bocor di kebocoran data publik. Silakan pakai password lain.",
+            variant: "destructive",
+          });
+          setIsLoading(false);
+          return;
+        }
+      }
+    } catch (hibpErr) {
+      console.warn("HIBP check skipped:", hibpErr);
+    }
+
+    try {
+      const { error } = await signUp(registerPhone, registerPassword, registerPhone, referralCode || undefined);
       if (error) {
         let errorMessage = error.message;
         if (error.message.includes("already registered")) errorMessage = "Nomor sudah terdaftar. Silakan login.";
         toast({ title: "Registrasi Gagal", description: errorMessage, variant: "destructive" });
         setIsLoading(false);
         return;
-      }
-      let bankUserId = userId;
-      if (!bankUserId) {
-        const {
-          data: { user: u },
-        } = await supabase.auth.getUser();
-        bankUserId = u?.id;
-      }
-      if (bankUserId) {
-        const { error: bankErr } = await supabase.from("bank_accounts").insert({
-          user_id: bankUserId,
-          account_type: "bank",
-          provider: bankName.trim(),
-          account_name: bankHolder.trim(),
-          account_number: bankNumber.trim(),
-        });
-        if (bankErr) console.error("Gagal simpan rekening:", bankErr);
       }
       toast({ title: "Registrasi Berhasil!", description: "Akun Anda telah dibuat. Selamat bergabung!" });
       navigate("/");
@@ -359,233 +274,74 @@ const Auth = () => {
 
               {/* Register */}
               <TabsContent value="register">
-                {otpStep === "form" ? (
-                  <div className="space-y-3">
-                    <div className="space-y-1.5">
-                      <Label htmlFor="register-phone" className="flex items-center gap-1 text-[11px] text-slate-600">
-                        <Phone className="w-3 h-3" />
-                        Nomor WhatsApp
-                      </Label>
-                      <Input
-                        id="register-phone"
-                        type="tel"
-                        placeholder="08123456789"
-                        value={registerPhone}
-                        onChange={(e) => setRegisterPhone(e.target.value)}
-                        required
-                        className="bg-white/70 border-slate-200 h-10 text-xs rounded-xl focus-visible:ring-[#3fae49]"
-                      />
-                    </div>
-                    <div className="space-y-1.5">
-                      <Label htmlFor="register-password" className="text-[11px] text-slate-600">
-                        Kata Sandi
-                      </Label>
-                      <div className="relative">
-                        <Input
-                          id="register-password"
-                          type={showPassword ? "text" : "password"}
-                          placeholder="Masukkan kata sandi"
-                          value={registerPassword}
-                          onChange={(e) => setRegisterPassword(e.target.value)}
-                          required
-                          className="bg-white/70 border-slate-200 h-10 text-xs rounded-xl focus-visible:ring-[#3fae49] pr-9"
-                        />
-                        <button
-                          type="button"
-                          onClick={() => setShowPassword(!showPassword)}
-                          className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700"
-                        >
-                          {showPassword ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
-                        </button>
-                      </div>
-                    </div>
-                    <div className="space-y-1.5">
-                      <Label htmlFor="referral-code" className="text-[11px] text-slate-600">
-                        Kode Undangan
-                      </Label>
-                      <Input
-                        id="referral-code"
-                        type="text"
-                        placeholder="Masukkan kode undangan"
-                        value={referralCode}
-                        onChange={(e) => setReferralCode(e.target.value.toUpperCase())}
-                        required
-                        className="bg-white/70 border-slate-200 h-10 text-xs rounded-xl focus-visible:ring-[#3fae49]"
-                      />
-                    </div>
-                    <div className="space-y-1.5">
-                      <Label className="flex items-center gap-1 text-[11px] text-slate-600">
-                        <Landmark className="w-3 h-3" />
-                        Nama Bank / E-Wallet
-                      </Label>
-                      <Popover>
-                        <PopoverTrigger asChild>
-                          <Button
-                            type="button"
-                            variant="outline"
-                            role="combobox"
-                            className={cn(
-                              "w-full justify-between bg-white/70 border-slate-200 h-10 text-xs rounded-xl font-normal",
-                              !bankName && "text-slate-400",
-                            )}
-                          >
-                            {bankName || "Pilih bank atau e-wallet..."}
-                            <ChevronsUpDown className="ml-2 h-3.5 w-3.5 shrink-0 opacity-50" />
-                          </Button>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-[--radix-popover-trigger-width] p-0" align="start">
-                          <Command>
-                            <CommandInput placeholder="Cari bank/e-wallet..." className="text-xs" />
-                            <CommandList>
-                              <CommandEmpty className="text-xs py-4 text-center">Tidak ditemukan.</CommandEmpty>
-                              {BANK_OPTIONS.map((g) => (
-                                <CommandGroup key={g.group} heading={g.group}>
-                                  {g.items.map((b) => (
-                                    <CommandItem
-                                      key={b}
-                                      value={b}
-                                      className="text-xs"
-                                      onSelect={(v) =>
-                                        setBankName(ALL_BANKS.find((x) => x.toLowerCase() === v.toLowerCase()) || v)
-                                      }
-                                    >
-                                      <Check
-                                        className={cn("mr-2 h-3.5 w-3.5", bankName === b ? "opacity-100" : "opacity-0")}
-                                      />
-                                      {b}
-                                    </CommandItem>
-                                  ))}
-                                </CommandGroup>
-                              ))}
-                            </CommandList>
-                          </Command>
-                        </PopoverContent>
-                      </Popover>
-                    </div>
-                    <div className="space-y-1.5">
-                      <Label htmlFor="bank-holder" className="text-[11px] text-slate-600">
-                        Pemegang Rekening
-                      </Label>
-                      <Input
-                        id="bank-holder"
-                        type="text"
-                        placeholder="Nama sesuai rekening"
-                        value={bankHolder}
-                        onChange={(e) => setBankHolder(e.target.value)}
-                        required
-                        className="bg-white/70 border-slate-200 h-10 text-xs rounded-xl focus-visible:ring-[#3fae49]"
-                      />
-                    </div>
-                    <div className="space-y-1.5">
-                      <Label htmlFor="bank-number" className="text-[11px] text-slate-600">
-                        Nomor Rekening
-                      </Label>
-                      <Input
-                        id="bank-number"
-                        type="text"
-                        inputMode="numeric"
-                        placeholder="Nomor rekening"
-                        value={bankNumber}
-                        onChange={(e) => setBankNumber(e.target.value.replace(/[^0-9]/g, ""))}
-                        required
-                        className="bg-white/70 border-slate-200 h-10 text-xs rounded-xl focus-visible:ring-[#3fae49]"
-                      />
-                    </div>
-                    <Button
-                      type="button"
-                      className="w-full h-10 text-xs rounded-xl bg-gradient-to-r from-[#4FC15A] to-[#2E8A37] hover:opacity-95 shadow-md shadow-emerald-500/30"
-                      disabled={otpSending}
-                      onClick={handleSendOtp}
-                    >
-                      {otpSending ? (
-                        <>
-                          <Loader2 className="w-3.5 h-3.5 mr-2 animate-spin" />
-                          Memproses...
-                        </>
-                      ) : (
-                        "Lanjut ke Verifikasi"
-                      )}
-                    </Button>
+                <form onSubmit={handleRegister} className="space-y-3">
+                  <div className="space-y-1.5">
+                    <Label htmlFor="register-phone" className="flex items-center gap-1 text-[11px] text-slate-600">
+                      <Phone className="w-3 h-3" />
+                      Nomor WhatsApp
+                    </Label>
+                    <Input
+                      id="register-phone"
+                      type="tel"
+                      placeholder="08123456789"
+                      value={registerPhone}
+                      onChange={(e) => setRegisterPhone(e.target.value)}
+                      required
+                      className="bg-white/70 border-slate-200 h-10 text-xs rounded-xl focus-visible:ring-[#3fae49]"
+                    />
                   </div>
-                ) : (
-                  <form onSubmit={handleVerifyAndRegister} className="space-y-3">
-                    <div className="text-center space-y-1.5 mb-3">
-                      <Shield className="w-8 h-8 text-[#3fae49] mx-auto" />
-                      <p className="text-[11px] text-slate-500">
-                        Verifikasi bahwa Anda bukan robot. Ketik ulang kode di bawah.
-                      </p>
-                    </div>
-                    <div className="space-y-1.5">
-                      <Label className="text-[11px] text-slate-600">Kode Captcha</Label>
-                      <div className="flex items-center gap-2">
-                        <div
-                          className="flex-1 select-none text-center font-mono text-xl font-bold tracking-[0.4em] py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-800"
-                          style={{
-                            backgroundImage:
-                              "repeating-linear-gradient(45deg, rgba(63,174,73,0.08) 0 2px, transparent 2px 8px)",
-                            letterSpacing: "0.4em",
-                            textShadow: "1px 1px 0 rgba(63,174,73,0.25)",
-                          }}
-                        >
-                          {captchaCode}
-                        </div>
-                        <Button
-                          type="button"
-                          variant="outline"
-                          size="sm"
-                          onClick={() => {
-                            setCaptchaCode(generateCaptcha());
-                            setOtpCode("");
-                          }}
-                          className="h-10 px-2 text-[11px] rounded-xl"
-                        >
-                          ↻
-                        </Button>
-                      </div>
-                    </div>
-                    <div className="space-y-1.5">
-                      <Label htmlFor="otp-code" className="text-[11px] text-slate-600">
-                        Masukkan Kode di Atas
-                      </Label>
+                  <div className="space-y-1.5">
+                    <Label htmlFor="register-password" className="text-[11px] text-slate-600">
+                      Kata Sandi
+                    </Label>
+                    <div className="relative">
                       <Input
-                        id="otp-code"
-                        type="text"
-                        placeholder="Ketik kode captcha"
-                        value={otpCode}
-                        onChange={(e) => setOtpCode(e.target.value.toUpperCase().slice(0, 6))}
-                        maxLength={6}
-                        className="bg-white/70 text-center text-lg tracking-widest font-mono h-11 uppercase rounded-xl border-slate-200"
-                        autoFocus
+                        id="register-password"
+                        type={showPassword ? "text" : "password"}
+                        placeholder="Masukkan kata sandi"
+                        value={registerPassword}
+                        onChange={(e) => setRegisterPassword(e.target.value)}
+                        required
+                        className="bg-white/70 border-slate-200 h-10 text-xs rounded-xl focus-visible:ring-[#3fae49] pr-9"
                       />
-                    </div>
-                    <Button
-                      type="submit"
-                      className="w-full h-10 text-xs rounded-xl bg-gradient-to-r from-[#4FC15A] to-[#2E8A37] hover:opacity-95 shadow-md shadow-emerald-500/30"
-                      disabled={isLoading}
-                    >
-                      {isLoading ? (
-                        <>
-                          <Loader2 className="w-3.5 h-3.5 mr-2 animate-spin" />
-                          Memverifikasi...
-                        </>
-                      ) : (
-                        "Verifikasi & Daftar"
-                      )}
-                    </Button>
-                    <div className="text-left text-[11px]">
                       <button
                         type="button"
-                        onClick={() => {
-                          setOtpStep("form");
-                          setOtpCode("");
-                        }}
-                        className="text-slate-500 hover:text-slate-800"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700"
                       >
-                        ← Kembali
+                        {showPassword ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
                       </button>
                     </div>
-                  </form>
-                )}
+                  </div>
+                  <div className="space-y-1.5">
+                    <Label htmlFor="referral-code" className="text-[11px] text-slate-600">
+                      Kode Undangan
+                    </Label>
+                    <Input
+                      id="referral-code"
+                      type="text"
+                      placeholder="Masukkan kode undangan"
+                      value={referralCode}
+                      onChange={(e) => setReferralCode(e.target.value.toUpperCase())}
+                      required
+                      className="bg-white/70 border-slate-200 h-10 text-xs rounded-xl focus-visible:ring-[#3fae49]"
+                    />
+                  </div>
+                  <Button
+                    type="submit"
+                    className="w-full h-10 text-xs rounded-xl bg-gradient-to-r from-[#4FC15A] to-[#2E8A37] hover:opacity-95 shadow-md shadow-emerald-500/30"
+                    disabled={isLoading}
+                  >
+                    {isLoading ? (
+                      <>
+                        <Loader2 className="w-3.5 h-3.5 mr-2 animate-spin" />
+                        Memproses...
+                      </>
+                    ) : (
+                      "Daftar"
+                    )}
+                  </Button>
+                </form>
               </TabsContent>
             </Tabs>
           )}
