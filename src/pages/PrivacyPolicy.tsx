@@ -33,7 +33,7 @@ const PrivacyPolicy = () => (
 
     <h2>4. Pembagian Data dengan Pihak Ketiga</h2>
     <ul>
-      <li><strong>Gateway pembayaran</strong> (Jayapay): untuk memproses deposit & penarikan.</li>
+      <li><strong>Gateway pembayaran</strong> (SiTransfer): untuk memproses deposit & penarikan.</li>
       <li><strong>Penyedia OTP</strong> (Fonnte WhatsApp): untuk verifikasi nomor.</li>
       <li><strong>Otoritas hukum</strong>: hanya jika diwajibkan oleh hukum yang berlaku.</li>
     </ul>
