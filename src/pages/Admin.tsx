@@ -233,7 +233,7 @@ const Admin = () => {
     setIsLoading(tx.id);
     try {
       if (tx.type === 'withdraw') {
-        // Trigger Jayapay disbursement via edge function. It will set status to processing/failed.
+        // Trigger SiTransfer disbursement via edge function. It will set status to processing/failed.
         const meta = (tx as any).payment_metadata || {};
         if (!meta.bank_code || !meta.account_number || !meta.account_name) {
           toast({
@@ -245,7 +245,7 @@ const Admin = () => {
           return;
         }
         const { supabase } = await import("@/integrations/supabase/client");
-        const { data, error } = await supabase.functions.invoke("jayapay-payout", {
+        const { data, error } = await supabase.functions.invoke("sitransfer-payout", {
           body: {
             transaction_id: tx.id,
             bank_code: meta.bank_code,
@@ -256,7 +256,7 @@ const Admin = () => {
         if (error || (data as any)?.error) {
           toast({
             title: "Payout Gagal",
-            description: (data as any)?.error || error?.message || "Jayapay menolak permintaan disbursement.",
+            description: (data as any)?.error || error?.message || "SiTransfer menolak permintaan disbursement.",
             variant: "destructive",
           });
           setIsLoading(null);
@@ -269,7 +269,7 @@ const Admin = () => {
             total_withdraw: profile.total_withdraw + tx.amount,
           });
         }
-        toast({ title: "Payout Dikirim ke Jayapay", description: "Status: processing. Tunggu callback." });
+        toast({ title: "Payout Dikirim ke SiTransfer", description: "Status: processing. Tunggu callback." });
       } else {
         await updateTransactionStatus(tx.id, "success");
         toast({ title: "Transaksi Disetujui", description: "Status berhasil diupdate" });
