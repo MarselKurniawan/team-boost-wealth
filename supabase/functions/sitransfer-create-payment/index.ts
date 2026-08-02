@@ -53,7 +53,12 @@ Deno.serve(async (req) => {
     });
 
     if (!resp.ok || resp.json?.success !== true) {
-      return json({ error: sitransferErrorMessage(resp.json), detail: resp.json }, 502);
+      const raw = sitransferErrorMessage(resp.json);
+      const friendly = /invalid or inactive credentials/i.test(raw)
+        ? "Store Key SiTransfer tidak valid atau belum aktif. Hubungi admin untuk memperbarui kredensial."
+        : raw;
+      console.error("[SiTransfer] generate failed", resp.status, raw);
+      return json({ error: friendly, detail: resp.json }, 502);
     }
 
     const d = resp.json.data || {};
