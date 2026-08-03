@@ -1,5 +1,5 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
-import { sitransferPost, sitransferErrorMessage } from "../_shared/sitransfer.ts";
+import { wijayaGet, wijayaErrorMessage } from "../_shared/wijayapay.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -31,13 +31,13 @@ Deno.serve(async (req) => {
     if (!user) return json({ error: "Unauthorized" }, 401);
 
     const body = await req.json();
-    const trxId = String(body.transaction_id || "").trim();
-    if (!trxId) return json({ error: "transaction_id wajib diisi" }, 400);
+    const refId = String(body.transaction_id || body.ref_id || "").trim();
+    if (!refId) return json({ error: "transaction_id wajib diisi" }, 400);
 
     const admin = createClient(supabaseUrl, serviceKey);
     const { data: tx } = await admin
       .from("transactions").select("*")
-      .eq("payment_reference", trxId)
+      .eq("payment_reference", refId)
       .eq("user_id", user.id)
       .maybeSingle();
     if (!tx) return json({ error: "Transaksi tidak ditemukan" }, 404);
@@ -46,23 +46,24 @@ Deno.serve(async (req) => {
       return json({ success: true, status: "success", already: true });
     }
 
-    const resp = await sitransferPost("/status", { transaction_id: trxId });
-    if (!resp.ok || resp.json?.success !== true) {
-      return json({ error: sitransferErrorMessage(resp.json), detail: resp.json }, 502);
+    const resp = await wijayaGet("/get-status", { ref_id: refId });
+    if (!resp.ok || (resp.json?.success === false)) {
+      return json({ error: wijayaErrorMessage(resp.json), detail: resp.json }, 502);
     }
 
     const d = resp.json.data || {};
-    const status = String(d.status || "").toLowerCase();
+    const raw = String(resp.json.status_pembayaran || resp.json.status || "").toLowerCase();
+    const status = raw === "paid" ? "success" : raw === "expired" ? "expired" : raw || "pending";
     const origMeta = (tx.payment_metadata as Record<string, unknown>) || {};
 
     if (status === "success" && tx.type === "recharge") {
-      const expectedAmount = Number(tx.amount || 0);
+      const creditAmount = Number(tx.amount || 0);
       const { data: profile } = await admin
         .from("profiles").select("balance, total_recharge").eq("user_id", tx.user_id).maybeSingle();
       if (profile) {
         await admin.from("profiles").update({
-          balance: Number(profile.balance) + expectedAmount,
-          total_recharge: Number(profile.total_recharge) + expectedAmount,
+          balance: Number(profile.balance) + creditAmount,
+          total_recharge: Number(profile.total_recharge) + creditAmount,
         }).eq("user_id", tx.user_id);
       }
       await admin.from("transactions").update({
@@ -78,7 +79,7 @@ Deno.serve(async (req) => {
 
     return json({ success: true, status, data: d });
   } catch (e) {
-    console.error("sitransfer check-status error", e);
+    console.error("wijayapay check-status error", e);
     return json({ error: (e as Error).message }, 500);
   }
 });

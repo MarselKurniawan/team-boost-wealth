@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
@@ -6,7 +6,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { formatCurrency } from "@/lib/database";
 import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
-import { Wallet, ChevronRight, ShieldCheck, Check, Copy, RefreshCw, ArrowLeft, ExternalLink } from "lucide-react";
+import { Wallet, ChevronRight, ShieldCheck, Check, Copy, RefreshCw, ArrowLeft, ExternalLink, Loader2 } from "lucide-react";
 
 interface RechargeDialogProps {
   open: boolean;
@@ -14,19 +14,30 @@ interface RechargeDialogProps {
   onSuccess: () => void;
 }
 
-const PAYMENT_METHODS: { code: string; name: string; short: string; badge?: string }[] = [
-  { code: "QRIS", name: "QRIS", short: "Semua e-wallet & mobile banking", badge: "Populer" },
-  { code: "DANA", name: "DANA", short: "Bayar langsung lewat aplikasi DANA" },
-];
+interface Channel {
+  group: string;
+  code: string;
+  name: string;
+  image?: string;
+  fee_amount: number;
+  fee_percent: number;
+  min_trx: number;
+  max_trx: number;
+  type_fee: string;
+  tutorial_pembayaran?: string;
+}
 
 interface PaymentResult {
   transaction_id: string;
   channel: string;
   amount: number;
+  total_bayar?: number;
+  total_fee?: number;
   expired_at?: string | null;
   qris_image?: string | null;
   qris_data?: string | null;
   payment_url?: string | null;
+  va_number?: string | null;
   instruction?: string | null;
 }
 
@@ -34,37 +45,65 @@ const RechargeDialog = ({ open, onOpenChange, onSuccess }: RechargeDialogProps) 
   const { toast } = useToast();
   const { user } = useAuth();
   const [amount, setAmount] = useState("");
-  const [method, setMethod] = useState<string | null>("QRIS");
+  const [method, setMethod] = useState<string | null>(null);
+  const [channels, setChannels] = useState<Channel[]>([]);
+  const [loadingChannels, setLoadingChannels] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [payment, setPayment] = useState<PaymentResult | null>(null);
   const [checking, setChecking] = useState(false);
 
   const presetAmounts = [100000, 250000, 500000, 1000000, 2500000, 5000000];
-  const selected = PAYMENT_METHODS.find((m) => m.code === method);
+  const selected = channels.find((m) => m.code === method);
+
+  const loadChannels = useCallback(async () => {
+    setLoadingChannels(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("wijayapay-channels", { body: {} });
+      if (error) throw new Error(error.message);
+      if ((data as any)?.error) throw new Error((data as any).error);
+      const list: Channel[] = (data as any)?.channels || [];
+      setChannels(list);
+      setMethod((prev) => prev || list.find((c) => c.code === "QRIS")?.code || list[0]?.code || null);
+    } catch (e) {
+      toast({ title: "Gagal memuat metode pembayaran", description: (e as Error).message, variant: "destructive" });
+    } finally {
+      setLoadingChannels(false);
+    }
+  }, [toast]);
 
   useEffect(() => {
-    if (!open) {
+    if (open) {
+      loadChannels();
+    } else {
       setPayment(null);
       setAmount("");
-      setMethod("QRIS");
+      setMethod(null);
     }
-  }, [open]);
+  }, [open, loadChannels]);
 
   const handleSubmit = async () => {
     const amountNum = parseInt(amount);
-    if (!amountNum || amountNum < 50000) {
-      toast({ title: "Jumlah kurang", description: "Minimum deposit Rp 50.000", variant: "destructive" });
+    if (!amountNum || amountNum < 10000) {
+      toast({ title: "Jumlah kurang", description: "Minimum deposit Rp 10.000", variant: "destructive" });
       return;
     }
     if (!method) {
       toast({ title: "Metode belum dipilih", variant: "destructive" });
       return;
     }
+    if (selected && (amountNum < selected.min_trx || amountNum > selected.max_trx)) {
+      toast({
+        title: "Nominal tidak sesuai",
+        description: `${selected.name}: ${formatCurrency(selected.min_trx)} - ${formatCurrency(selected.max_trx)}`,
+        variant: "destructive",
+      });
+      return;
+    }
     if (!user) return;
 
     setIsLoading(true);
     try {
-      const { data, error } = await supabase.functions.invoke("sitransfer-create-payment", {
+      const { data, error } = await supabase.functions.invoke("wijayapay-create-payment", {
         body: { amount: amountNum, method },
       });
       if (error) throw new Error(error.message);
@@ -83,14 +122,14 @@ const RechargeDialog = ({ open, onOpenChange, onSuccess }: RechargeDialogProps) 
     if (!payment) return;
     setChecking(true);
     try {
-      const { data, error } = await supabase.functions.invoke("sitransfer-check-status", {
+      const { data, error } = await supabase.functions.invoke("wijayapay-check-status", {
         body: { transaction_id: payment.transaction_id },
       });
       if (error) throw new Error(error.message);
       if ((data as any)?.error) throw new Error((data as any).error);
 
       const status = String((data as any).status || "").toLowerCase();
-      if (status === "success") {
+      if (status === "success" || status === "paid") {
         toast({ title: "Pembayaran berhasil", description: "Saldo kamu sudah bertambah." });
         onSuccess();
         onOpenChange(false);
@@ -108,10 +147,9 @@ const RechargeDialog = ({ open, onOpenChange, onSuccess }: RechargeDialogProps) 
     }
   };
 
-  const copyQris = async () => {
-    if (!payment?.qris_data) return;
-    await navigator.clipboard.writeText(payment.qris_data);
-    toast({ title: "Kode QRIS disalin" });
+  const copyText = async (text: string, label: string) => {
+    await navigator.clipboard.writeText(text);
+    toast({ title: `${label} disalin` });
   };
 
   return (
@@ -154,15 +192,43 @@ const RechargeDialog = ({ open, onOpenChange, onSuccess }: RechargeDialogProps) 
         <div className="flex-1 min-h-0 -mt-8 px-5 overflow-y-auto overscroll-contain">
           {payment ? (
             <div className="rounded-2xl bg-white border border-emerald-100 shadow-[0_10px_30px_-15px_rgba(30,64,175,0.35)] p-4 space-y-3">
-              <div className="flex items-center justify-between">
-                <div>
+              <div className="flex items-center justify-between gap-2">
+                <div className="min-w-0">
                   <p className="text-[10px] text-muted-foreground uppercase tracking-wider font-semibold">ID Transaksi</p>
                   <p className="text-[12px] font-heading font-bold text-foreground break-all">{payment.transaction_id}</p>
                 </div>
-                <span className="text-[9px] font-bold px-2 py-1 rounded-full bg-emerald-100 text-emerald-700">
+                <span className="text-[9px] font-bold px-2 py-1 rounded-full bg-emerald-100 text-emerald-700 shrink-0">
                   {payment.channel}
                 </span>
               </div>
+
+              {typeof payment.total_bayar === "number" && payment.total_bayar !== payment.amount && (
+                <div className="rounded-xl bg-emerald-50 border border-emerald-100 p-2.5">
+                  <div className="flex items-center justify-between text-[11px]">
+                    <span className="text-muted-foreground">Total yang harus dibayar</span>
+                    <span className="font-heading font-bold text-primary break-all">{formatCurrency(payment.total_bayar)}</span>
+                  </div>
+                  {!!payment.total_fee && (
+                    <p className="text-[10px] text-muted-foreground mt-1">Termasuk biaya {formatCurrency(payment.total_fee)}</p>
+                  )}
+                </div>
+              )}
+
+              {payment.va_number && (
+                <div className="rounded-xl border border-emerald-100 bg-emerald-50/50 p-3">
+                  <p className="text-[10px] text-muted-foreground uppercase tracking-wider font-semibold">Nomor Pembayaran</p>
+                  <div className="flex items-center justify-between gap-2 mt-1">
+                    <p className="text-sm font-heading font-bold text-foreground break-all">{payment.va_number}</p>
+                    <Button
+                      variant="outline"
+                      onClick={() => copyText(payment.va_number!, "Nomor pembayaran")}
+                      className="h-8 rounded-full text-[10px] font-bold border-emerald-200 text-primary shrink-0"
+                    >
+                      <Copy className="w-3 h-3 mr-1" /> Salin
+                    </Button>
+                  </div>
+                </div>
+              )}
 
               {payment.qris_image && (
                 <div className="rounded-2xl border border-emerald-100 bg-emerald-50/40 p-3 flex flex-col items-center gap-2">
@@ -175,7 +241,7 @@ const RechargeDialog = ({ open, onOpenChange, onSuccess }: RechargeDialogProps) 
                   {payment.qris_data && (
                     <Button
                       variant="outline"
-                      onClick={copyQris}
+                      onClick={() => copyText(payment.qris_data!, "Kode QRIS")}
                       className="h-8 rounded-full text-[10px] font-bold border-emerald-200 text-primary"
                     >
                       <Copy className="w-3 h-3 mr-1" /> Salin kode QRIS
@@ -189,7 +255,7 @@ const RechargeDialog = ({ open, onOpenChange, onSuccess }: RechargeDialogProps) 
                   onClick={() => window.open(payment.payment_url!, "_blank", "noopener,noreferrer")}
                   className="w-full h-10 rounded-2xl bg-gradient-to-r from-[#10b981] to-[#065f46] text-white text-xs font-bold"
                 >
-                  <ExternalLink className="w-3.5 h-3.5 mr-1.5" /> Buka aplikasi {payment.channel}
+                  <ExternalLink className="w-3.5 h-3.5 mr-1.5" /> Buka halaman pembayaran
                 </Button>
               )}
 
@@ -201,7 +267,7 @@ const RechargeDialog = ({ open, onOpenChange, onSuccess }: RechargeDialogProps) 
 
               <div className="flex items-start gap-2 rounded-xl bg-emerald-50 border border-emerald-100 p-2.5">
                 <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 mt-0.5 shrink-0" />
-                <p className="text-[10px] text-emerald-700 leading-snug">
+                <p className="text-[10px] text-emerald-700 leading-snug whitespace-pre-line">
                   {payment.instruction || "Selesaikan pembayaran sebelum waktu kedaluwarsa. Saldo masuk otomatis setelah pembayaran terverifikasi."}
                 </p>
               </div>
@@ -235,38 +301,53 @@ const RechargeDialog = ({ open, onOpenChange, onSuccess }: RechargeDialogProps) 
               {/* Payment method list */}
               <div>
                 <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-2">Metode pembayaran</p>
-                <div className="space-y-1.5 pb-1">
-                  {PAYMENT_METHODS.map((m) => {
-                    const active = method === m.code;
-                    return (
-                      <button
-                        key={m.code}
-                        onClick={() => setMethod(m.code)}
-                        className={cn(
-                          "w-full flex items-center gap-3 rounded-xl border px-3 py-2.5 text-left transition",
-                          active
-                            ? "border-primary bg-gradient-to-r from-emerald-50 to-lime-50 shadow-sm"
-                            : "border-emerald-100 bg-white hover:border-primary/40"
-                        )}
-                      >
-                        <div className={cn(
-                          "w-9 h-9 rounded-xl flex items-center justify-center text-[10px] font-heading font-bold shrink-0",
-                          active ? "bg-gradient-to-br from-[#10b981] to-[#065f46] text-white" : "bg-emerald-50 text-primary"
-                        )}>
-                          {m.code.slice(0, 3)}
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-1.5">
-                            <p className="text-[12px] font-heading font-bold text-foreground truncate">{m.name}</p>
-                            {m.badge && <span className="text-[8px] font-bold px-1.5 py-0.5 rounded-full bg-amber-100 text-amber-700">{m.badge}</span>}
+                {loadingChannels ? (
+                  <div className="flex items-center justify-center gap-2 py-6 text-[11px] text-muted-foreground">
+                    <Loader2 className="w-4 h-4 animate-spin" /> Memuat metode...
+                  </div>
+                ) : channels.length === 0 ? (
+                  <div className="rounded-xl border border-emerald-100 bg-emerald-50/50 p-3 text-[10px] text-muted-foreground">
+                    Belum ada metode pembayaran aktif. Coba lagi nanti atau hubungi layanan pelanggan.
+                  </div>
+                ) : (
+                  <div className="space-y-1.5 pb-1">
+                    {channels.map((m) => {
+                      const active = method === m.code;
+                      return (
+                        <button
+                          key={m.code}
+                          onClick={() => setMethod(m.code)}
+                          className={cn(
+                            "w-full flex items-center gap-3 rounded-xl border px-3 py-2.5 text-left transition",
+                            active
+                              ? "border-primary bg-gradient-to-r from-emerald-50 to-lime-50 shadow-sm"
+                              : "border-emerald-100 bg-white hover:border-primary/40"
+                          )}
+                        >
+                          <div className={cn(
+                            "w-9 h-9 rounded-xl flex items-center justify-center overflow-hidden text-[10px] font-heading font-bold shrink-0 bg-white border border-emerald-100"
+                          )}>
+                            {m.image ? (
+                              <img src={m.image} alt={`Logo ${m.name}`} className="w-full h-full object-contain p-1" loading="lazy" />
+                            ) : (
+                              m.code.slice(0, 3)
+                            )}
                           </div>
-                          <p className="text-[10px] text-muted-foreground">{m.short}</p>
-                        </div>
-                        {active ? <Check className="w-4 h-4 text-primary shrink-0" /> : <ChevronRight className="w-3.5 h-3.5 text-muted-foreground shrink-0" />}
-                      </button>
-                    );
-                  })}
-                </div>
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-1.5">
+                              <p className="text-[12px] font-heading font-bold text-foreground truncate">{m.name}</p>
+                              <span className="text-[8px] font-bold px-1.5 py-0.5 rounded-full bg-amber-100 text-amber-700">{m.group}</span>
+                            </div>
+                            <p className="text-[10px] text-muted-foreground break-all">
+                              Min {formatCurrency(m.min_trx)} · Maks {formatCurrency(m.max_trx)}
+                            </p>
+                          </div>
+                          {active ? <Check className="w-4 h-4 text-primary shrink-0" /> : <ChevronRight className="w-3.5 h-3.5 text-muted-foreground shrink-0" />}
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
 
               <div className="flex items-start gap-2 rounded-xl bg-emerald-50 border border-emerald-100 p-2.5">

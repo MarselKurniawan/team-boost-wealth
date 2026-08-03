@@ -23,7 +23,7 @@ const TermsOfService = () => (
 
     <h2>3. Deposit & Penarikan</h2>
     <ul>
-      <li>Deposit diproses melalui gateway pembayaran resmi (SiTransfer).</li>
+      <li>Deposit diproses melalui gateway pembayaran resmi (WijayaPay).</li>
       <li>Penarikan dana diproses ke rekening bank/e-wallet atas nama pemilik akun yang sama.</li>
       <li>Minimum penarikan dan biaya admin mengikuti ketentuan yang berlaku di aplikasi.</li>
       <li>Penarikan diproses pada jam kerja dan dapat memakan waktu 1×24 jam.</li>

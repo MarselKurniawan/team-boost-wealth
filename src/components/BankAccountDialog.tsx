@@ -18,7 +18,7 @@ interface BankAccountDialogProps {
   onSuccess: () => void;
 }
 
-// SiTransfer supported bank codes (bank_target)
+// WijayaPay supported bank codes (bank_target)
 const BANKS = [
   { value: "BCA", label: "BCA (Bank Central Asia)" },
   { value: "BRI", label: "BRI (Bank Rakyat Indonesia)" },
@@ -29,7 +29,7 @@ const BANKS = [
   { value: "DANAMON", label: "Bank Danamon" },
 ];
 
-// SiTransfer supported e-wallet codes (bank_target)
+// WijayaPay supported e-wallet codes (bank_target)
 const EWALLETS = [
   { value: "DANA", label: "DANA" },
   { value: "OVO", label: "OVO" },
@@ -80,7 +80,7 @@ const BankAccountDialog = ({ open, onOpenChange, onSuccess }: BankAccountDialogP
     const result = await createBankAccount({
       user_id: user.id,
       account_type: accountType,
-      provider: `${provider}|${selectedProviderLabel}`, // simpan "kode|label" — kode dipakai utk SiTransfer, label utk tampilan
+      provider: `${provider}|${selectedProviderLabel}`, // simpan "kode|label" — kode dipakai utk WijayaPay, label utk tampilan
       account_number: accountNumber.trim(),
       account_name: accountName.trim(),
     });
