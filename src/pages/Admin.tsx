@@ -233,7 +233,7 @@ const Admin = () => {
     setIsLoading(tx.id);
     try {
       if (tx.type === 'withdraw') {
-        // Trigger SiTransfer disbursement via edge function. It will set status to processing/failed.
+        // WijayaPay tidak menyediakan API disbursement — payout ditransfer manual oleh admin.
         const meta = (tx as any).payment_metadata || {};
         if (!meta.bank_code || !meta.account_number || !meta.account_name) {
           toast({
@@ -244,32 +244,14 @@ const Admin = () => {
           setIsLoading(null);
           return;
         }
-        const { supabase } = await import("@/integrations/supabase/client");
-        const { data, error } = await supabase.functions.invoke("sitransfer-payout", {
-          body: {
-            transaction_id: tx.id,
-            bank_code: meta.bank_code,
-            account_number: meta.account_number,
-            account_name: meta.account_name,
-          },
-        });
-        if (error || (data as any)?.error) {
-          toast({
-            title: "Payout Gagal",
-            description: (data as any)?.error || error?.message || "SiTransfer menolak permintaan disbursement.",
-            variant: "destructive",
-          });
-          setIsLoading(null);
-          loadData();
-          return;
-        }
+        await updateTransactionStatus(tx.id, "success");
         const profile = profiles.find(p => p.user_id === tx.user_id);
         if (profile) {
           await updateProfile(tx.user_id, {
             total_withdraw: profile.total_withdraw + tx.amount,
           });
         }
-        toast({ title: "Payout Dikirim ke SiTransfer", description: "Status: processing. Tunggu callback." });
+        toast({ title: "Penarikan Disetujui", description: "Tandai selesai setelah dana ditransfer manual." });
       } else {
         await updateTransactionStatus(tx.id, "success");
         toast({ title: "Transaksi Disetujui", description: "Status berhasil diupdate" });
