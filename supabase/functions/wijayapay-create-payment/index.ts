@@ -62,6 +62,8 @@ Deno.serve(async (req) => {
     const resp = await wijayaPost("/transaction/create", {
       payment_method: channelCode,
       code: channelCode,
+      metode: channelCode,
+      nominal: amount,
       amount,
       callback_url: callbackUrl,
       customer_name: (profile?.name || "Member").toString().slice(0, 50),
