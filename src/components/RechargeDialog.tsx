@@ -37,7 +37,7 @@ interface PaymentResult {
   qris_image?: string | null;
   qris_data?: string | null;
   payment_url?: string | null;
-  va_number?: string | null;
+  nomor_va?: string | null;
   instruction?: string | null;
 }
 
@@ -214,14 +214,14 @@ const RechargeDialog = ({ open, onOpenChange, onSuccess }: RechargeDialogProps) 
                 </div>
               )}
 
-              {payment.va_number && (
+              {payment.nomor_va && (
                 <div className="rounded-xl border border-emerald-100 bg-emerald-50/50 p-3">
                   <p className="text-[10px] text-muted-foreground uppercase tracking-wider font-semibold">Nomor Pembayaran</p>
                   <div className="flex items-center justify-between gap-2 mt-1">
-                    <p className="text-sm font-heading font-bold text-foreground break-all">{payment.va_number}</p>
+                    <p className="text-sm font-heading font-bold text-foreground break-all">{payment.nomor_va}</p>
                     <Button
                       variant="outline"
-                      onClick={() => copyText(payment.va_number!, "Nomor pembayaran")}
+                      onClick={() => copyText(payment.nomor_va!, "Nomor pembayaran")}
                       className="h-8 rounded-full text-[10px] font-bold border-emerald-200 text-primary shrink-0"
                     >
                       <Copy className="w-3 h-3 mr-1" /> Salin
