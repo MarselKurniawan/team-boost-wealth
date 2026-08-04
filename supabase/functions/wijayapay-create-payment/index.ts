@@ -106,7 +106,7 @@ Deno.serve(async (req) => {
       qris_image: d.qr_image || null,
       qris_data: d.qr_string || null,
       payment_url: d.payment_url || null,
-      va_number: d.no_va || d.virtual_account || d.payment_code || null,
+      va_number: d.nomor_va || d.virtual_account || d.payment_code || null,
       instruction: d.tutorial_pembayaran || channel.tutorial_pembayaran || null,
       tx_id: tx.id,
     });
