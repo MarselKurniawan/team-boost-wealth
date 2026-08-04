@@ -63,6 +63,7 @@ Deno.serve(async (req) => {
       payment_method: channelCode,
       code: channelCode,
       metode: channelCode,
+      code_payment: channelCode,
       nominal: amount,
       amount,
       callback_url: callbackUrl,
