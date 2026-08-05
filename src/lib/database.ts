@@ -185,6 +185,8 @@ export const processReferralCommission = async (userId: string, investAmount: nu
 
 // Process rabat when user claims daily income (via Edge Function to bypass RLS)
 export const processReferralRabat = async (userId: string, dailyProfit: number): Promise<void> => {
+  // Locked-contract accruals credit 0 — no rabat to distribute
+  if (!userId || !Number(dailyProfit) || Number(dailyProfit) <= 0) return;
   try {
     const { data, error } = await supabase.functions.invoke('process-referral', {
       body: {

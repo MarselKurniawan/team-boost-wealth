@@ -119,10 +119,17 @@ serve(async (req) => {
 
     const { userId, amount, type } = await req.json();
 
-    if (!userId || !amount || !type) {
+    if (!userId || !type) {
       return new Response(
-        JSON.stringify({ error: "Missing required fields: userId, amount, type" }),
+        JSON.stringify({ error: "Missing required fields: userId, type" }),
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    if (!Number(amount) || Number(amount) <= 0) {
+      return new Response(
+        JSON.stringify({ skipped: true, reason: "non_positive_amount" }),
+        { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
