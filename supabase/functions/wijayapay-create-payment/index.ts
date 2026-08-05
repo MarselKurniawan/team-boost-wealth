@@ -79,6 +79,12 @@ Deno.serve(async (req) => {
 
     const d = resp.json.data || {};
     const totalBayar = Number(d.total_bayar || amount);
+    console.log("[WijayaPay] create data keys", JSON.stringify(Object.keys(d)));
+
+    // WijayaPay uses different field names per channel (VA / retail code)
+    const vaNumber =
+      d.nomor_va || d.no_va || d.va_number || d.virtual_account || d.no_virtual_account ||
+      d.payment_code || d.kode_bayar || d.code_bayar || d.nomor_pembayaran || d.pay_code || null;
 
     const { data: tx, error: txErr } = await admin.from("transactions").insert({
       user_id: user.id,
