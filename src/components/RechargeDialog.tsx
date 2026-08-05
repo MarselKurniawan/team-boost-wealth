@@ -51,6 +51,7 @@ const RechargeDialog = ({ open, onOpenChange, onSuccess }: RechargeDialogProps) 
   const [isLoading, setIsLoading] = useState(false);
   const [payment, setPayment] = useState<PaymentResult | null>(null);
   const [checking, setChecking] = useState(false);
+  const [failedLogos, setFailedLogos] = useState<Record<string, boolean>>({});
 
   const presetAmounts = [100000, 250000, 500000, 1000000, 2500000, 5000000];
   const selected = channels.find((m) => m.code === method);
