@@ -51,6 +51,7 @@ const RechargeDialog = ({ open, onOpenChange, onSuccess }: RechargeDialogProps) 
   const [isLoading, setIsLoading] = useState(false);
   const [payment, setPayment] = useState<PaymentResult | null>(null);
   const [checking, setChecking] = useState(false);
+  const [failedLogos, setFailedLogos] = useState<Record<string, boolean>>({});
 
   const presetAmounts = [100000, 250000, 500000, 1000000, 2500000, 5000000];
   const selected = channels.find((m) => m.code === method);
@@ -325,12 +326,18 @@ const RechargeDialog = ({ open, onOpenChange, onSuccess }: RechargeDialogProps) 
                           )}
                         >
                           <div className={cn(
-                            "w-9 h-9 rounded-xl flex items-center justify-center overflow-hidden text-[10px] font-heading font-bold shrink-0 bg-white border border-emerald-100"
+                            "w-9 h-9 rounded-xl flex items-center justify-center overflow-hidden text-[9px] font-heading font-bold shrink-0 bg-emerald-50 text-primary border border-emerald-100"
                           )}>
-                            {m.image ? (
-                              <img src={m.image} alt={`Logo ${m.name}`} className="w-full h-full object-contain p-1" loading="lazy" />
+                            {m.image && !failedLogos[m.code] ? (
+                              <img
+                                src={m.image}
+                                alt={`Logo ${m.name}`}
+                                className="w-full h-full object-contain p-1"
+                                loading="lazy"
+                                onError={() => setFailedLogos((prev) => ({ ...prev, [m.code]: true }))}
+                              />
                             ) : (
-                              m.code.slice(0, 3)
+                              <span className="px-0.5 text-center leading-none break-all">{m.code.replace(/VA$/, "").slice(0, 4)}</span>
                             )}
                           </div>
                           <div className="flex-1 min-w-0">
