@@ -58,6 +58,11 @@ const SideMenu = ({ open, onOpenChange }: Props) => {
                   <Crown className="w-2.5 h-2.5" /> L{profile?.vip_level ?? 0}
                 </span>
                 <span className="text-[10px] font-semibold text-foreground truncate">{vipTitle}</span>
+                {isPremium && (
+                  <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-gradient-to-r from-amber-400 to-amber-600 text-white text-[9px] font-bold shrink-0">
+                    <Gem className="w-2.5 h-2.5" /> Premium
+                  </span>
+                )}
               </div>
               <span className="text-[10px] font-bold text-emerald-600">+2%</span>
             </div>
