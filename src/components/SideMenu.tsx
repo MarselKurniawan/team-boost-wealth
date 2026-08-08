@@ -2,10 +2,11 @@ import { useNavigate } from "react-router-dom";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import {
   ArrowDownToLine, ArrowUpFromLine, Landmark, Lock, Headphones, FileText,
-  LogOut, ChevronRight, Crown, UserCog,
+  LogOut, ChevronRight, Crown, UserCog, Gem,
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useVipTitles } from "@/hooks/useVipTitles";
+import { usePremiumBadge } from "@/hooks/usePremiumBadge";
 
 interface Props { open: boolean; onOpenChange: (o: boolean) => void; }
 
