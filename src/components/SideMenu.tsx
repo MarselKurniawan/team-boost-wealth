@@ -2,10 +2,11 @@ import { useNavigate } from "react-router-dom";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import {
   ArrowDownToLine, ArrowUpFromLine, Landmark, Lock, Headphones, FileText,
-  LogOut, ChevronRight, Crown, UserCog,
+  LogOut, ChevronRight, Crown, UserCog, Gem,
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useVipTitles } from "@/hooks/useVipTitles";
+import { usePremiumBadge } from "@/hooks/usePremiumBadge";
 
 interface Props { open: boolean; onOpenChange: (o: boolean) => void; }
 
@@ -13,6 +14,7 @@ const SideMenu = ({ open, onOpenChange }: Props) => {
   const navigate = useNavigate();
   const { profile, signOut, isAdmin } = useAuth();
   const { titleFor } = useVipTitles();
+  const { isPremium } = usePremiumBadge();
 
   const go = (path: string) => { onOpenChange(false); setTimeout(() => navigate(path), 60); };
   const uid = profile?.user_id?.slice(0, 6).toUpperCase() || "------";
@@ -58,6 +60,11 @@ const SideMenu = ({ open, onOpenChange }: Props) => {
                   <Crown className="w-2.5 h-2.5" /> L{profile?.vip_level ?? 0}
                 </span>
                 <span className="text-[10px] font-semibold text-foreground truncate">{vipTitle}</span>
+                {isPremium && (
+                  <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-gradient-to-r from-amber-400 to-amber-600 text-white text-[9px] font-bold shrink-0">
+                    <Gem className="w-2.5 h-2.5" /> Premium
+                  </span>
+                )}
               </div>
               <span className="text-[10px] font-bold text-emerald-600">+2%</span>
             </div>

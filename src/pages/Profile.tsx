@@ -8,7 +8,7 @@ import {
   User as UserIcon, Shield, LogOut, ChevronRight, Copy, Eye, EyeOff,
   ClipboardList, Receipt, Crown, Users, ArrowDownToLine, ArrowUpFromLine,
   Lock, Landmark, Headphones, Share2,
-  FileText, TrendingUp, Wallet, Settings, Building2,
+  FileText, TrendingUp, Wallet, Settings, Building2, Gem,
 } from "lucide-react";
 
 import ProfileDialog from "@/components/ProfileDialog";
@@ -23,6 +23,7 @@ import DailyCheckinDialog from "@/components/DailyCheckinDialog";
 import SpinWheelDialog from "@/components/SpinWheelDialog";
 import TransactionHistoryDialog from "@/components/TransactionHistoryDialog";
 import { useVipTitles } from "@/hooks/useVipTitles";
+import { usePremiumBadge } from "@/hooks/usePremiumBadge";
 
 
 const Profile = () => {
@@ -31,6 +32,7 @@ const Profile = () => {
   const { toast } = useToast();
   const { profile, isAdmin, signOut, refreshProfile } = useAuth();
   const { titleFor } = useVipTitles();
+  const { isPremium } = usePremiumBadge();
 
 
   const [profileDialogOpen, setProfileDialogOpen] = useState(false);
@@ -147,8 +149,15 @@ const Profile = () => {
                   </span>
                 )}
               </div>
-              <div className="mt-1 inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-gradient-to-r from-primary to-primary-glow text-primary-foreground text-[9px] font-bold shadow-sm">
-                <Crown className="w-2.5 h-2.5" /> {titleFor(profile.vip_level)}
+              <div className="mt-1 flex items-center gap-1.5 flex-wrap">
+                <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-gradient-to-r from-primary to-primary-glow text-primary-foreground text-[9px] font-bold shadow-sm">
+                  <Crown className="w-2.5 h-2.5" /> {titleFor(profile.vip_level)}
+                </div>
+                {isPremium && (
+                  <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-gradient-to-r from-amber-400 to-amber-600 text-white text-[9px] font-bold shadow-sm">
+                    <Gem className="w-2.5 h-2.5" /> Premium
+                  </div>
+                )}
               </div>
               <button onClick={handleCopyUID} className="mt-1.5 flex items-center gap-1 text-[10px] text-muted-foreground hover:text-primary">
                 UID {uid} <Copy className="w-2.5 h-2.5" />
