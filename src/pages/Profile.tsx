@@ -32,6 +32,7 @@ const Profile = () => {
   const { toast } = useToast();
   const { profile, isAdmin, signOut, refreshProfile } = useAuth();
   const { titleFor } = useVipTitles();
+  const { isPremium } = usePremiumBadge();
 
 
   const [profileDialogOpen, setProfileDialogOpen] = useState(false);
