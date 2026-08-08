@@ -14,6 +14,7 @@ const SideMenu = ({ open, onOpenChange }: Props) => {
   const navigate = useNavigate();
   const { profile, signOut, isAdmin } = useAuth();
   const { titleFor } = useVipTitles();
+  const { isPremium } = usePremiumBadge();
 
   const go = (path: string) => { onOpenChange(false); setTimeout(() => navigate(path), 60); };
   const uid = profile?.user_id?.slice(0, 6).toUpperCase() || "------";
